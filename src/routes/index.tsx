@@ -11,8 +11,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Shoibur Rahman — Developer, Designer & Video Editor" },
       { name: "description", content: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing." },
-      { property: "og:title", content: "Shoibur Rahman — Portfolio" },
-      { property: "og:description", content: "Web development, professional logos, and promotional video editing." },
+      { property: "og:title", content: "Shoibur Rahman — Developer, Designer & Video Editor" },
+      { property: "og:description", content: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing." },
     ],
   }),
   component: HomePage,
