@@ -14,8 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          content: string
+          cover_path: string | null
+          created_at: string
+          excerpt: string
+          id: string
+          published_at: string | null
+          seo_description: string
+          seo_title: string
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: string
+          cover_path?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          published_at?: string | null
+          seo_description?: string
+          seo_title?: string
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          cover_path?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          published_at?: string | null
+          seo_description?: string
+          seo_title?: string
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
+          archived: boolean
           created_at: string
           email: string
           id: string
@@ -23,6 +69,7 @@ export type Database = {
           name: string
         }
         Insert: {
+          archived?: boolean
           created_at?: string
           email: string
           id?: string
@@ -30,6 +77,7 @@ export type Database = {
           name: string
         }
         Update: {
+          archived?: boolean
           created_at?: string
           email?: string
           id?: string
@@ -42,53 +90,134 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          detail_content: string
+          featured: boolean
           id: string
           image_path: string | null
+          images: string[]
           live_url: string | null
+          sort_order: number
+          tags: string[]
           title: string
           updated_at: string
         }
         Insert: {
           created_at?: string
           description?: string
+          detail_content?: string
+          featured?: boolean
           id?: string
           image_path?: string | null
+          images?: string[]
           live_url?: string | null
+          sort_order?: number
+          tags?: string[]
           title: string
           updated_at?: string
         }
         Update: {
           created_at?: string
           description?: string
+          detail_content?: string
+          featured?: boolean
           id?: string
           image_path?: string | null
+          images?: string[]
           live_url?: string | null
+          sort_order?: number
+          tags?: string[]
           title?: string
           updated_at?: string
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          created_at: string
+          description: string
+          icon_name: string
+          id: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          icon_name?: string
+          id?: string
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon_name?: string
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
+          avatar_path: string | null
           bio: string
+          education: string
+          experience: string
           id: string
+          location: string
           name: string
           resume_path: string | null
+          tagline: string
           updated_at: string
         }
         Insert: {
+          avatar_path?: string | null
           bio?: string
+          education?: string
+          experience?: string
           id?: string
+          location?: string
           name?: string
           resume_path?: string | null
+          tagline?: string
           updated_at?: string
         }
         Update: {
+          avatar_path?: string | null
           bio?: string
+          education?: string
+          experience?: string
           id?: string
+          location?: string
           name?: string
           resume_path?: string | null
+          tagline?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -116,6 +245,36 @@ export type Database = {
           platform_name?: string
           sort_order?: number
           url?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          author_name: string
+          author_role: string
+          avatar_path: string | null
+          content: string
+          created_at: string
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          author_name: string
+          author_role?: string
+          avatar_path?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+        }
+        Update: {
+          author_name?: string
+          author_role?: string
+          avatar_path?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
