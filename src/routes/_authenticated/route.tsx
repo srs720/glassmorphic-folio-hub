@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { LayoutDashboard, FolderKanban, MessageSquare, Settings, LogOut, Home } from "lucide-react";
+import { LayoutDashboard, FolderKanban, MessageSquare, Settings, LogOut, Home, FileText, Wrench, Sparkles, Quote } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -10,15 +10,24 @@ export const Route = createFileRoute("/_authenticated")({
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user) throw redirect({ to: "/auth" });
     const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", data.user.id);
+      .from("user_roles").select("role").eq("user_id", data.user.id);
     const isAdmin = (roles ?? []).some((r) => r.role === "admin");
     if (!isAdmin) throw redirect({ to: "/" });
     return { user: data.user };
   },
   component: AdminLayout,
 });
+
+const NAV = [
+  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/admin/projects", label: "Projects", icon: FolderKanban },
+  { to: "/admin/blog", label: "Blog", icon: FileText },
+  { to: "/admin/messages", label: "Messages", icon: MessageSquare },
+  { to: "/admin/skills", label: "Skills", icon: Sparkles },
+  { to: "/admin/services", label: "Services", icon: Wrench },
+  { to: "/admin/testimonials", label: "Testimonials", icon: Quote },
+  { to: "/admin/settings", label: "Settings", icon: Settings },
+] as const;
 
 function AdminLayout() {
   const navigate = useNavigate();
@@ -34,8 +43,7 @@ function AdminLayout() {
     navigate({ to: "/auth", replace: true });
   }
 
-  const linkClass =
-    "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground/70 hover:bg-white/60 hover:text-foreground transition";
+  const linkClass = "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground/70 hover:bg-white/60 hover:text-foreground transition";
   const activeClass = "bg-white/80 text-foreground shadow-sm";
 
   return (
@@ -58,20 +66,18 @@ function AdminLayout() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-[220px_1fr]">
-          <aside className="glass p-3 h-fit sticky top-6">
+          <aside className="glass p-3 h-fit md:sticky md:top-6">
             <nav className="grid gap-1">
-              <Link to="/admin" activeOptions={{ exact: true }} className={linkClass} activeProps={{ className: `${linkClass} ${activeClass}` }}>
-                <LayoutDashboard className="h-4 w-4" /> Dashboard
-              </Link>
-              <Link to="/admin/projects" className={linkClass} activeProps={{ className: `${linkClass} ${activeClass}` }}>
-                <FolderKanban className="h-4 w-4" /> Projects
-              </Link>
-              <Link to="/admin/messages" className={linkClass} activeProps={{ className: `${linkClass} ${activeClass}` }}>
-                <MessageSquare className="h-4 w-4" /> Messages
-              </Link>
-              <Link to="/admin/settings" className={linkClass} activeProps={{ className: `${linkClass} ${activeClass}` }}>
-                <Settings className="h-4 w-4" /> Settings
-              </Link>
+              {NAV.map((n) => (
+                <Link
+                  key={n.to} to={n.to}
+                  activeOptions={n.exact ? { exact: true } : undefined}
+                  className={linkClass}
+                  activeProps={{ className: `${linkClass} ${activeClass}` }}
+                >
+                  <n.icon className="h-4 w-4" /> {n.label}
+                </Link>
+              ))}
             </nav>
           </aside>
 

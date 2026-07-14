@@ -5,14 +5,13 @@ import { toast } from "sonner";
 import { Upload, Save, Plus, Trash2, Pencil, X, FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { uploadFile, deleteFile, getSignedUrl } from "@/lib/portfolio";
+import { SignedImage } from "@/components/SignedImage";
 
 export const Route = createFileRoute("/_authenticated/admin/settings")({
   component: SettingsAdmin,
 });
 
-const ICON_OPTIONS = [
-  "github", "linkedin", "twitter", "instagram", "youtube", "globe", "mail", "link",
-];
+const ICON_OPTIONS = ["github", "linkedin", "twitter", "instagram", "youtube", "globe", "mail", "link"];
 
 function SettingsAdmin() {
   return (
@@ -35,7 +34,12 @@ function SettingsForm() {
 
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [tagline, setTagline] = useState("");
+  const [location, setLocation] = useState("");
+  const [education, setEducation] = useState("");
+  const [experience, setExperience] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -43,6 +47,10 @@ function SettingsForm() {
     if (q.data) {
       setName(q.data.name);
       setBio(q.data.bio);
+      setTagline(q.data.tagline ?? "");
+      setLocation(q.data.location ?? "");
+      setEducation(q.data.education ?? "");
+      setExperience(q.data.experience ?? "");
       getSignedUrl(q.data.resume_path).then(setResumeUrl);
     }
   }, [q.data]);
@@ -53,44 +61,69 @@ function SettingsForm() {
     setSaving(true);
     try {
       let resume_path = q.data.resume_path;
-      if (file) {
+      let avatar_path = q.data.avatar_path;
+      if (resumeFile) {
         if (q.data.resume_path) await deleteFile(q.data.resume_path);
-        resume_path = await uploadFile(file, "resume");
+        resume_path = await uploadFile(resumeFile, "resume");
+      }
+      if (avatarFile) {
+        if (q.data.avatar_path) await deleteFile(q.data.avatar_path);
+        avatar_path = await uploadFile(avatarFile, "avatar");
       }
       const { error } = await supabase.from("site_settings")
-        .update({ name: name.trim(), bio: bio.trim(), resume_path })
+        .update({ name: name.trim(), bio: bio.trim(), tagline, location, education, experience, resume_path, avatar_path })
         .eq("id", q.data.id);
       if (error) throw error;
       toast.success("Settings saved");
       qc.invalidateQueries({ queryKey: ["site_settings_admin"] });
       qc.invalidateQueries({ queryKey: ["site_settings"] });
-      setFile(null);
+      setResumeFile(null); setAvatarFile(null);
     } catch (err) {
       console.error(err);
       toast.error("Save failed");
-    } finally {
-      setSaving(false);
-    }
+    } finally { setSaving(false); }
   }
 
   return (
     <form onSubmit={onSubmit} className="glass-strong p-6 grid gap-3">
       <div>
         <h2 className="text-xl font-bold">Site settings</h2>
-        <p className="text-sm text-muted-foreground">Your name, bio, and resume.</p>
+        <p className="text-sm text-muted-foreground">Your name, bio, profile picture, and resume.</p>
       </div>
-      <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</label>
-      <input className="glass-input px-4 py-2.5 text-sm" value={name} onChange={(e) => setName(e.target.value)} />
-      <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Bio</label>
-      <textarea className="glass-input px-4 py-2.5 text-sm min-h-32" value={bio} onChange={(e) => setBio(e.target.value)} />
+
+      <div className="flex items-center gap-4">
+        <div className="h-20 w-20 rounded-full overflow-hidden ring-2 ring-white/70 bg-gradient-to-br from-mint to-emerald-soft flex items-center justify-center">
+          {q.data?.avatar_path ? (
+            <SignedImage path={q.data.avatar_path} alt="avatar" className="h-full w-full object-cover" />
+          ) : (
+            <span className="text-2xl font-bold text-white/90">{(q.data?.name ?? "S").charAt(0)}</span>
+          )}
+        </div>
+        <label className="glass-input flex items-center gap-3 px-4 py-2.5 text-sm cursor-pointer flex-1">
+          <Upload className="h-4 w-4 text-primary" />
+          <span className="text-muted-foreground truncate">
+            {avatarFile ? avatarFile.name : q.data?.avatar_path ? "Replace profile picture" : "Upload profile picture"}
+          </span>
+          <input type="file" accept="image/*" className="hidden" onChange={(e) => setAvatarFile(e.target.files?.[0] ?? null)} />
+        </label>
+      </div>
+
+      <Field label="Name"><input className="glass-input px-4 py-2.5 text-sm w-full" value={name} onChange={(e) => setName(e.target.value)} /></Field>
+      <Field label="Tagline"><input className="glass-input px-4 py-2.5 text-sm w-full" value={tagline} onChange={(e) => setTagline(e.target.value)} /></Field>
+      <Field label="Bio"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-32" value={bio} onChange={(e) => setBio(e.target.value)} /></Field>
+      <div className="grid gap-3 md:grid-cols-2">
+        <Field label="Location"><input className="glass-input px-4 py-2.5 text-sm w-full" value={location} onChange={(e) => setLocation(e.target.value)} /></Field>
+        <Field label="Education"><input className="glass-input px-4 py-2.5 text-sm w-full" value={education} onChange={(e) => setEducation(e.target.value)} /></Field>
+      </div>
+      <Field label="Experience"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-20" value={experience} onChange={(e) => setExperience(e.target.value)} /></Field>
+
       <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Resume / CV</label>
       <label className="glass-input flex items-center gap-3 px-4 py-2.5 text-sm cursor-pointer">
         <Upload className="h-4 w-4 text-primary" />
         <span className="text-muted-foreground truncate">
-          {file ? file.name : q.data?.resume_path ? "Replace resume" : "Upload resume (PDF)"}
+          {resumeFile ? resumeFile.name : q.data?.resume_path ? "Replace resume" : "Upload resume (PDF)"}
         </span>
-        <input type="file" accept=".pdf,application/pdf" className="hidden"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+        <input type="file" accept=".pdf,application/pdf" className="hidden" onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)} />
       </label>
       {resumeUrl && (
         <a href={resumeUrl} target="_blank" rel="noopener noreferrer"
@@ -102,6 +135,15 @@ function SettingsForm() {
         <Save className="h-4 w-4" /> {saving ? "Saving…" : "Save settings"}
       </button>
     </form>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</label>
+      <div className="mt-1">{children}</div>
+    </div>
   );
 }
 
@@ -138,7 +180,7 @@ function SocialsManager() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold">Social links</h2>
-          <p className="text-sm text-muted-foreground">Displayed on your homepage.</p>
+          <p className="text-sm text-muted-foreground">Displayed across the site.</p>
         </div>
         <button onClick={() => { setEditing(null); setShowForm(true); }} className="btn-primary inline-flex items-center gap-2">
           <Plus className="h-4 w-4" /> Add
@@ -158,14 +200,10 @@ function SocialsManager() {
       )}
 
       <div className="grid gap-2">
-        {list.data?.length === 0 && (
-          <p className="text-sm text-muted-foreground">No links yet.</p>
-        )}
+        {list.data?.length === 0 && <p className="text-sm text-muted-foreground">No links yet.</p>}
         {list.data?.map((s) => (
           <div key={s.id} className="glass flex items-center gap-3 p-3">
-            <span className="text-xs uppercase tracking-wide bg-primary/15 text-primary rounded-md px-2 py-1">
-              {s.icon_name}
-            </span>
+            <span className="text-xs uppercase tracking-wide bg-primary/15 text-primary rounded-md px-2 py-1">{s.icon_name}</span>
             <div className="min-w-0 flex-1">
               <p className="font-medium">{s.platform_name}</p>
               <p className="text-xs text-muted-foreground truncate">{s.url}</p>
@@ -184,9 +222,7 @@ function SocialsManager() {
   );
 }
 
-function SocialForm({
-  initial, onClose, onSaved,
-}: { initial: Social | null; onClose: () => void; onSaved: () => void }) {
+function SocialForm({ initial, onClose, onSaved }: { initial: Social | null; onClose: () => void; onSaved: () => void }) {
   const [platform_name, setPlatform] = useState(initial?.platform_name ?? "");
   const [url, setUrl] = useState(initial?.url ?? "");
   const [icon_name, setIcon] = useState(initial?.icon_name ?? "link");
