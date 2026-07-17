@@ -5,8 +5,32 @@ import { supabase } from "@/integrations/supabase/client";
 import { SignedImage } from "@/components/SignedImage";
 import { SiteLayout } from "@/components/SiteLayout";
 
+const BASE_URL = "https://glassmorphic-folio-hub.lovable.app";
+
 export const Route = createFileRoute("/projects/$id")({
-  head: () => ({ meta: [{ title: "Project — Shoibur Rahman" }] }),
+  loader: async ({ params }) => {
+    const { data } = await supabase.from("projects").select("id, title, description").eq("id", params.id).maybeSingle();
+    return { project: data };
+  },
+  head: ({ params, loaderData }) => {
+    const p = loaderData?.project;
+    const title = p ? `${p.title} — Shoibur Rahman` : "Project — Shoibur Rahman";
+    const desc = p?.description
+      ? p.description.slice(0, 160)
+      : "A project by Shoibur Rahman — web development, design, and video editing work.";
+    const url = `${BASE_URL}/projects/${params.id}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: ProjectDetail,
 });
 

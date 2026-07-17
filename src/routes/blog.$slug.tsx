@@ -5,8 +5,45 @@ import { supabase } from "@/integrations/supabase/client";
 import { SignedImage } from "@/components/SignedImage";
 import { SiteLayout } from "@/components/SiteLayout";
 
+const BASE_URL = "https://glassmorphic-folio-hub.lovable.app";
+
 export const Route = createFileRoute("/blog/$slug")({
-  head: () => ({ meta: [{ title: "Post — Shoibur Rahman" }] }),
+  loader: async ({ params }) => {
+    const { data } = await supabase.from("blog_posts")
+      .select("title, excerpt, seo_title, seo_description, published_at")
+      .eq("slug", params.slug).eq("status", "published").maybeSingle();
+    return { post: data };
+  },
+  head: ({ params, loaderData }) => {
+    const p = loaderData?.post;
+    const title = p ? `${p.seo_title || p.title} — Shoibur Rahman` : "Post — Shoibur Rahman";
+    const desc = (p?.seo_description || p?.excerpt || "An article by Shoibur Rahman.").slice(0, 160);
+    const url = `${BASE_URL}/blog/${params.slug}`;
+    const scripts = p ? [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: p.title,
+        description: p.excerpt,
+        datePublished: p.published_at,
+        author: { "@type": "Person", name: "Shoibur Rahman" },
+        mainEntityOfPage: url,
+      }),
+    }] : undefined;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      ...(scripts ? { scripts } : {}),
+    };
+  },
   component: BlogDetail,
 });
 
