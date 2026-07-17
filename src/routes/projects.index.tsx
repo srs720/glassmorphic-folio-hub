@@ -9,8 +9,12 @@ export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
       { title: "Projects — Shoibur Rahman" },
-      { name: "description", content: "Selected projects: web development, design, and video editing." },
+      { name: "description", content: "Selected projects by Shoibur Rahman across web development, logo design, and promotional video editing — including SRS Digital Shop and Zero To Decor." },
+      { property: "og:title", content: "Projects — Shoibur Rahman" },
+      { property: "og:description", content: "Selected projects by Shoibur Rahman across web development, logo design, and promotional video editing — including SRS Digital Shop and Zero To Decor." },
+      { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/projects" },
     ],
+    links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/projects" }],
   }),
   component: ProjectsPage,
 });
@@ -62,7 +66,7 @@ function ProjectsPage() {
                 <SignedImage path={p.image_path} alt={p.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <div className="p-5">
-                <h3 className="font-semibold">{p.title}</h3>
+                <h2 className="font-semibold">{p.title}</h2>
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.description}</p>
                 {p.tags?.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-1.5">

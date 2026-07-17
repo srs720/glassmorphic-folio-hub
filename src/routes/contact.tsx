@@ -9,8 +9,12 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Shoibur Rahman" },
-      { name: "description", content: "Get in touch with Shoibur Rahman." },
+      { name: "description", content: "Get in touch with Shoibur Rahman for web development, logo design, or promotional video editing projects. Send a message or connect on social." },
+      { property: "og:title", content: "Contact — Shoibur Rahman" },
+      { property: "og:description", content: "Get in touch with Shoibur Rahman for web development, logo design, or promotional video editing projects. Send a message or connect on social." },
+      { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/contact" },
     ],
+    links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/contact" }],
   }),
   component: ContactPage,
 });
