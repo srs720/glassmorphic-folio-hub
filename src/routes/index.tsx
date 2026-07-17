@@ -132,7 +132,7 @@ function HomePage() {
             <h2 className="mt-1 text-3xl font-bold">A little about me</h2>
             <p className="mt-4 text-muted-foreground leading-relaxed">{settings.data?.bio}</p>
             <Link to="/about" className="mt-6 inline-flex items-center gap-1 text-primary font-medium hover:underline">
-              Learn more <ArrowRight className="h-4 w-4" />
+              Read my full bio <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="grid gap-3">
