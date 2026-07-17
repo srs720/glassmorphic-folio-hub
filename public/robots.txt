@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /auth
+
+Sitemap: https://glassmorphic-folio-hub.lovable.app/sitemap.xml
