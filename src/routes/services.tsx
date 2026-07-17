@@ -8,8 +8,12 @@ export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
       { title: "Services — Shoibur Rahman" },
-      { name: "description", content: "Web development, logo design, video editing, and database services." },
+      { name: "description", content: "Freelance services from Shoibur Rahman — web development, professional logo design, promotional video editing, and database configuration for modern projects." },
+      { property: "og:title", content: "Services — Shoibur Rahman" },
+      { property: "og:description", content: "Freelance services from Shoibur Rahman — web development, professional logo design, promotional video editing, and database configuration for modern projects." },
+      { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/services" },
     ],
+    links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/services" }],
   }),
   component: ServicesPage,
 });
@@ -46,7 +50,7 @@ function ServicesPage() {
             return (
               <div key={s.id} className="glass p-6">
                 <div className="rounded-xl bg-primary/15 text-primary p-2.5 w-fit"><Icon className="h-5 w-5" /></div>
-                <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
+                <h2 className="mt-4 text-lg font-semibold">{s.title}</h2>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.description}</p>
               </div>
             );

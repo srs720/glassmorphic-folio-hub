@@ -1,0 +1,12 @@
+# Shoibur Rahman
+
+> Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing.
+
+## Pages
+
+- [Home](/): Overview, featured projects, and skills.
+- [About](/about): Bio, education, experience, and skills.
+- [Projects](/projects): Selected work across web, design, and video.
+- [Services](/services): Web development, logo design, video editing, and database services.
+- [Blog](/blog): Articles and updates.
+- [Contact](/contact): Get in touch.

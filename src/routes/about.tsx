@@ -9,9 +9,14 @@ import { SiteLayout, useSettings } from "@/components/SiteLayout";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Shoibur Rahman" },
-      { name: "description", content: "About Shoibur Rahman: education, experience, and skills." },
+      { title: "About Shoibur Rahman — Developer, Designer & Video Editor" },
+      { name: "description", content: "Learn about Shoibur Rahman — his education, professional experience, and the skills he uses across web development, logo design, and promotional video editing." },
+      { property: "og:title", content: "About Shoibur Rahman — Developer, Designer & Video Editor" },
+      { property: "og:description", content: "Learn about Shoibur Rahman — his education, professional experience, and the skills he uses across web development, logo design, and promotional video editing." },
+      { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/about" },
+      { property: "og:type", content: "profile" },
     ],
+    links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/about" }],
   }),
   component: AboutPage,
 });
@@ -47,7 +52,7 @@ function AboutPage() {
           </div>
           <div>
             <p className="text-sm font-medium uppercase tracking-widest text-primary">About Me</p>
-            <h1 className="text-4xl font-bold mt-1">{settings.data?.name}</h1>
+            <h1 className="text-4xl font-bold mt-1">{settings.data?.name ?? "Shoibur Rahman"} — Developer, Designer & Video Editor</h1>
             <p className="text-muted-foreground">{settings.data?.tagline}</p>
             <p className="mt-6 text-lg leading-relaxed">{settings.data?.bio}</p>
             {settings.data?.resume_path && (

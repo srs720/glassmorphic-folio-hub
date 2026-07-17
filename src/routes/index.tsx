@@ -13,6 +13,30 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing." },
       { property: "og:title", content: "Shoibur Rahman — Developer, Designer & Video Editor" },
       { property: "og:description", content: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing." },
+      { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/" },
+    ],
+    links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Shoibur Rahman",
+          jobTitle: "Developer, Designer & Video Editor",
+          url: "https://glassmorphic-folio-hub.lovable.app/",
+          description: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing.",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Shoibur Rahman",
+          url: "https://glassmorphic-folio-hub.lovable.app/",
+        }),
+      },
     ],
   }),
   component: HomePage,
@@ -108,7 +132,7 @@ function HomePage() {
             <h2 className="mt-1 text-3xl font-bold">A little about me</h2>
             <p className="mt-4 text-muted-foreground leading-relaxed">{settings.data?.bio}</p>
             <Link to="/about" className="mt-6 inline-flex items-center gap-1 text-primary font-medium hover:underline">
-              Learn more <ArrowRight className="h-4 w-4" />
+              Read my full bio <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="grid gap-3">

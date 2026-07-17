@@ -8,8 +8,12 @@ export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
       { title: "Blog — Shoibur Rahman" },
-      { name: "description", content: "Articles and updates." },
+      { name: "description", content: "Articles, tutorials, and updates from Shoibur Rahman on web development, design, video editing, and building digital products." },
+      { property: "og:title", content: "Blog — Shoibur Rahman" },
+      { property: "og:description", content: "Articles, tutorials, and updates from Shoibur Rahman on web development, design, video editing, and building digital products." },
+      { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/blog" },
     ],
+    links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/blog" }],
   }),
   component: BlogIndex,
 });
