@@ -8,9 +8,9 @@ export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
       { title: "Services — Shoibur Rahman" },
-      { name: "description", content: "Freelance services from Shoibur Rahman — web development, professional logo design, promotional video editing, and database configuration for modern projects." },
+      { name: "description", content: "Freelance services from Shoibur Rahman — web development, logo design, and promotional video editing." },
       { property: "og:title", content: "Services — Shoibur Rahman" },
-      { property: "og:description", content: "Freelance services from Shoibur Rahman — web development, professional logo design, promotional video editing, and database configuration for modern projects." },
+      { property: "og:description", content: "Freelance services from Shoibur Rahman — web development, logo design, and promotional video editing." },
       { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/services" },
     ],
     links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/services" }],
@@ -21,36 +21,37 @@ export const Route = createFileRoute("/services")({
 const ICONS: Record<string, typeof Sparkles> = { code: Code, palette: Palette, video: Video, database: Database, sparkles: Sparkles };
 
 const STEPS = [
-  { icon: MessageCircle, title: "Discovery", body: "We talk about your goals, audience, and constraints." },
-  { icon: PencilRuler, title: "Design", body: "Wireframes, mood-boards, and clean prototypes." },
-  { icon: Rocket, title: "Build", body: "Fast, reliable delivery with iterative previews." },
-  { icon: CheckCircle2, title: "Launch", body: "Ship, measure, and iterate for impact." },
+  { icon: MessageCircle, title: "Brief", body: "We talk shot list — goals, audience, constraints." },
+  { icon: PencilRuler, title: "Storyboard", body: "Wireframes, mood-boards, clean prototypes." },
+  { icon: Rocket, title: "Production", body: "Fast, reliable builds with iterative dailies." },
+  { icon: CheckCircle2, title: "Final Cut", body: "Ship, measure, and iterate for impact." },
 ];
 
 function ServicesPage() {
   const services = useQuery({
     queryKey: ["services"],
-    queryFn: async () => {
-      const { data } = await supabase.from("services").select("*").order("sort_order");
-      return data ?? [];
-    },
+    queryFn: async () => (await supabase.from("services").select("*").order("sort_order")).data ?? [],
   });
 
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-6xl px-4 pt-12 pb-16">
-        <div className="glass-strong p-8">
-          <p className="text-sm font-medium uppercase tracking-widest text-primary">Services</p>
-          <h1 className="text-4xl font-bold">What I offer</h1>
-          <p className="mt-2 text-muted-foreground">Purpose-built solutions across code, design, and video.</p>
-        </div>
-        <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {(services.data ?? []).map((s) => {
+      <section className="mx-auto max-w-7xl px-4 md:px-6 pt-12">
+        <p className="mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">// SCENE_04 · Services</p>
+        <h1 className="mt-4 font-display text-5xl md:text-7xl uppercase leading-[0.9]">
+          What I <span className="text-accent">Ship.</span>
+        </h1>
+        <p className="mt-4 text-muted-foreground max-w-xl">Purpose-built work across code, design, and video.</p>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {(services.data ?? []).map((s, i) => {
             const Icon = ICONS[s.icon_name] ?? Sparkles;
             return (
-              <div key={s.id} className="glass p-6">
-                <div className="rounded-xl bg-primary/15 text-primary p-2.5 w-fit"><Icon className="h-5 w-5" /></div>
-                <h2 className="mt-4 text-lg font-semibold">{s.title}</h2>
+              <div key={s.id} className="surface p-6 hover:border-accent/60 transition">
+                <div className="flex items-center justify-between">
+                  <div className="border border-accent/60 text-accent p-2.5 w-fit"><Icon className="h-5 w-5" /></div>
+                  <span className="mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">SVC_{String(i + 1).padStart(2, "0")}</span>
+                </div>
+                <h2 className="mt-5 font-display text-xl uppercase">{s.title}</h2>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.description}</p>
               </div>
             );
@@ -58,17 +59,17 @@ function ServicesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-20">
-        <div className="glass-strong p-8">
-          <p className="text-sm font-medium uppercase tracking-widest text-primary">Process</p>
-          <h2 className="text-3xl font-bold">How I work</h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-4">
+      <section className="mx-auto max-w-7xl px-4 md:px-6 mt-20 pb-24">
+        <div className="surface p-6 md:p-10">
+          <p className="mono text-[11px] uppercase tracking-[0.22em] text-teal">// WORKFLOW</p>
+          <h2 className="mt-2 font-display text-3xl md:text-5xl uppercase">How The Edit Works</h2>
+          <div className="mt-8 grid gap-0 md:grid-cols-4 border-t border-border">
             {STEPS.map((s, i) => (
-              <div key={s.title} className="glass p-5">
-                <div className="rounded-xl bg-primary/15 text-primary p-2.5 w-fit"><s.icon className="h-5 w-5" /></div>
-                <p className="mt-3 text-xs text-primary font-semibold">Step {i + 1}</p>
-                <h3 className="font-semibold">{s.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
+              <div key={s.title} className="p-5 border-b md:border-b-0 md:border-r border-border last:border-r-0">
+                <p className="mono text-[10px] uppercase tracking-[0.22em] text-accent">STEP {String(i + 1).padStart(2, "0")}</p>
+                <div className="mt-3"><s.icon className="h-5 w-5 text-accent" /></div>
+                <h3 className="mt-3 font-display uppercase text-lg">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
               </div>
             ))}
           </div>
