@@ -48,45 +48,48 @@ function ProjectDetail() {
 
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-4xl px-4 pt-12 pb-20">
-        <Link to="/projects" className="text-sm text-primary hover:underline inline-flex items-center gap-1 mb-4">
-          <ArrowLeft className="h-4 w-4" /> All projects
+      <section className="mx-auto max-w-5xl px-4 md:px-6 pt-12 pb-24">
+        <Link to="/projects" className="mono text-[11px] uppercase tracking-[0.22em] text-accent hover:underline inline-flex items-center gap-1 mb-6">
+          <ArrowLeft className="h-3 w-3" /> Back to reel
         </Link>
         {q.isLoading ? (
-          <div className="glass h-96 animate-pulse" />
+          <div className="surface h-96 animate-pulse" />
         ) : !p ? (
-          <div className="glass p-10 text-center text-muted-foreground">Project not found.</div>
+          <div className="surface p-10 text-center text-muted-foreground mono text-sm uppercase">// take not found</div>
         ) : (
-          <article className="glass-strong overflow-hidden">
-            <div className="aspect-video overflow-hidden bg-gradient-to-br from-mint/30 to-emerald-soft/30">
+          <article className="surface overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-border">
+              <span className="mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                {(p.title || "PROJECT").replace(/[^A-Z0-9]+/gi, "_").toUpperCase()}.MP4
+              </span>
+              <span className="mono text-[10px] text-teal">MASTER</span>
+            </div>
+            <div className="aspect-video overflow-hidden bg-[#0f1116]">
               <SignedImage path={p.image_path} alt={p.title} className="h-full w-full object-cover" />
             </div>
-            <div className="p-8">
-              <h1 className="text-3xl font-bold">{p.title}</h1>
+            <div className="p-6 md:p-8">
+              <h1 className="font-display text-3xl md:text-5xl uppercase leading-tight">{p.title}</h1>
               {p.tags?.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {p.tags.map((t: string) => (
-                    <span key={t} className="text-xs bg-primary/10 text-primary rounded-md px-2 py-0.5">{t}</span>
-                  ))}
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {p.tags.map((t: string) => (<span key={t} className="tag-mono">{t}</span>))}
                 </div>
               )}
-              <p className="mt-4 text-lg text-muted-foreground">{p.description}</p>
+              <p className="mt-5 text-lg text-muted-foreground">{p.description}</p>
               {p.detail_content && (
-                <div className="mt-6 whitespace-pre-wrap leading-relaxed">{p.detail_content}</div>
+                <div className="mt-6 whitespace-pre-wrap leading-relaxed text-foreground/90">{p.detail_content}</div>
               )}
               {(p.images ?? []).length > 0 && (
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
                   {p.images.map((path: string) => (
-                    <div key={path} className="glass overflow-hidden aspect-video">
+                    <div key={path} className="surface overflow-hidden aspect-video">
                       <SignedImage path={path} alt={p.title} className="h-full w-full object-cover" />
                     </div>
                   ))}
                 </div>
               )}
               {p.live_url && (
-                <a href={p.live_url} target="_blank" rel="noopener noreferrer"
-                  className="btn-primary mt-8 inline-flex items-center gap-2">
-                  Visit live <ExternalLink className="h-4 w-4" />
+                <a href={p.live_url} target="_blank" rel="noopener noreferrer" className="btn-primary mt-8 inline-flex items-center gap-2">
+                  Visit Live <ExternalLink className="h-4 w-4" />
                 </a>
               )}
             </div>
