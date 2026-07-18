@@ -169,3 +169,25 @@
     pointer-events: none;
   }
 }
+
+/* Compatibility shims for legacy admin classes */
+@utility glass {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+@utility glass-strong {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+@utility glass-input {
+  background: #14161C;
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  border-radius: 4px;
+  padding: 0.6rem 0.85rem;
+}
+@utility glass-input {
+  &:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-accent) 30%, transparent); }
+}
