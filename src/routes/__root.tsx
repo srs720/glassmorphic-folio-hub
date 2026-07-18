@@ -56,6 +56,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "Z_QJyL-d0fwOOF_yHt-MpNDyUD14IgvLLUAFjuYFuP8" },
       { title: "Shoibur Rahman — Developer, Designer & Video Editor" },
       { name: "description", content: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing." },
       { property: "og:title", content: "Shoibur Rahman — Developer, Designer & Video Editor" },
