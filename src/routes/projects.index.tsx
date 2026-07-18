@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { Play } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SignedImage } from "@/components/SignedImage";
 import { SiteLayout } from "@/components/SiteLayout";
@@ -9,9 +10,9 @@ export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
       { title: "Projects — Shoibur Rahman" },
-      { name: "description", content: "Selected projects by Shoibur Rahman across web development, logo design, and promotional video editing — including SRS Digital Shop and Zero To Decor." },
+      { name: "description", content: "Selected projects from Shoibur Rahman across web, design, and video — including SRS Digital Shop and Zero To Decor." },
       { property: "og:title", content: "Projects — Shoibur Rahman" },
-      { property: "og:description", content: "Selected projects by Shoibur Rahman across web development, logo design, and promotional video editing — including SRS Digital Shop and Zero To Decor." },
+      { property: "og:description", content: "Selected projects from Shoibur Rahman across web, design, and video — including SRS Digital Shop and Zero To Decor." },
       { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/projects" },
     ],
     links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/projects" }],
@@ -23,10 +24,7 @@ function ProjectsPage() {
   const [filter, setFilter] = useState<string>("All");
   const projects = useQuery({
     queryKey: ["projects_all"],
-    queryFn: async () => {
-      const { data } = await supabase.from("projects").select("*").order("sort_order").order("created_at", { ascending: false });
-      return data ?? [];
-    },
+    queryFn: async () => (await supabase.from("projects").select("*").order("sort_order").order("created_at", { ascending: false })).data ?? [],
   });
 
   const tags = useMemo(() => {
@@ -39,48 +37,61 @@ function ProjectsPage() {
 
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-6xl px-4 pt-12 pb-20">
-        <div className="glass-strong p-8">
-          <p className="text-sm font-medium uppercase tracking-widest text-primary">Portfolio</p>
-          <h1 className="text-4xl font-bold">Projects</h1>
-          <p className="mt-2 text-muted-foreground">A collection of work across web, design, and video.</p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {tags.map((t) => (
-              <button
-                key={t}
-                onClick={() => setFilter(t)}
-                className={
-                  filter === t
-                    ? "rounded-full px-4 py-1.5 text-sm bg-primary text-primary-foreground font-medium"
-                    : "glass rounded-full px-4 py-1.5 text-sm hover:bg-white/70"
-                }
-              >{t}</button>
-            ))}
-          </div>
+      <section className="mx-auto max-w-7xl px-4 md:px-6 pt-12 pb-20">
+        <p className="mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">// SCENE_03 · Archive</p>
+        <h1 className="mt-4 font-display text-5xl md:text-7xl uppercase leading-[0.9]">
+          The <span className="text-accent">Reel.</span>
+        </h1>
+        <p className="mt-4 text-muted-foreground max-w-xl">A cut of recent work. Filter by tag to jump between chapters.</p>
+
+        <div className="mt-8 flex flex-wrap gap-2 border-y border-border py-3">
+          {tags.map((t) => (
+            <button
+              key={t}
+              onClick={() => setFilter(t)}
+              className={`mono text-[11px] uppercase tracking-[0.18em] px-3 py-1.5 border transition ${
+                filter === t
+                  ? "border-accent text-accent bg-accent/10"
+                  : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
+              }`}
+            >{t}</button>
+          ))}
         </div>
 
-        <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {visible.map((p) => (
-            <Link key={p.id} to="/projects/$id" params={{ id: p.id }} className="glass overflow-hidden group">
-              <div className="aspect-video overflow-hidden bg-gradient-to-br from-mint/30 to-emerald-soft/30">
-                <SignedImage path={p.image_path} alt={p.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-              </div>
-              <div className="p-5">
-                <h2 className="font-semibold">{p.title}</h2>
-                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.description}</p>
-                {p.tags?.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {p.tags.map((t: string) => (
-                      <span key={t} className="text-xs bg-primary/10 text-primary rounded-md px-2 py-0.5">{t}</span>
-                    ))}
+        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {visible.map((p, i) => {
+            const filename = `${(p.title || "PROJECT").replace(/[^A-Z0-9]+/gi, "_").toUpperCase().slice(0, 24)}_${String(i + 1).padStart(2, "0")}.MP4`;
+            return (
+              <Link key={p.id} to="/projects/$id" params={{ id: p.id }} className="group block surface overflow-hidden hover:border-accent/60 transition">
+                <div className="flex items-center justify-between px-3 py-2 border-b border-border">
+                  <span className="mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{filename}</span>
+                  <span className="mono text-[10px] text-teal">01:24</span>
+                </div>
+                <div className="relative aspect-video bg-[#0f1116] overflow-hidden">
+                  <SignedImage path={p.image_path} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:brightness-110" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                    <div className="h-12 w-12 rounded-full bg-accent/90 flex items-center justify-center">
+                      <Play className="h-5 w-5 text-background fill-background ml-0.5" />
+                    </div>
                   </div>
-                )}
-              </div>
-            </Link>
-          ))}
+                </div>
+                <div className="p-4">
+                  <h2 className="font-display uppercase text-lg leading-tight">{p.title}</h2>
+                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.description}</p>
+                  {p.tags?.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {p.tags.slice(0, 4).map((t: string) => (
+                        <span key={t} className="tag-mono">{t}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
           {visible.length === 0 && !projects.isLoading && (
-            <div className="glass p-8 text-center text-muted-foreground md:col-span-2 lg:col-span-3">
-              No projects in this category yet.
+            <div className="surface p-8 text-center text-muted-foreground md:col-span-2 lg:col-span-3 mono text-sm uppercase tracking-wider">
+              // No takes in this chapter yet
             </div>
           )}
         </div>
