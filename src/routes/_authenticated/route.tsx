@@ -20,12 +20,13 @@ export const Route = createFileRoute("/_authenticated")({
 
 const NAV: Array<{ to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean }> = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/projects", label: "Projects", icon: FolderKanban },
-  { to: "/admin/blog", label: "Blog", icon: FileText },
+  { to: "/admin/education", label: "Education", icon: FileText },
+  { to: "/admin/people", label: "People", icon: Sparkles },
+  { to: "/admin/hobbies", label: "Hobbies", icon: Wrench },
+  { to: "/admin/memories", label: "Memories", icon: FolderKanban },
+  { to: "/admin/foods", label: "Food Diary", icon: Quote },
+  { to: "/admin/quotes", label: "Quotes", icon: Quote },
   { to: "/admin/messages", label: "Messages", icon: MessageSquare },
-  { to: "/admin/skills", label: "Skills", icon: Sparkles },
-  { to: "/admin/services", label: "Services", icon: Wrench },
-  { to: "/admin/testimonials", label: "Testimonials", icon: Quote },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

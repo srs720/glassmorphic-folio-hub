@@ -24,8 +24,14 @@ import { Route as AuthenticatedAdminTestimonialsRouteImport } from './routes/_au
 import { Route as AuthenticatedAdminSkillsRouteImport } from './routes/_authenticated/admin.skills'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin.services'
+import { Route as AuthenticatedAdminQuotesRouteImport } from './routes/_authenticated/admin.quotes'
 import { Route as AuthenticatedAdminProjectsRouteImport } from './routes/_authenticated/admin.projects'
+import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
+import { Route as AuthenticatedAdminMemoriesRouteImport } from './routes/_authenticated/admin.memories'
+import { Route as AuthenticatedAdminHobbiesRouteImport } from './routes/_authenticated/admin.hobbies'
+import { Route as AuthenticatedAdminFoodsRouteImport } from './routes/_authenticated/admin.foods'
+import { Route as AuthenticatedAdminEducationRouteImport } from './routes/_authenticated/admin.education'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 
 const ThoughtsRoute = ThoughtsRouteImport.update({
@@ -106,16 +112,51 @@ const AuthenticatedAdminServicesRoute =
     path: '/admin/services',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminQuotesRoute =
+  AuthenticatedAdminQuotesRouteImport.update({
+    id: '/admin/quotes',
+    path: '/admin/quotes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminProjectsRoute =
   AuthenticatedAdminProjectsRouteImport.update({
     id: '/admin/projects',
     path: '/admin/projects',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminPeopleRoute =
+  AuthenticatedAdminPeopleRouteImport.update({
+    id: '/admin/people',
+    path: '/admin/people',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminMessagesRoute =
   AuthenticatedAdminMessagesRouteImport.update({
     id: '/admin/messages',
     path: '/admin/messages',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminMemoriesRoute =
+  AuthenticatedAdminMemoriesRouteImport.update({
+    id: '/admin/memories',
+    path: '/admin/memories',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminHobbiesRoute =
+  AuthenticatedAdminHobbiesRouteImport.update({
+    id: '/admin/hobbies',
+    path: '/admin/hobbies',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminFoodsRoute = AuthenticatedAdminFoodsRouteImport.update({
+  id: '/admin/foods',
+  path: '/admin/foods',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminEducationRoute =
+  AuthenticatedAdminEducationRouteImport.update({
+    id: '/admin/education',
+    path: '/admin/education',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
@@ -135,8 +176,14 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/education': typeof AuthenticatedAdminEducationRoute
+  '/admin/foods': typeof AuthenticatedAdminFoodsRoute
+  '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
+  '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/projects': typeof AuthenticatedAdminProjectsRoute
+  '/admin/quotes': typeof AuthenticatedAdminQuotesRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/skills': typeof AuthenticatedAdminSkillsRoute
@@ -154,8 +201,14 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/education': typeof AuthenticatedAdminEducationRoute
+  '/admin/foods': typeof AuthenticatedAdminFoodsRoute
+  '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
+  '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/projects': typeof AuthenticatedAdminProjectsRoute
+  '/admin/quotes': typeof AuthenticatedAdminQuotesRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/skills': typeof AuthenticatedAdminSkillsRoute
@@ -175,8 +228,14 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
+  '/_authenticated/admin/foods': typeof AuthenticatedAdminFoodsRoute
+  '/_authenticated/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
+  '/_authenticated/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/_authenticated/admin/projects': typeof AuthenticatedAdminProjectsRoute
+  '/_authenticated/admin/quotes': typeof AuthenticatedAdminQuotesRoute
   '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/skills': typeof AuthenticatedAdminSkillsRoute
@@ -196,8 +255,14 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/admin/blog'
+    | '/admin/education'
+    | '/admin/foods'
+    | '/admin/hobbies'
+    | '/admin/memories'
     | '/admin/messages'
+    | '/admin/people'
     | '/admin/projects'
+    | '/admin/quotes'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/skills'
@@ -215,8 +280,14 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/admin/blog'
+    | '/admin/education'
+    | '/admin/foods'
+    | '/admin/hobbies'
+    | '/admin/memories'
     | '/admin/messages'
+    | '/admin/people'
     | '/admin/projects'
+    | '/admin/quotes'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/skills'
@@ -235,8 +306,14 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/_authenticated/admin/blog'
+    | '/_authenticated/admin/education'
+    | '/_authenticated/admin/foods'
+    | '/_authenticated/admin/hobbies'
+    | '/_authenticated/admin/memories'
     | '/_authenticated/admin/messages'
+    | '/_authenticated/admin/people'
     | '/_authenticated/admin/projects'
+    | '/_authenticated/admin/quotes'
     | '/_authenticated/admin/services'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/skills'
@@ -364,6 +441,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminServicesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/quotes': {
+      id: '/_authenticated/admin/quotes'
+      path: '/admin/quotes'
+      fullPath: '/admin/quotes'
+      preLoaderRoute: typeof AuthenticatedAdminQuotesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/projects': {
       id: '/_authenticated/admin/projects'
       path: '/admin/projects'
@@ -371,11 +455,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProjectsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/people': {
+      id: '/_authenticated/admin/people'
+      path: '/admin/people'
+      fullPath: '/admin/people'
+      preLoaderRoute: typeof AuthenticatedAdminPeopleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/messages': {
       id: '/_authenticated/admin/messages'
       path: '/admin/messages'
       fullPath: '/admin/messages'
       preLoaderRoute: typeof AuthenticatedAdminMessagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/memories': {
+      id: '/_authenticated/admin/memories'
+      path: '/admin/memories'
+      fullPath: '/admin/memories'
+      preLoaderRoute: typeof AuthenticatedAdminMemoriesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/hobbies': {
+      id: '/_authenticated/admin/hobbies'
+      path: '/admin/hobbies'
+      fullPath: '/admin/hobbies'
+      preLoaderRoute: typeof AuthenticatedAdminHobbiesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/foods': {
+      id: '/_authenticated/admin/foods'
+      path: '/admin/foods'
+      fullPath: '/admin/foods'
+      preLoaderRoute: typeof AuthenticatedAdminFoodsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/education': {
+      id: '/_authenticated/admin/education'
+      path: '/admin/education'
+      fullPath: '/admin/education'
+      preLoaderRoute: typeof AuthenticatedAdminEducationRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/blog': {
@@ -390,8 +509,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
+  AuthenticatedAdminEducationRoute: typeof AuthenticatedAdminEducationRoute
+  AuthenticatedAdminFoodsRoute: typeof AuthenticatedAdminFoodsRoute
+  AuthenticatedAdminHobbiesRoute: typeof AuthenticatedAdminHobbiesRoute
+  AuthenticatedAdminMemoriesRoute: typeof AuthenticatedAdminMemoriesRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
+  AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
   AuthenticatedAdminProjectsRoute: typeof AuthenticatedAdminProjectsRoute
+  AuthenticatedAdminQuotesRoute: typeof AuthenticatedAdminQuotesRoute
   AuthenticatedAdminServicesRoute: typeof AuthenticatedAdminServicesRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
   AuthenticatedAdminSkillsRoute: typeof AuthenticatedAdminSkillsRoute
@@ -401,8 +526,14 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
+  AuthenticatedAdminEducationRoute: AuthenticatedAdminEducationRoute,
+  AuthenticatedAdminFoodsRoute: AuthenticatedAdminFoodsRoute,
+  AuthenticatedAdminHobbiesRoute: AuthenticatedAdminHobbiesRoute,
+  AuthenticatedAdminMemoriesRoute: AuthenticatedAdminMemoriesRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
+  AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
   AuthenticatedAdminProjectsRoute: AuthenticatedAdminProjectsRoute,
+  AuthenticatedAdminQuotesRoute: AuthenticatedAdminQuotesRoute,
   AuthenticatedAdminServicesRoute: AuthenticatedAdminServicesRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
   AuthenticatedAdminSkillsRoute: AuthenticatedAdminSkillsRoute,
