@@ -16,10 +16,11 @@ import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="glass-strong max-w-md text-center p-10">
-        <h1 className="text-6xl font-bold text-foreground">404</h1>
-        <p className="mt-3 text-sm text-muted-foreground">This page drifted off into the fog.</p>
+    <div className="flex min-h-screen items-center justify-center px-4 bg-background">
+      <div className="bento max-w-md text-center p-10">
+        <p className="label-mono">404</p>
+        <h1 className="mt-3 text-3xl">This page wandered off.</h1>
+        <p className="mt-3 text-sm text-muted-foreground">Let's get you home.</p>
         <div className="mt-6">
           <Link to="/" className="btn-primary inline-block">Back home</Link>
         </div>
@@ -35,15 +36,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="glass-strong max-w-md text-center p-10">
+    <div className="flex min-h-screen items-center justify-center px-4 bg-background">
+      <div className="bento max-w-md text-center p-10">
         <h1 className="text-xl font-semibold">Something went wrong</h1>
         <p className="mt-2 text-sm text-muted-foreground">Try again or head home.</p>
         <div className="mt-6 flex justify-center gap-2">
-          <button
-            onClick={() => { router.invalidate(); reset(); }}
-            className="btn-primary"
-          >Try again</button>
+          <button onClick={() => { router.invalidate(); reset(); }} className="btn-primary">Try again</button>
           <a href="/" className="btn-ghost">Home</a>
         </div>
       </div>
@@ -57,22 +55,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "google-site-verification", content: "Z_QJyL-d0fwOOF_yHt-MpNDyUD14IgvLLUAFjuYFuP8" },
-      { title: "Shoibur Rahman — Developer, Designer & Video Editor" },
-      { name: "description", content: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing." },
-      { property: "og:title", content: "Shoibur Rahman — Developer, Designer & Video Editor" },
-      { property: "og:description", content: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing." },
+      { title: "Shoibur Rahman — Digital Diary" },
+      { name: "description", content: "The personal digital diary of Shoibur Rahman — student, web developer, and curious mind. Journey, people, memories, food, and thoughts." },
+      { property: "og:site_name", content: "Shoibur Rahman" },
+      { property: "og:title", content: "Shoibur Rahman — Digital Diary" },
+      { property: "og:description", content: "The personal digital diary of Shoibur Rahman — student, web developer, and curious mind." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Shoibur Rahman — Developer, Designer & Video Editor" },
-      { name: "twitter:description", content: "Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b05200c1-110e-456e-82c6-f63d7257d655/id-preview-b128c306--c9f93f8e-fd6c-40f8-8eac-053ccd0f69ff.lovable.app-1784001223719.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b05200c1-110e-456e-82c6-f63d7257d655/id-preview-b128c306--c9f93f8e-fd6c-40f8-8eac-053ccd0f69ff.lovable.app-1784001223719.png" },
+      { name: "twitter:title", content: "Shoibur Rahman — Digital Diary" },
+      { name: "twitter:description", content: "The personal digital diary of Shoibur Rahman — student, web developer, and curious mind." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" },
     ],
   }),
   shellComponent: RootShell,

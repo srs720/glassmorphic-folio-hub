@@ -38,7 +38,10 @@ function SettingsForm() {
   const [location, setLocation] = useState("");
   const [education, setEducation] = useState("");
   const [experience, setExperience] = useState("");
+  const [greeting, setGreeting] = useState("");
+  const [identityLine, setIdentityLine] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [heroFile, setHeroFile] = useState<File | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -51,6 +54,8 @@ function SettingsForm() {
       setLocation(q.data.location ?? "");
       setEducation(q.data.education ?? "");
       setExperience(q.data.experience ?? "");
+      setGreeting((q.data as any).greeting ?? "");
+      setIdentityLine((q.data as any).identity_line ?? "");
       getSignedUrl(q.data.resume_path).then(setResumeUrl);
     }
   }, [q.data]);
@@ -62,6 +67,7 @@ function SettingsForm() {
     try {
       let resume_path = q.data.resume_path;
       let avatar_path = q.data.avatar_path;
+      let hero_image_path = (q.data as any).hero_image_path;
       if (resumeFile) {
         if (q.data.resume_path) await deleteFile(q.data.resume_path);
         resume_path = await uploadFile(resumeFile, "resume");
@@ -70,14 +76,22 @@ function SettingsForm() {
         if (q.data.avatar_path) await deleteFile(q.data.avatar_path);
         avatar_path = await uploadFile(avatarFile, "avatar");
       }
+      if (heroFile) {
+        if (hero_image_path) await deleteFile(hero_image_path);
+        hero_image_path = await uploadFile(heroFile, "hero");
+      }
       const { error } = await supabase.from("site_settings")
-        .update({ name: name.trim(), bio: bio.trim(), tagline, location, education, experience, resume_path, avatar_path })
+        .update({
+          name: name.trim(), bio: bio.trim(), tagline, location, education, experience,
+          resume_path, avatar_path,
+          greeting, identity_line: identityLine, hero_image_path,
+        } as any)
         .eq("id", q.data.id);
       if (error) throw error;
       toast.success("Settings saved");
       qc.invalidateQueries({ queryKey: ["site_settings_admin"] });
       qc.invalidateQueries({ queryKey: ["site_settings"] });
-      setResumeFile(null); setAvatarFile(null);
+      setResumeFile(null); setAvatarFile(null); setHeroFile(null);
     } catch (err) {
       console.error(err);
       toast.error("Save failed");
@@ -109,6 +123,8 @@ function SettingsForm() {
       </div>
 
       <Field label="Name"><input className="glass-input px-4 py-2.5 text-sm w-full" value={name} onChange={(e) => setName(e.target.value)} /></Field>
+      <Field label="Greeting (shown on home hero)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={greeting} onChange={(e) => setGreeting(e.target.value)} placeholder="Hey, I'm Shoibur." /></Field>
+      <Field label="Identity line (footer)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={identityLine} onChange={(e) => setIdentityLine(e.target.value)} placeholder="Student · Web developer · Curious mind" /></Field>
       <Field label="Tagline"><input className="glass-input px-4 py-2.5 text-sm w-full" value={tagline} onChange={(e) => setTagline(e.target.value)} /></Field>
       <Field label="Bio"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-32" value={bio} onChange={(e) => setBio(e.target.value)} /></Field>
       <div className="grid gap-3 md:grid-cols-2">
@@ -116,6 +132,15 @@ function SettingsForm() {
         <Field label="Education"><input className="glass-input px-4 py-2.5 text-sm w-full" value={education} onChange={(e) => setEducation(e.target.value)} /></Field>
       </div>
       <Field label="Experience"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-20" value={experience} onChange={(e) => setExperience(e.target.value)} /></Field>
+
+      <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Hero image (large photo on home)</label>
+      <label className="glass-input flex items-center gap-3 px-4 py-2.5 text-sm cursor-pointer">
+        <Upload className="h-4 w-4 text-primary" />
+        <span className="text-muted-foreground truncate">
+          {heroFile ? heroFile.name : (q.data as any)?.hero_image_path ? "Replace hero image" : "Upload hero image"}
+        </span>
+        <input type="file" accept="image/*" className="hidden" onChange={(e) => setHeroFile(e.target.files?.[0] ?? null)} />
+      </label>
 
       <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Resume / CV</label>
       <label className="glass-input flex items-center gap-3 px-4 py-2.5 text-sm cursor-pointer">

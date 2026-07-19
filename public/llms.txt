@@ -1,12 +1,13 @@
 # Shoibur Rahman
 
-> Personal portfolio of Shoibur Rahman — web development, logo design, and promotional video editing.
+> The personal digital diary of Shoibur Rahman — student, web developer, and curious mind based in Bangladesh.
 
 ## Pages
 
-- [Home](/): Overview, featured projects, and skills.
-- [About](/about): Bio, education, experience, and skills.
-- [Projects](/projects): Selected work across web, design, and video.
-- [Services](/services): Web development, logo design, video editing, and database services.
-- [Blog](/blog): Articles and updates.
+- [Home](/): Welcome, quick bio, and highlights.
+- [Journey](/journey): Education timeline, current studies, and future plans.
+- [People](/people): Family, teachers, and close friends.
+- [Memories](/memories): Hobbies, travel stories, and personal moments.
+- [Food Diary](/diary): Favorite foods with short reviews.
+- [Thoughts](/thoughts): Personal quotes, advice, and reflections.
 - [Contact](/contact): Get in touch.

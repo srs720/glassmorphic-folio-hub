@@ -1,20 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Send } from "lucide-react";
+import { Mail, Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout, useSocials, SocialIcon } from "@/components/SiteLayout";
+
+const CANONICAL = "https://shoiburrahman.com";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Shoibur Rahman" },
-      { name: "description", content: "Get in touch with Shoibur Rahman for web development, logo design, or promotional video editing." },
+      { name: "description", content: "Drop Shoibur Rahman a note — questions, hellos, or collaboration ideas." },
       { property: "og:title", content: "Contact — Shoibur Rahman" },
-      { property: "og:description", content: "Get in touch with Shoibur Rahman for web development, logo design, or promotional video editing." },
-      { property: "og:url", content: "https://glassmorphic-folio-hub.lovable.app/contact" },
+      { property: "og:description", content: "Say hello." },
+      { property: "og:url", content: `${CANONICAL}/contact` },
     ],
-    links: [{ rel: "canonical", href: "https://glassmorphic-folio-hub.lovable.app/contact" }],
+    links: [{ rel: "canonical", href: `${CANONICAL}/contact` }],
   }),
   component: ContactPage,
 });
@@ -24,73 +26,73 @@ function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !message.trim()) { toast.error("Please fill in every field."); return; }
-    if (name.length > 100 || email.length > 255 || message.length > 2000) { toast.error("Input too long."); return; }
-    setLoading(true);
-    const { error } = await supabase.from("messages").insert({ name: name.trim(), email: email.trim(), message: message.trim() });
-    setLoading(false);
-    if (error) { toast.error("Failed to send. Try again."); return; }
-    toast.success("Message sent — thanks!");
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      toast.error("Please fill in every field.");
+      return;
+    }
+    setSending(true);
+    const { error } = await supabase.from("messages").insert({ name, email, message });
+    setSending(false);
+    if (error) {
+      toast.error("Couldn't send — please try again.");
+      return;
+    }
+    toast.success("Sent — thanks for saying hello.");
     setName(""); setEmail(""); setMessage("");
   }
 
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-4xl px-4 md:px-6 pt-12 pb-24">
-        <p className="mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">// SCENE_05 · Call Sheet</p>
-        <h1 className="mt-4 font-display text-5xl md:text-7xl uppercase leading-[0.9]">
-          Send The <span className="text-accent">Brief.</span>
-        </h1>
-        <p className="mt-4 text-muted-foreground max-w-xl">Have a project in mind? Fill the call sheet and I'll reply within 24h.</p>
+      <section className="mx-auto max-w-5xl px-4 md:px-6 pt-10 md:pt-16">
+        <p className="label-mono">Say hello</p>
+        <h1 className="mt-3 font-display text-5xl md:text-6xl">Let's talk.</h1>
 
-        <div className="mt-10 surface p-6 md:p-10">
-          <form onSubmit={submit} className="grid gap-5">
-            <Field label="01 · Client Name">
-              <input className="field w-full text-sm" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} />
-            </Field>
-            <Field label="02 · Email Channel">
-              <input className="field w-full text-sm" placeholder="you@studio.com" type="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={255} />
-            </Field>
-            <Field label="03 · Project Brief">
-              <textarea className="field w-full text-sm min-h-40" placeholder="Scope, timeline, references…" value={message} onChange={(e) => setMessage(e.target.value)} maxLength={2000} />
-            </Field>
-            <div className="flex items-center justify-between border-t border-border pt-5">
-              <span className="mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">TAKE_01</span>
-              <button type="submit" disabled={loading} className="btn-primary inline-flex items-center gap-2">
-                <Send className="h-4 w-4" /> {loading ? "Rolling…" : "Send Brief"}
+        <div className="mt-10 grid gap-5 md:grid-cols-5">
+          <form onSubmit={submit} className="bento p-6 md:p-8 md:col-span-3 grid gap-4">
+            <div>
+              <label className="label-mono">Your name</label>
+              <input className="field mt-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Shoibur's friend" />
+            </div>
+            <div>
+              <label className="label-mono">Your email</label>
+              <input type="email" className="field mt-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+            </div>
+            <div>
+              <label className="label-mono">Message</label>
+              <textarea className="field mt-2 min-h-[140px]" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Say hi, share thoughts, or ask anything." />
+            </div>
+            <div>
+              <button disabled={sending} className="btn-primary">
+                {sending ? "Sending..." : (<>Send message <Send className="h-4 w-4" /></>)}
               </button>
             </div>
           </form>
 
-          {(socials.data ?? []).length > 0 && (
-            <div className="mt-10 border-t border-border pt-6">
-              <p className="mono text-[10px] uppercase tracking-[0.22em] text-teal">// OTHER CHANNELS</p>
+          <div className="md:col-span-2 grid gap-4 content-start">
+            <div className="bento-blue p-6">
+              <Mail className="h-5 w-5" />
+              <p className="mt-3 font-display text-xl">Prefer another way?</p>
+              <p className="text-sm text-foreground/80 mt-2">Use any of the channels below — I read them all.</p>
+            </div>
+            <div className="bento p-6">
+              <p className="label-mono">Find me at</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {socials.data!.map((s) => (
-                  <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer"
-                    className="mono inline-flex items-center gap-2 border border-border px-3 py-2 text-xs uppercase tracking-wider hover:border-accent hover:text-accent transition">
+                {(socials.data ?? []).map((s) => (
+                  <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer" className="chip hover:bg-surface-2">
                     <SocialIcon name={s.icon_name} />
                     <span>{s.platform_name}</span>
                   </a>
                 ))}
+                {(socials.data ?? []).length === 0 && <span className="text-sm text-muted-foreground">Coming soon.</span>}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </section>
     </SiteLayout>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="block">
-      <span className="mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">{label}</span>
-      <div className="mt-2">{children}</div>
-    </label>
   );
 }

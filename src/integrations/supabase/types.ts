@@ -59,6 +59,144 @@ export type Database = {
         }
         Relationships: []
       }
+      education_entries: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          institution: string | null
+          kind: string
+          period: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          institution?: string | null
+          kind: string
+          period?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          institution?: string | null
+          kind?: string
+          period?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      foods: {
+        Row: {
+          created_at: string
+          cuisine: string | null
+          id: string
+          image_path: string | null
+          name: string
+          rating: number | null
+          review: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cuisine?: string | null
+          id?: string
+          image_path?: string | null
+          name: string
+          rating?: number | null
+          review?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cuisine?: string | null
+          id?: string
+          image_path?: string | null
+          name?: string
+          rating?: number | null
+          review?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hobbies: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          image_path: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_path?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_path?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      memories: {
+        Row: {
+          created_at: string
+          id: string
+          image_path: string | null
+          location: string | null
+          sort_order: number
+          story: string | null
+          taken_on: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          location?: string | null
+          sort_order?: number
+          story?: string | null
+          taken_on?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          location?: string | null
+          sort_order?: number
+          story?: string | null
+          taken_on?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           archived: boolean
@@ -83,6 +221,42 @@ export type Database = {
           id?: string
           message?: string
           name?: string
+        }
+        Relationships: []
+      }
+      people: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          image_path: string | null
+          name: string
+          note: string | null
+          relation: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          name: string
+          note?: string | null
+          relation?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          image_path?: string | null
+          name?: string
+          note?: string | null
+          relation?: string | null
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -131,6 +305,36 @@ export type Database = {
         }
         Relationships: []
       }
+      quotes: {
+        Row: {
+          author: string | null
+          category: string | null
+          created_at: string
+          id: string
+          sort_order: number
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          sort_order?: number
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          sort_order?: number
+          text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           created_at: string
@@ -164,7 +368,10 @@ export type Database = {
           bio: string
           education: string
           experience: string
+          greeting: string | null
+          hero_image_path: string | null
           id: string
+          identity_line: string | null
           location: string
           name: string
           resume_path: string | null
@@ -176,7 +383,10 @@ export type Database = {
           bio?: string
           education?: string
           experience?: string
+          greeting?: string | null
+          hero_image_path?: string | null
           id?: string
+          identity_line?: string | null
           location?: string
           name?: string
           resume_path?: string | null
@@ -188,7 +398,10 @@ export type Database = {
           bio?: string
           education?: string
           experience?: string
+          greeting?: string | null
+          hero_image_path?: string | null
           id?: string
+          identity_line?: string | null
           location?: string
           name?: string
           resume_path?: string | null
