@@ -9,9 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ThoughtsRouteImport } from './routes/thoughts'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as PeopleRouteImport } from './routes/people'
+import { Route as MemoriesRouteImport } from './routes/memories'
+import { Route as JourneyRouteImport } from './routes/journey'
+import { Route as DiaryRouteImport } from './routes/diary'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -31,6 +36,11 @@ import { Route as AuthenticatedAdminProjectsRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 
+const ThoughtsRoute = ThoughtsRouteImport.update({
+  id: '/thoughts',
+  path: '/thoughts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -44,6 +54,26 @@ const ServicesRoute = ServicesRouteImport.update({
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PeopleRoute = PeopleRouteImport.update({
+  id: '/people',
+  path: '/people',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemoriesRoute = MemoriesRouteImport.update({
+  id: '/memories',
+  path: '/memories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JourneyRoute = JourneyRouteImport.update({
+  id: '/journey',
+  path: '/journey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiaryRoute = DiaryRouteImport.update({
+  id: '/diary',
+  path: '/diary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -148,9 +178,14 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
+  '/diary': typeof DiaryRoute
+  '/journey': typeof JourneyRoute
+  '/memories': typeof MemoriesRoute
+  '/people': typeof PeopleRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/thoughts': typeof ThoughtsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/blog/': typeof BlogIndexRoute
@@ -169,8 +204,13 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/diary': typeof DiaryRoute
+  '/journey': typeof JourneyRoute
+  '/memories': typeof MemoriesRoute
+  '/people': typeof PeopleRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/thoughts': typeof ThoughtsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/blog': typeof BlogIndexRoute
@@ -192,9 +232,14 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
+  '/diary': typeof DiaryRoute
+  '/journey': typeof JourneyRoute
+  '/memories': typeof MemoriesRoute
+  '/people': typeof PeopleRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/thoughts': typeof ThoughtsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/blog/': typeof BlogIndexRoute
@@ -216,9 +261,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/contact'
+    | '/diary'
+    | '/journey'
+    | '/memories'
+    | '/people'
     | '/projects'
     | '/services'
     | '/sitemap.xml'
+    | '/thoughts'
     | '/blog/$slug'
     | '/projects/$id'
     | '/blog/'
@@ -237,8 +287,13 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
+    | '/diary'
+    | '/journey'
+    | '/memories'
+    | '/people'
     | '/services'
     | '/sitemap.xml'
+    | '/thoughts'
     | '/blog/$slug'
     | '/projects/$id'
     | '/blog'
@@ -259,9 +314,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/contact'
+    | '/diary'
+    | '/journey'
+    | '/memories'
+    | '/people'
     | '/projects'
     | '/services'
     | '/sitemap.xml'
+    | '/thoughts'
     | '/blog/$slug'
     | '/projects/$id'
     | '/blog/'
@@ -283,13 +343,25 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
+  DiaryRoute: typeof DiaryRoute
+  JourneyRoute: typeof JourneyRoute
+  MemoriesRoute: typeof MemoriesRoute
+  PeopleRoute: typeof PeopleRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ThoughtsRoute: typeof ThoughtsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/thoughts': {
+      id: '/thoughts'
+      path: '/thoughts'
+      fullPath: '/thoughts'
+      preLoaderRoute: typeof ThoughtsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -309,6 +381,34 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/people': {
+      id: '/people'
+      path: '/people'
+      fullPath: '/people'
+      preLoaderRoute: typeof PeopleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memories': {
+      id: '/memories'
+      path: '/memories'
+      fullPath: '/memories'
+      preLoaderRoute: typeof MemoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journey': {
+      id: '/journey'
+      path: '/journey'
+      fullPath: '/journey'
+      preLoaderRoute: typeof JourneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diary': {
+      id: '/diary'
+      path: '/diary'
+      fullPath: '/diary'
+      preLoaderRoute: typeof DiaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -498,9 +598,14 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
+  DiaryRoute: DiaryRoute,
+  JourneyRoute: JourneyRoute,
+  MemoriesRoute: MemoriesRoute,
+  PeopleRoute: PeopleRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ThoughtsRoute: ThoughtsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
