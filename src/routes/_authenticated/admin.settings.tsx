@@ -123,6 +123,8 @@ function SettingsForm() {
       </div>
 
       <Field label="Name"><input className="glass-input px-4 py-2.5 text-sm w-full" value={name} onChange={(e) => setName(e.target.value)} /></Field>
+      <Field label="Greeting (shown on home hero)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={greeting} onChange={(e) => setGreeting(e.target.value)} placeholder="Hey, I'm Shoibur." /></Field>
+      <Field label="Identity line (footer)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={identityLine} onChange={(e) => setIdentityLine(e.target.value)} placeholder="Student · Web developer · Curious mind" /></Field>
       <Field label="Tagline"><input className="glass-input px-4 py-2.5 text-sm w-full" value={tagline} onChange={(e) => setTagline(e.target.value)} /></Field>
       <Field label="Bio"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-32" value={bio} onChange={(e) => setBio(e.target.value)} /></Field>
       <div className="grid gap-3 md:grid-cols-2">
@@ -130,6 +132,15 @@ function SettingsForm() {
         <Field label="Education"><input className="glass-input px-4 py-2.5 text-sm w-full" value={education} onChange={(e) => setEducation(e.target.value)} /></Field>
       </div>
       <Field label="Experience"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-20" value={experience} onChange={(e) => setExperience(e.target.value)} /></Field>
+
+      <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Hero image (large photo on home)</label>
+      <label className="glass-input flex items-center gap-3 px-4 py-2.5 text-sm cursor-pointer">
+        <Upload className="h-4 w-4 text-primary" />
+        <span className="text-muted-foreground truncate">
+          {heroFile ? heroFile.name : (q.data as any)?.hero_image_path ? "Replace hero image" : "Upload hero image"}
+        </span>
+        <input type="file" accept="image/*" className="hidden" onChange={(e) => setHeroFile(e.target.files?.[0] ?? null)} />
+      </label>
 
       <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Resume / CV</label>
       <label className="glass-input flex items-center gap-3 px-4 py-2.5 text-sm cursor-pointer">
