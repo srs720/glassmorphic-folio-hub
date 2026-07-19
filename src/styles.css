@@ -5,12 +5,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --radius-sm: 2px;
-  --radius-md: 3px;
-  --radius-lg: 4px;
-  --radius-xl: 6px;
-  --radius-2xl: 8px;
-  --radius-3xl: 12px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-3xl: 28px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -26,34 +26,36 @@
   --color-muted: var(--surface-2);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
-  --color-accent-foreground: var(--background);
-  --color-teal: var(--teal);
+  --color-accent-foreground: var(--foreground);
+  --color-sky: var(--sky);
+  --color-yellow: var(--yellow);
   --color-destructive: oklch(0.62 0.22 25);
-  --color-destructive-foreground: var(--foreground);
+  --color-destructive-foreground: #ffffff;
   --color-border: var(--border);
   --color-input: var(--surface-2);
   --color-ring: var(--primary);
-  --font-display: "Archivo Black", "General Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", "Cormorant Garamond", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 :root {
-  --radius: 4px;
+  --radius: 20px;
 
-  --background: #14161C;
-  --foreground: #EDEBE4;
+  --background: #F9F8F6;
+  --foreground: #1B1D23;
 
-  --surface: #1D2027;
-  --surface-2: #23262F;
+  --surface: #FFFFFF;
+  --surface-2: #F1EFEA;
 
-  --primary: #E8A33D;
-  --primary-foreground: #14161C;
-  --accent: #E8A33D;
-  --teal: #5FB8B0;
+  --primary: #7CC4F2;
+  --primary-foreground: #0E2A3F;
+  --accent: #F5C451;
+  --sky: #7CC4F2;
+  --yellow: #F5C451;
 
-  --muted-foreground: #8B8D97;
-  --border: #2D2F3D;
+  --muted-foreground: #6B6F7A;
+  --border: #ECE9E3;
 }
 
 @layer base {
@@ -64,130 +66,159 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
-  ::selection { background: var(--color-accent); color: var(--primary-foreground); }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  ::selection { background: var(--color-accent); color: #1B1D23; }
 }
 
-@utility surface {
-  background: var(--color-surface);
+@utility bento {
+  background: #ffffff;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px -14px rgba(20, 24, 40, 0.10),
+              0 2px 6px -3px rgba(20, 24, 40, 0.05);
+}
+
+@utility bento-blue {
+  background: linear-gradient(160deg, #EAF5FE 0%, #DCEEFB 100%);
+  border: 1px solid #CDE6FA;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px -14px rgba(20, 24, 40, 0.10);
+}
+
+@utility bento-yellow {
+  background: linear-gradient(160deg, #FFF6DD 0%, #FDEBB8 100%);
+  border: 1px solid #F7E3A4;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px -14px rgba(20, 24, 40, 0.10);
+}
+
+@utility bento-cream {
+  background: #F5F1EA;
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  box-shadow: 0 10px 30px -14px rgba(20, 24, 40, 0.08);
 }
 
 @utility mono {
   font-family: var(--font-mono);
-  font-feature-settings: "ss01" on;
   letter-spacing: 0.02em;
 }
 
-@utility btn-primary {
-  background: var(--color-accent);
-  color: var(--primary-foreground);
-  border-radius: 4px;
-  padding: 0.7rem 1.25rem;
-  font-weight: 700;
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-family: var(--font-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  transition: filter 0.15s, transform 0.15s;
-  border: 1px solid color-mix(in oklab, var(--color-accent) 80%, black);
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+}
+
+@utility btn-primary {
+  background: #1B1D23;
+  color: #FDFBF6;
+  border-radius: 999px;
+  padding: 0.75rem 1.4rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  transition: transform 0.15s, filter 0.15s, box-shadow 0.2s;
+  border: 1px solid #1B1D23;
+  box-shadow: 0 8px 20px -10px rgba(20, 24, 40, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 @utility btn-primary {
-  &:hover { filter: brightness(1.08); }
-  &:active { transform: translateY(1px); }
+  &:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
   &:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 
 @utility btn-ghost {
-  background: transparent;
+  background: #ffffff;
   color: var(--color-foreground);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 0.65rem 1.15rem;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 0.7rem 1.3rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
   transition: background 0.15s, border-color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 @utility btn-ghost {
-  &:hover { background: var(--color-surface); border-color: color-mix(in oklab, var(--color-accent) 60%, transparent); }
+  &:hover { background: var(--color-surface-2); }
 }
 
+@utility btn-accent {
+  background: var(--color-accent);
+  color: #1B1D23;
+  border-radius: 999px;
+  padding: 0.75rem 1.4rem;
+  font-weight: 600;
+  border: 1px solid color-mix(in oklab, var(--color-accent) 80%, black);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: filter 0.15s, transform 0.15s;
+}
+@utility btn-accent { &:hover { filter: brightness(1.05); transform: translateY(-1px); } }
+
 @utility field {
-  background: #14161C;
+  background: #ffffff;
   border: 1px solid var(--color-border);
   color: var(--color-foreground);
-  border-radius: 4px;
-  padding: 0.75rem 0.9rem;
+  border-radius: 14px;
+  padding: 0.8rem 1rem;
   font-family: var(--font-sans);
   transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
 }
 @utility field {
-  &:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-accent) 30%, transparent); }
+  &:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 25%, transparent); }
 }
 
-@utility tag-mono {
+@utility label-mono {
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-teal);
-  border: 1px solid color-mix(in oklab, var(--color-teal) 40%, transparent);
-  padding: 0.2rem 0.5rem;
-  border-radius: 2px;
-  background: color-mix(in oklab, var(--color-teal) 8%, transparent);
+  color: var(--color-muted-foreground);
 }
 
-@utility film-grain {
-  position: relative;
-}
-@utility film-grain {
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.75 0 0 0 0 0.4 0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
-    mix-blend-mode: overlay;
-    opacity: 0.28;
-  }
-}
-
-@utility duotone-amber {
-  filter: grayscale(1) contrast(1.05) brightness(0.9);
-  position: relative;
-}
-@utility duotone-amber {
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, color-mix(in oklab, var(--color-accent) 55%, transparent), color-mix(in oklab, #1a1204 65%, transparent));
-    mix-blend-mode: color;
-    pointer-events: none;
-  }
-}
-
-/* Compatibility shims for legacy admin classes */
+/* Admin compatibility shims — light theme */
 @utility glass {
-  background: var(--color-surface);
+  background: #ffffff;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px -12px rgba(20, 24, 40, 0.08);
 }
 @utility glass-strong {
-  background: var(--color-surface);
+  background: #ffffff;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: 20px;
+  box-shadow: 0 10px 24px -14px rgba(20, 24, 40, 0.10);
 }
 @utility glass-input {
-  background: #14161C;
+  background: #ffffff;
   border: 1px solid var(--color-border);
   color: var(--color-foreground);
-  border-radius: 4px;
-  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
+  padding: 0.65rem 0.9rem;
 }
 @utility glass-input {
-  &:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-accent) 30%, transparent); }
+  &:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 25%, transparent); }
 }
