@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/SiteLayout";
 import { GraduationCap, BookOpen, Sparkles, Award } from "lucide-react";
+import { useLang } from "@/lib/i18n";
 
 const CANONICAL = "https://shoiburrahman.com";
 
@@ -10,7 +11,7 @@ export const Route = createFileRoute("/journey")({
   head: () => ({
     meta: [
       { title: "Journey — Shoibur Rahman" },
-      { name: "description", content: "Shoibur Rahman's education journey — from 9th grade to 10th grade at General Jim (Batch 2026), plans for higher secondary, and technical certificates." },
+      { name: "description", content: "Shoibur Rahman's education journey — 10th grade (Batch 2026) at Darunnazat Siddikia Kamil Madrasah and self-taught web development." },
       { property: "og:title", content: "Journey — Shoibur Rahman" },
       { property: "og:description", content: "Education timeline, current studies, and future academic plans." },
       { property: "og:url", content: `${CANONICAL}/journey` },
@@ -21,31 +22,30 @@ export const Route = createFileRoute("/journey")({
 });
 
 const ORDER = ["current", "past", "future", "certificate"] as const;
-const META: Record<string, { title: string; icon: typeof GraduationCap; tone: string }> = {
-  current: { title: "Right now", icon: GraduationCap, tone: "bento-blue" },
-  past: { title: "Where I've been", icon: BookOpen, tone: "bento" },
-  future: { title: "What's next", icon: Sparkles, tone: "bento-yellow" },
-  certificate: { title: "Certificates & self-study", icon: Award, tone: "bento-cream" },
-};
 
 function JourneyPage() {
+  const { t } = useLang();
+  const META: Record<string, { title: string; icon: typeof GraduationCap; tone: string }> = {
+    current: { title: t("edu_current"), icon: GraduationCap, tone: "bento-blue" },
+    past: { title: t("edu_past"), icon: BookOpen, tone: "bento" },
+    future: { title: t("edu_future"), icon: Sparkles, tone: "bento-yellow" },
+    certificate: { title: t("edu_cert"), icon: Award, tone: "bento-cream" },
+  };
   const q = useQuery({
     queryKey: ["education_entries"],
     queryFn: async () => (await supabase.from("education_entries").select("*").order("sort_order")).data ?? [],
   });
 
-  const grouped = (q.data ?? []).reduce<Record<string, typeof q.data extends (infer T)[] | undefined ? T[] : never>>(
-    (acc, e) => { (acc[e.kind] ||= [] as any).push(e); return acc; }, {} as any
+  const grouped = (q.data ?? []).reduce<Record<string, any[]>>(
+    (acc, e) => { (acc[e.kind] ||= []).push(e); return acc; }, {}
   );
 
   return (
     <SiteLayout>
       <section className="mx-auto max-w-5xl px-4 md:px-6 pt-10 md:pt-16">
-        <p className="label-mono">Chapter one</p>
-        <h1 className="mt-3 font-display text-5xl md:text-6xl">My education journey.</h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          A running log of where I've studied, what I'm learning now, and where I'd like to go next.
-        </p>
+        <p className="label-mono">{t("chapter_one")}</p>
+        <h1 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl">{t("journey_title")}</h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("journey_intro")}</p>
 
         <div className="mt-10 grid gap-6">
           {ORDER.map((kind) => {
@@ -74,10 +74,11 @@ function JourneyPage() {
             );
           })}
           {(q.data ?? []).length === 0 && (
-            <div className="bento p-8 text-center text-muted-foreground">Timeline is being written.</div>
+            <div className="bento p-8 text-center text-muted-foreground">{t("timeline_soon")}</div>
           )}
         </div>
       </section>
     </SiteLayout>
   );
 }
+

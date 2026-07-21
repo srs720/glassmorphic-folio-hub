@@ -1,7 +1,7 @@
-import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { LayoutDashboard, FolderKanban, MessageSquare, Settings, LogOut, Home, FileText, Wrench, Sparkles, Quote } from "lucide-react";
+import { LayoutDashboard, FolderKanban, MessageSquare, Settings, LogOut, Home, FileText, Wrench, Sparkles, Quote, Menu, X } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -33,6 +33,10 @@ const NAV: Array<{ to: string; label: string; icon: typeof LayoutDashboard; exac
 function AdminLayout() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
+  const [navOpen, setNavOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => { setNavOpen(false); }, [pathname]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? ""));
@@ -49,25 +53,51 @@ function AdminLayout() {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto max-w-7xl px-4 py-6">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-widest text-primary font-semibold">Admin Panel</p>
-            <h1 className="text-2xl font-bold tracking-tight">Portfolio Studio</h1>
+      <div className="mx-auto max-w-7xl px-4 py-4 md:py-6">
+        <div className="mb-4 md:mb-6 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
+          <button
+            onClick={() => setNavOpen((v) => !v)}
+            className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-xl border border-border bg-white shrink-0"
+            aria-label="Toggle navigation"
+            aria-expanded={navOpen}
+          >
+            {navOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-xs uppercase tracking-widest text-primary font-semibold">Admin Panel</p>
+            <h1 className="text-lg sm:text-2xl font-bold tracking-tight truncate">Portfolio Studio</h1>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="hidden md:block text-xs text-muted-foreground">{email}</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="hidden lg:block text-xs text-muted-foreground max-w-[180px] truncate">{email}</span>
             <Link to="/" className="btn-ghost inline-flex items-center gap-2 text-sm">
-              <Home className="h-4 w-4" /> Site
+              <Home className="h-4 w-4" /> <span className="hidden sm:inline">Site</span>
             </Link>
             <button onClick={signOut} className="btn-ghost inline-flex items-center gap-2 text-sm">
-              <LogOut className="h-4 w-4" /> Sign out
+              <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Sign out</span>
             </button>
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-[220px_1fr]">
-          <aside className="glass p-3 h-fit md:sticky md:top-6">
+        {/* Mobile nav drawer */}
+        {navOpen && (
+          <div className="md:hidden glass p-3 mb-4">
+            <nav className="grid gap-1">
+              {NAV.map((n) => (
+                <Link
+                  key={n.to} to={n.to}
+                  activeOptions={n.exact ? { exact: true } : undefined}
+                  className={linkClass}
+                  activeProps={{ className: `${linkClass} ${activeClass}` }}
+                >
+                  <n.icon className="h-4 w-4" /> {n.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        )}
+
+        <div className="grid gap-6 md:grid-cols-[220px_minmax(0,1fr)]">
+          <aside className="hidden md:block glass p-3 h-fit md:sticky md:top-6">
             <nav className="grid gap-1">
               {NAV.map((n) => (
                 <Link

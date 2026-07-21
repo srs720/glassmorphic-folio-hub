@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SignedImage } from "@/components/SignedImage";
 import { Star } from "lucide-react";
+import { useLang } from "@/lib/i18n";
 
 const CANONICAL = "https://shoiburrahman.com";
 
@@ -32,6 +33,7 @@ function Stars({ n }: { n: number | null }) {
 }
 
 function DiaryPage() {
+  const { t } = useLang();
   const q = useQuery({
     queryKey: ["foods"],
     queryFn: async () => (await supabase.from("foods").select("*").order("sort_order")).data ?? [],
@@ -40,11 +42,10 @@ function DiaryPage() {
   return (
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-4 md:px-6 pt-10 md:pt-16">
-        <p className="label-mono">Chapter four</p>
-        <h1 className="mt-3 font-display text-5xl md:text-6xl">A little food diary.</h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          The dishes I keep coming back to, with a small note on each.
-        </p>
+        <p className="label-mono">{t("chapter_four")}</p>
+        <h1 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl">{t("diary_title")}</h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("diary_intro")}</p>
+
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {(q.data ?? []).map((f: any) => (
@@ -71,8 +72,9 @@ function DiaryPage() {
             </div>
           ))}
           {(q.data ?? []).length === 0 && (
-            <div className="bento p-8 col-span-full text-center text-muted-foreground">Still tasting.</div>
+            <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("still_tasting")}</div>
           )}
+
         </div>
       </section>
     </SiteLayout>
