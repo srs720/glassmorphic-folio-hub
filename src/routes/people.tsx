@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SignedImage } from "@/components/SignedImage";
+import { useLang } from "@/lib/i18n";
 
 const CANONICAL = "https://shoiburrahman.com";
 
@@ -20,13 +21,14 @@ export const Route = createFileRoute("/people")({
   component: PeoplePage,
 });
 
-const GROUPS: { key: "family" | "teacher" | "friend"; title: string; tone: string }[] = [
-  { key: "family", title: "Family", tone: "bento-yellow" },
-  { key: "teacher", title: "Teachers", tone: "bento-blue" },
-  { key: "friend", title: "Close friends", tone: "bento" },
-];
-
 function PeoplePage() {
+  const { t } = useLang();
+  const GROUPS: { key: "family" | "teacher" | "friend"; title: string; tone: string }[] = [
+    { key: "family", title: t("group_family"), tone: "bento-yellow" },
+    { key: "teacher", title: t("group_teachers"), tone: "bento-blue" },
+    { key: "friend", title: t("group_friends"), tone: "bento" },
+  ];
+
   const q = useQuery({
     queryKey: ["people"],
     queryFn: async () => (await supabase.from("people").select("*").order("sort_order")).data ?? [],
@@ -35,11 +37,9 @@ function PeoplePage() {
   return (
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-4 md:px-6 pt-10 md:pt-16">
-        <p className="label-mono">Chapter two</p>
-        <h1 className="mt-3 font-display text-5xl md:text-6xl">The people in my story.</h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          The ones who cheer me on, teach me, and keep the days warm.
-        </p>
+        <p className="label-mono">{t("chapter_two")}</p>
+        <h1 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl">{t("people_title")}</h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("people_intro")}</p>
 
         <div className="mt-10 grid gap-8">
           {GROUPS.map((g) => {
@@ -72,10 +72,11 @@ function PeoplePage() {
             );
           })}
           {(q.data ?? []).length === 0 && (
-            <div className="bento p-8 text-center text-muted-foreground">This chapter is being written.</div>
+            <div className="bento p-8 text-center text-muted-foreground">{t("people_soon")}</div>
           )}
         </div>
       </section>
     </SiteLayout>
   );
 }
+
