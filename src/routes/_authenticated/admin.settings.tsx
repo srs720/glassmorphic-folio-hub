@@ -41,8 +41,11 @@ function SettingsForm() {
   const [greeting, setGreeting] = useState("");
   const [identityLine, setIdentityLine] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [heroFile, setHeroFile] = useState<File | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [sliderFiles, setSliderFiles] = useState<File[]>([]);
+  const [sliderImages, setSliderImages] = useState<string[]>([]);
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -56,9 +59,15 @@ function SettingsForm() {
       setExperience(q.data.experience ?? "");
       setGreeting((q.data as any).greeting ?? "");
       setIdentityLine((q.data as any).identity_line ?? "");
+      setSliderImages(((q.data as any).slider_images ?? []) as string[]);
       getSignedUrl(q.data.resume_path).then(setResumeUrl);
     }
   }, [q.data]);
+
+  async function removeSlider(path: string) {
+    await deleteFile(path);
+    setSliderImages((s) => s.filter((p) => p !== path));
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -67,7 +76,9 @@ function SettingsForm() {
     try {
       let resume_path = q.data.resume_path;
       let avatar_path = q.data.avatar_path;
+      let logo_path = (q.data as any).logo_path;
       let hero_image_path = (q.data as any).hero_image_path;
+      let slider_images = [...sliderImages];
       if (resumeFile) {
         if (q.data.resume_path) await deleteFile(q.data.resume_path);
         resume_path = await uploadFile(resumeFile, "resume");
@@ -76,22 +87,31 @@ function SettingsForm() {
         if (q.data.avatar_path) await deleteFile(q.data.avatar_path);
         avatar_path = await uploadFile(avatarFile, "avatar");
       }
+      if (logoFile) {
+        if (logo_path) await deleteFile(logo_path);
+        logo_path = await uploadFile(logoFile, "logo");
+      }
       if (heroFile) {
         if (hero_image_path) await deleteFile(hero_image_path);
         hero_image_path = await uploadFile(heroFile, "hero");
       }
+      if (sliderFiles.length) {
+        const uploaded = await Promise.all(sliderFiles.map((f) => uploadFile(f, "slider")));
+        slider_images = [...slider_images, ...uploaded];
+      }
       const { error } = await supabase.from("site_settings")
         .update({
           name: name.trim(), bio: bio.trim(), tagline, location, education, experience,
-          resume_path, avatar_path,
+          resume_path, avatar_path, logo_path,
           greeting, identity_line: identityLine, hero_image_path,
+          slider_images,
         } as any)
         .eq("id", q.data.id);
       if (error) throw error;
       toast.success("Settings saved");
       qc.invalidateQueries({ queryKey: ["site_settings_admin"] });
       qc.invalidateQueries({ queryKey: ["site_settings"] });
-      setResumeFile(null); setAvatarFile(null); setHeroFile(null);
+      setResumeFile(null); setAvatarFile(null); setHeroFile(null); setLogoFile(null); setSliderFiles([]);
     } catch (err) {
       console.error(err);
       toast.error("Save failed");
