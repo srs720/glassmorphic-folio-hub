@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS logo_path text; ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS slider_images text[] NOT NULL DEFAULT '{}';

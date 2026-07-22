@@ -373,8 +373,10 @@ export type Database = {
           id: string
           identity_line: string | null
           location: string
+          logo_path: string | null
           name: string
           resume_path: string | null
+          slider_images: string[]
           tagline: string
           updated_at: string
         }
@@ -388,8 +390,10 @@ export type Database = {
           id?: string
           identity_line?: string | null
           location?: string
+          logo_path?: string | null
           name?: string
           resume_path?: string | null
+          slider_images?: string[]
           tagline?: string
           updated_at?: string
         }
@@ -403,8 +407,10 @@ export type Database = {
           id?: string
           identity_line?: string | null
           location?: string
+          logo_path?: string | null
           name?: string
           resume_path?: string | null
+          slider_images?: string[]
           tagline?: string
           updated_at?: string
         }
