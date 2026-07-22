@@ -22,7 +22,7 @@ export const Route = createFileRoute("/")({
       { title: "Shoibur Rahman - Student & Web Developer" },
       { name: "description", content: "Shoibur Rahman — student of Darunnazat Siddikia Kamil Madrasah and passionate full-stack web developer. A bilingual personal digital diary." },
       { property: "og:title", content: "Shoibur Rahman - Student & Web Developer" },
-      { property: "og:description", content: "Personal digital diary — journey, people, memories, food and thoughts by Shoibur Rahman." },
+      { property: "og:description", content: "Shoibur Rahman — student of Darunnazat Siddikia Kamil Madrasah and passionate full-stack web developer. A bilingual personal digital diary." },
       { property: "og:url", content: `${CANONICAL}/` },
       { property: "og:site_name", content: "Shoibur Rahman" },
     ],
