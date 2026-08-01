@@ -14,7 +14,6 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PeopleRouteImport } from './routes/people'
 import { Route as MemoriesRouteImport } from './routes/memories'
 import { Route as JourneyRouteImport } from './routes/journey'
-import { Route as DiaryRouteImport } from './routes/diary'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -30,9 +29,7 @@ import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminMemoriesRouteImport } from './routes/_authenticated/admin.memories'
 import { Route as AuthenticatedAdminHobbiesRouteImport } from './routes/_authenticated/admin.hobbies'
-import { Route as AuthenticatedAdminFoodsRouteImport } from './routes/_authenticated/admin.foods'
 import { Route as AuthenticatedAdminEducationRouteImport } from './routes/_authenticated/admin.education'
-import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 
 const ThoughtsRoute = ThoughtsRouteImport.update({
   id: '/thoughts',
@@ -57,11 +54,6 @@ const MemoriesRoute = MemoriesRouteImport.update({
 const JourneyRoute = JourneyRouteImport.update({
   id: '/journey',
   path: '/journey',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DiaryRoute = DiaryRouteImport.update({
-  id: '/diary',
-  path: '/diary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -148,36 +140,23 @@ const AuthenticatedAdminHobbiesRoute =
     path: '/admin/hobbies',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedAdminFoodsRoute = AuthenticatedAdminFoodsRouteImport.update({
-  id: '/admin/foods',
-  path: '/admin/foods',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedAdminEducationRoute =
   AuthenticatedAdminEducationRouteImport.update({
     id: '/admin/education',
     path: '/admin/education',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
-  id: '/admin/blog',
-  path: '/admin/blog',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/diary': typeof DiaryRoute
   '/journey': typeof JourneyRoute
   '/memories': typeof MemoriesRoute
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
-  '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
-  '/admin/foods': typeof AuthenticatedAdminFoodsRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
@@ -194,15 +173,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/diary': typeof DiaryRoute
   '/journey': typeof JourneyRoute
   '/memories': typeof MemoriesRoute
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
-  '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
-  '/admin/foods': typeof AuthenticatedAdminFoodsRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
@@ -221,15 +197,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/diary': typeof DiaryRoute
   '/journey': typeof JourneyRoute
   '/memories': typeof MemoriesRoute
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
-  '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
-  '/_authenticated/admin/foods': typeof AuthenticatedAdminFoodsRoute
   '/_authenticated/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/_authenticated/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
@@ -248,15 +221,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/contact'
-    | '/diary'
     | '/journey'
     | '/memories'
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
-    | '/admin/blog'
     | '/admin/education'
-    | '/admin/foods'
     | '/admin/hobbies'
     | '/admin/memories'
     | '/admin/messages'
@@ -273,15 +243,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/contact'
-    | '/diary'
     | '/journey'
     | '/memories'
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
-    | '/admin/blog'
     | '/admin/education'
-    | '/admin/foods'
     | '/admin/hobbies'
     | '/admin/memories'
     | '/admin/messages'
@@ -299,15 +266,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/contact'
-    | '/diary'
     | '/journey'
     | '/memories'
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
-    | '/_authenticated/admin/blog'
     | '/_authenticated/admin/education'
-    | '/_authenticated/admin/foods'
     | '/_authenticated/admin/hobbies'
     | '/_authenticated/admin/memories'
     | '/_authenticated/admin/messages'
@@ -326,7 +290,6 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
-  DiaryRoute: typeof DiaryRoute
   JourneyRoute: typeof JourneyRoute
   MemoriesRoute: typeof MemoriesRoute
   PeopleRoute: typeof PeopleRoute
@@ -369,13 +332,6 @@ declare module '@tanstack/react-router' {
       path: '/journey'
       fullPath: '/journey'
       preLoaderRoute: typeof JourneyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/diary': {
-      id: '/diary'
-      path: '/diary'
-      fullPath: '/diary'
-      preLoaderRoute: typeof DiaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -483,13 +439,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminHobbiesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin/foods': {
-      id: '/_authenticated/admin/foods'
-      path: '/admin/foods'
-      fullPath: '/admin/foods'
-      preLoaderRoute: typeof AuthenticatedAdminFoodsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/admin/education': {
       id: '/_authenticated/admin/education'
       path: '/admin/education'
@@ -497,20 +446,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminEducationRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin/blog': {
-      id: '/_authenticated/admin/blog'
-      path: '/admin/blog'
-      fullPath: '/admin/blog'
-      preLoaderRoute: typeof AuthenticatedAdminBlogRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
   AuthenticatedAdminEducationRoute: typeof AuthenticatedAdminEducationRoute
-  AuthenticatedAdminFoodsRoute: typeof AuthenticatedAdminFoodsRoute
   AuthenticatedAdminHobbiesRoute: typeof AuthenticatedAdminHobbiesRoute
   AuthenticatedAdminMemoriesRoute: typeof AuthenticatedAdminMemoriesRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
@@ -525,9 +465,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
   AuthenticatedAdminEducationRoute: AuthenticatedAdminEducationRoute,
-  AuthenticatedAdminFoodsRoute: AuthenticatedAdminFoodsRoute,
   AuthenticatedAdminHobbiesRoute: AuthenticatedAdminHobbiesRoute,
   AuthenticatedAdminMemoriesRoute: AuthenticatedAdminMemoriesRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
@@ -549,7 +487,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
-  DiaryRoute: DiaryRoute,
   JourneyRoute: JourneyRoute,
   MemoriesRoute: MemoriesRoute,
   PeopleRoute: PeopleRoute,
@@ -559,13 +496,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
