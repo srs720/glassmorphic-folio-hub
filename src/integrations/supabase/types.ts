@@ -17,44 +17,107 @@ export type Database = {
       blog_posts: {
         Row: {
           content: string
+          content_bn: string | null
           cover_path: string | null
           created_at: string
           excerpt: string
+          excerpt_bn: string | null
           id: string
           published_at: string | null
           seo_description: string
+          seo_description_bn: string | null
           seo_title: string
+          seo_title_bn: string | null
           slug: string
+          sort_order: number
           status: string
           title: string
+          title_bn: string | null
           updated_at: string
         }
         Insert: {
           content?: string
+          content_bn?: string | null
           cover_path?: string | null
           created_at?: string
           excerpt?: string
+          excerpt_bn?: string | null
           id?: string
           published_at?: string | null
           seo_description?: string
+          seo_description_bn?: string | null
           seo_title?: string
+          seo_title_bn?: string | null
           slug: string
+          sort_order?: number
           status?: string
           title: string
+          title_bn?: string | null
           updated_at?: string
         }
         Update: {
           content?: string
+          content_bn?: string | null
           cover_path?: string | null
           created_at?: string
           excerpt?: string
+          excerpt_bn?: string | null
           id?: string
           published_at?: string | null
           seo_description?: string
+          seo_description_bn?: string | null
           seo_title?: string
+          seo_title_bn?: string | null
           slug?: string
+          sort_order?: number
           status?: string
           title?: string
+          title_bn?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      certificates: {
+        Row: {
+          created_at: string
+          description: string | null
+          description_bn: string | null
+          id: string
+          image_path: string | null
+          issued_on: string | null
+          issuer: string | null
+          issuer_bn: string | null
+          sort_order: number
+          title: string
+          title_bn: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          description_bn?: string | null
+          id?: string
+          image_path?: string | null
+          issued_on?: string | null
+          issuer?: string | null
+          issuer_bn?: string | null
+          sort_order?: number
+          title: string
+          title_bn?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          description_bn?: string | null
+          id?: string
+          image_path?: string | null
+          issued_on?: string | null
+          issuer?: string | null
+          issuer_bn?: string | null
+          sort_order?: number
+          title?: string
+          title_bn?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -63,70 +126,46 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          description_bn: string | null
           id: string
           institution: string | null
+          institution_bn: string | null
           kind: string
           period: string | null
+          period_bn: string | null
           sort_order: number
           title: string
+          title_bn: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           description?: string | null
+          description_bn?: string | null
           id?: string
           institution?: string | null
+          institution_bn?: string | null
           kind: string
           period?: string | null
+          period_bn?: string | null
           sort_order?: number
           title: string
+          title_bn?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           description?: string | null
+          description_bn?: string | null
           id?: string
           institution?: string | null
+          institution_bn?: string | null
           kind?: string
           period?: string | null
+          period_bn?: string | null
           sort_order?: number
           title?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      foods: {
-        Row: {
-          created_at: string
-          cuisine: string | null
-          id: string
-          image_path: string | null
-          name: string
-          rating: number | null
-          review: string | null
-          sort_order: number
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          cuisine?: string | null
-          id?: string
-          image_path?: string | null
-          name: string
-          rating?: number | null
-          review?: string | null
-          sort_order?: number
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          cuisine?: string | null
-          id?: string
-          image_path?: string | null
-          name?: string
-          rating?: number | null
-          review?: string | null
-          sort_order?: number
+          title_bn?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -135,28 +174,34 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          description_bn: string | null
           id: string
           image_path: string | null
           sort_order: number
           title: string
+          title_bn: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           description?: string | null
+          description_bn?: string | null
           id?: string
           image_path?: string | null
           sort_order?: number
           title: string
+          title_bn?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           description?: string | null
+          description_bn?: string | null
           id?: string
           image_path?: string | null
           sort_order?: number
           title?: string
+          title_bn?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -164,35 +209,50 @@ export type Database = {
       memories: {
         Row: {
           created_at: string
+          description: string | null
+          description_bn: string | null
           id: string
           image_path: string | null
           location: string | null
+          location_bn: string | null
           sort_order: number
           story: string | null
+          story_bn: string | null
           taken_on: string | null
           title: string
+          title_bn: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
+          description?: string | null
+          description_bn?: string | null
           id?: string
           image_path?: string | null
           location?: string | null
+          location_bn?: string | null
           sort_order?: number
           story?: string | null
+          story_bn?: string | null
           taken_on?: string | null
           title: string
+          title_bn?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
+          description?: string | null
+          description_bn?: string | null
           id?: string
           image_path?: string | null
           location?: string | null
+          location_bn?: string | null
           sort_order?: number
           story?: string | null
+          story_bn?: string | null
           taken_on?: string | null
           title?: string
+          title_bn?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -231,8 +291,11 @@ export type Database = {
           id: string
           image_path: string | null
           name: string
+          name_bn: string | null
           note: string | null
+          note_bn: string | null
           relation: string | null
+          relation_bn: string | null
           sort_order: number
           updated_at: string
         }
@@ -242,8 +305,11 @@ export type Database = {
           id?: string
           image_path?: string | null
           name: string
+          name_bn?: string | null
           note?: string | null
+          note_bn?: string | null
           relation?: string | null
+          relation_bn?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -253,8 +319,11 @@ export type Database = {
           id?: string
           image_path?: string | null
           name?: string
+          name_bn?: string | null
           note?: string | null
+          note_bn?: string | null
           relation?: string | null
+          relation_bn?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -308,29 +377,38 @@ export type Database = {
       quotes: {
         Row: {
           author: string | null
+          author_bn: string | null
           category: string | null
+          category_bn: string | null
           created_at: string
           id: string
           sort_order: number
           text: string
+          text_bn: string | null
           updated_at: string
         }
         Insert: {
           author?: string | null
+          author_bn?: string | null
           category?: string | null
+          category_bn?: string | null
           created_at?: string
           id?: string
           sort_order?: number
           text: string
+          text_bn?: string | null
           updated_at?: string
         }
         Update: {
           author?: string | null
+          author_bn?: string | null
           category?: string | null
+          category_bn?: string | null
           created_at?: string
           id?: string
           sort_order?: number
           text?: string
+          text_bn?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -366,52 +444,67 @@ export type Database = {
         Row: {
           avatar_path: string | null
           bio: string
+          bio_bn: string | null
           education: string
           experience: string
           greeting: string | null
+          greeting_bn: string | null
           hero_image_path: string | null
           id: string
           identity_line: string | null
+          identity_line_bn: string | null
           location: string
           logo_path: string | null
           name: string
+          name_bn: string | null
           resume_path: string | null
           slider_images: string[]
           tagline: string
+          tagline_bn: string | null
           updated_at: string
         }
         Insert: {
           avatar_path?: string | null
           bio?: string
+          bio_bn?: string | null
           education?: string
           experience?: string
           greeting?: string | null
+          greeting_bn?: string | null
           hero_image_path?: string | null
           id?: string
           identity_line?: string | null
+          identity_line_bn?: string | null
           location?: string
           logo_path?: string | null
           name?: string
+          name_bn?: string | null
           resume_path?: string | null
           slider_images?: string[]
           tagline?: string
+          tagline_bn?: string | null
           updated_at?: string
         }
         Update: {
           avatar_path?: string | null
           bio?: string
+          bio_bn?: string | null
           education?: string
           experience?: string
           greeting?: string | null
+          greeting_bn?: string | null
           hero_image_path?: string | null
           id?: string
           identity_line?: string | null
+          identity_line_bn?: string | null
           location?: string
           logo_path?: string | null
           name?: string
+          name_bn?: string | null
           resume_path?: string | null
           slider_images?: string[]
           tagline?: string
+          tagline_bn?: string | null
           updated_at?: string
         }
         Relationships: []
