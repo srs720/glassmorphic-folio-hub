@@ -227,15 +227,15 @@ function PeopleSection() {
                   <HoverCard className={`${g.tone} p-5 flex gap-4 items-start h-full`}>
                     <div className="h-20 w-20 rounded-2xl overflow-hidden shrink-0 bg-white border border-border">
                       {p.image_path ? (
-                        <SignedImage path={p.image_path} alt={p.name} className="h-full w-full object-cover" />
+                        <SignedImage path={p.image_path} alt={pickLang(p, "name", lang)} className="h-full w-full object-cover" />
                       ) : (
-                        <div className="h-full w-full flex items-center justify-center font-display text-3xl text-foreground/50">{p.name.charAt(0)}</div>
+                        <div className="h-full w-full flex items-center justify-center font-display text-3xl text-foreground/50">{pickLang(p, "name", lang).charAt(0)}</div>
                       )}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-display text-xl leading-tight">{p.name}</p>
-                      {p.relation && <p className="label-mono mt-0.5">{p.relation}</p>}
-                      {p.note && <p className="text-sm mt-2 text-foreground/80">{p.note}</p>}
+                      <p className="font-display text-xl leading-tight">{pickLang(p, "name", lang)}</p>
+                      {pickLang(p, "relation", lang) && <p className="label-mono mt-0.5">{pickLang(p, "relation", lang)}</p>}
+                      {pickLang(p, "note", lang) && <p className="text-sm mt-2 text-foreground/80">{pickLang(p, "note", lang)}</p>}
                     </div>
                   </HoverCard>
                 </StaggerItem>
