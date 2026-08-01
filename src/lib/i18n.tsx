@@ -13,7 +13,8 @@ export const T: Dict = {
   nav_journey: { en: "Journey", bn: "যাত্রা" },
   nav_people: { en: "People", bn: "মানুষজন" },
   nav_memories: { en: "Memories", bn: "স্মৃতি" },
-  nav_diary: { en: "Food Diary", bn: "খাদ্য ডায়েরি" },
+  nav_certificates: { en: "Certificates", bn: "সার্টিফিকেট" },
+  nav_posts: { en: "Research & Posts", bn: "গবেষণা ও পোস্ট" },
   nav_thoughts: { en: "Thoughts", bn: "ভাবনা" },
   nav_contact: { en: "Contact", bn: "যোগাযোগ" },
   menu: { en: "Menu", bn: "মেনু" },
@@ -30,7 +31,6 @@ export const T: Dict = {
   tile_journey_caption: { en: "10th grade & self-taught dev", bn: "দশম শ্রেণি ও স্ব-শিক্ষিত ডেভ" },
   tile_people_caption: { en: "Family, teachers & friends", bn: "পরিবার, শিক্ষক ও বন্ধু" },
   tile_memories_caption: { en: "Hobbies & travel", bn: "শখ ও ভ্রমণ" },
-  tile_diary_caption: { en: "Pizza, pasta & more", bn: "পিজ্জা, পাস্তা ও আরও" },
   profile_picture: { en: "profile picture", bn: "প্রোফাইল ছবি" },
   featured_memory: { en: "memory", bn: "স্মৃতি" },
   more_soon: { en: "More stories are being written — check back soon.", bn: "আরও গল্প লেখা হচ্ছে — শীঘ্রই আবার আসুন।" },
@@ -72,14 +72,30 @@ export const T: Dict = {
   travel_memories: { en: "Travel memories", bn: "ভ্রমণের স্মৃতি" },
   memory_book_empty: { en: "Memory book is empty for now.", bn: "স্মৃতির খাতা এখন খালি।" },
 
-  // Diary
+  // Certificates
   chapter_four: { en: "Chapter four", bn: "অধ্যায় চার" },
-  diary_title: { en: "A little food diary.", bn: "ছোট্ট একটি খাদ্য ডায়েরি।" },
-  diary_intro: {
-    en: "The dishes I keep coming back to, with a small note on each.",
-    bn: "যে খাবারগুলোতে বারবার ফিরে যাই, প্রতিটির সাথে ছোট্ট একটি নোট।",
+  certificates_title: { en: "Certificates & achievements.", bn: "সার্টিফিকেট ও অর্জন।" },
+  certificates_intro: {
+    en: "Courses finished, contests joined, and milestones worth keeping.",
+    bn: "সম্পন্ন করা কোর্স, অংশ নেওয়া প্রতিযোগিতা এবং রাখার মতো অর্জনগুলো।",
   },
-  still_tasting: { en: "Still tasting.", bn: "এখনও চেখে দেখছি।" },
+  certificates_empty: { en: "Certificates are on the way.", bn: "সার্টিফিকেট শীঘ্রই আসছে।" },
+  view_certificate: { en: "View certificate", bn: "সার্টিফিকেট দেখুন" },
+  close: { en: "Close", bn: "বন্ধ করুন" },
+
+  // Posts
+  chapter_six: { en: "Chapter six", bn: "অধ্যায় ছয়" },
+  posts_title: { en: "Research & posts.", bn: "গবেষণা ও পোস্ট।" },
+  posts_intro: {
+    en: "Articles, notes and research I publish as I learn.",
+    bn: "শেখার পথে লেখা আমার প্রবন্ধ, নোট ও গবেষণা।",
+  },
+  posts_empty: { en: "First post is being written.", bn: "প্রথম পোস্টটি লেখা হচ্ছে।" },
+  read_more: { en: "Read more", bn: "আরও পড়ুন" },
+  back_home: { en: "Back to home", bn: "হোমে ফিরুন" },
+  published_on: { en: "Published", bn: "প্রকাশিত" },
+  post_not_found: { en: "This post could not be found.", bn: "এই পোস্টটি খুঁজে পাওয়া যায়নি।" },
+  loading: { en: "Loading…", bn: "লোড হচ্ছে…" },
 
   // Thoughts
   chapter_five: { en: "Chapter five", bn: "অধ্যায় পাঁচ" },
@@ -133,6 +149,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const t = (key: keyof typeof T) => (T[key] ? T[key][lang] : String(key));
   return <LangCtx.Provider value={{ lang, setLang, t }}>{children}</LangCtx.Provider>;
+}
+
+/** Bilingual field picker: falls back to English when the Bengali value is empty. */
+export function pickLang(row: any, key: string, lang: Lang): string {
+  if (!row) return "";
+  if (lang === "bn") return (row[`${key}_bn`] || row[key] || "") as string;
+  return (row[key] || "") as string;
 }
 
 export function useLang() {

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin/settings")({
   component: SettingsAdmin,
 });
 
-const ICON_OPTIONS = ["github", "linkedin", "twitter", "instagram", "youtube", "globe", "mail", "link"];
+const ICON_OPTIONS = ["github", "linkedin", "twitter", "instagram", "globe", "mail", "link"];
 
 function SettingsAdmin() {
   return (
@@ -40,6 +40,11 @@ function SettingsForm() {
   const [experience, setExperience] = useState("");
   const [greeting, setGreeting] = useState("");
   const [identityLine, setIdentityLine] = useState("");
+  const [nameBn, setNameBn] = useState("");
+  const [bioBn, setBioBn] = useState("");
+  const [taglineBn, setTaglineBn] = useState("");
+  const [greetingBn, setGreetingBn] = useState("");
+  const [identityLineBn, setIdentityLineBn] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [heroFile, setHeroFile] = useState<File | null>(null);
@@ -59,6 +64,11 @@ function SettingsForm() {
       setExperience(q.data.experience ?? "");
       setGreeting((q.data as any).greeting ?? "");
       setIdentityLine((q.data as any).identity_line ?? "");
+      setNameBn((q.data as any).name_bn ?? "");
+      setBioBn((q.data as any).bio_bn ?? "");
+      setTaglineBn((q.data as any).tagline_bn ?? "");
+      setGreetingBn((q.data as any).greeting_bn ?? "");
+      setIdentityLineBn((q.data as any).identity_line_bn ?? "");
       setSliderImages(((q.data as any).slider_images ?? []) as string[]);
       getSignedUrl(q.data.resume_path).then(setResumeUrl);
     }
@@ -105,6 +115,8 @@ function SettingsForm() {
           resume_path, avatar_path, logo_path,
           greeting, identity_line: identityLine, hero_image_path,
           slider_images,
+          name_bn: nameBn || null, bio_bn: bioBn || null, tagline_bn: taglineBn || null,
+          greeting_bn: greetingBn || null, identity_line_bn: identityLineBn || null,
         } as any)
         .eq("id", q.data.id);
       if (error) throw error;
@@ -192,7 +204,14 @@ function SettingsForm() {
         />
       </label>
 
-      <Field label="Name"><input className="glass-input px-4 py-2.5 text-sm w-full" value={name} onChange={(e) => setName(e.target.value)} /></Field>
+      <div className="grid gap-3 md:grid-cols-2">
+        <Field label="Name (EN)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={name} onChange={(e) => setName(e.target.value)} /></Field>
+        <Field label="নাম (BN)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={nameBn} onChange={(e) => setNameBn(e.target.value)} placeholder="শোয়াইবুর রহমান" /></Field>
+      </div>
+      <Field label="অভিবাদন / Greeting (BN)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={greetingBn} onChange={(e) => setGreetingBn(e.target.value)} /></Field>
+      <Field label="পরিচয় লাইন / Identity line (BN)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={identityLineBn} onChange={(e) => setIdentityLineBn(e.target.value)} /></Field>
+      <Field label="ট্যাগলাইন / Tagline (BN)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={taglineBn} onChange={(e) => setTaglineBn(e.target.value)} /></Field>
+      <Field label="বায়ো / Bio (BN)"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-32" value={bioBn} onChange={(e) => setBioBn(e.target.value)} /></Field>
       <Field label="Greeting (shown on home hero)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={greeting} onChange={(e) => setGreeting(e.target.value)} placeholder="Hey, I'm Shoibur." /></Field>
       <Field label="Identity line (footer)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={identityLine} onChange={(e) => setIdentityLine(e.target.value)} placeholder="Student · Web developer · Curious mind" /></Field>
       <Field label="Tagline"><input className="glass-input px-4 py-2.5 text-sm w-full" value={tagline} onChange={(e) => setTagline(e.target.value)} /></Field>

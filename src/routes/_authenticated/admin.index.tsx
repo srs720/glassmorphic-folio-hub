@@ -64,7 +64,7 @@ function Dashboard() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat icon={FolderKanban} label="Projects" value={stats.data?.projects ?? "—"} />
-        <Stat icon={FileText} label="Blog posts" value={stats.data?.blog ?? "—"} />
+        <Stat icon={FileText} label="Research posts" value={stats.data?.blog ?? "—"} />
         <Stat icon={MessageSquare} label="Messages" value={stats.data?.messages ?? "—"} />
         <Stat icon={Quote} label="Testimonials" value={stats.data?.testimonials ?? "—"} />
       </div>

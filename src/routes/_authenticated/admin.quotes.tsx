@@ -11,9 +11,12 @@ export const Route = createFileRoute("/_authenticated/admin/quotes")({
       titleField: "text",
       subtitleField: "author",
       fields: [
-        { key: "text", label: "Quote", type: "textarea" },
-        { key: "author", label: "Author (default: Shoibur)" },
-        { key: "category", label: "Category (life, work, …)" },
+        { key: "text", label: "Quote (EN)", type: "textarea" },
+        { key: "text_bn", label: "উক্তি (BN)", type: "textarea" },
+        { key: "author", label: "Author (EN)" },
+        { key: "author_bn", label: "লেখক (BN)" },
+        { key: "category", label: "Category (EN)" },
+        { key: "category_bn", label: "বিভাগ (BN)" },
       ],
     }} />
   ),

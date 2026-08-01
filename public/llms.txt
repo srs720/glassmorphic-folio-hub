@@ -8,6 +8,7 @@
 - [Journey](/journey): Education timeline, current studies, and future plans.
 - [People](/people): Family, teachers, and close friends.
 - [Memories](/memories): Hobbies, travel stories, and personal moments.
-- [Food Diary](/diary): Favorite foods with short reviews.
+- [Certificates](/#certificates): Certificates and achievements.
+- [Research & Posts](/#posts): Articles, notes, and research (individual posts live at /post/{slug}).
 - [Thoughts](/thoughts): Personal quotes, advice, and reflections.
 - [Contact](/contact): Get in touch.

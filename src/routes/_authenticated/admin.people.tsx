@@ -14,9 +14,12 @@ export const Route = createFileRoute("/_authenticated/admin/people")({
       imageFolder: "people",
       fields: [
         { key: "category", label: "Category", type: "select", options: ["family", "teacher", "friend"] },
-        { key: "name", label: "Name" },
-        { key: "relation", label: "Relation" },
-        { key: "note", label: "Short note", type: "textarea" },
+        { key: "name", label: "Name (EN)" },
+        { key: "name_bn", label: "নাম (BN)" },
+        { key: "relation", label: "Relation (EN)" },
+        { key: "relation_bn", label: "সম্পর্ক (BN)" },
+        { key: "note", label: "Short note (EN)", type: "textarea" },
+        { key: "note_bn", label: "সংক্ষিপ্ত নোট (BN)", type: "textarea" },
       ],
     }} />
   ),
