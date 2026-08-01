@@ -22,6 +22,25 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/contact", changefreq: "yearly", priority: "0.5" },
         ];
 
+        try {
+          const { createClient } = await import("@supabase/supabase-js");
+          const client = createClient(
+            process.env["SUPABASE_URL"]!,
+            process.env["SUPABASE_PUBLISHABLE_KEY"]!,
+            { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
+          );
+          const { data } = await client
+            .from("blog_posts")
+            .select("slug")
+            .eq("status", "published");
+          for (const row of data ?? []) {
+            entries.push({ path: `/post/${row.slug}`, changefreq: "monthly", priority: "0.9" });
+          }
+        } catch {
+          // sitemap still serves static routes if the database is unreachable
+        }
+
+
         const urls = entries.map((e) =>
           [
             `  <url>`,
