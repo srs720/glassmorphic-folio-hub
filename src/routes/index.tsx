@@ -9,10 +9,12 @@ import { SignedImage } from "@/components/SignedImage";
 import { HeroSlider } from "@/components/HeroSlider";
 import { Reveal, Stagger, StaggerItem, HoverCard } from "@/components/Reveal";
 import {
-  GraduationCap, BookOpen, Sparkles, Award, Star, MapPin, Send, Mail, Quote as QuoteIcon,
-  ArrowDown,
+  GraduationCap, BookOpen, Sparkles, Award, MapPin, Send, Mail, Quote as QuoteIcon,
+  ArrowDown, ArrowRight, Calendar,
 } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang, pickLang } from "@/lib/i18n";
+import { Lightbox } from "@/components/Lightbox";
+import { Link } from "@tanstack/react-router";
 
 const CANONICAL = "https://shoiburrahman.com";
 
@@ -117,16 +119,22 @@ function HomePage() {
         <MemoriesSection />
       </section>
 
-      {/* ============ FOOD DIARY ============ */}
-      <section id="diary" className="mx-auto max-w-6xl px-4 md:px-6 pt-20 md:pt-28 scroll-mt-20">
-        <SectionHeader chapter={t("chapter_four")} title={t("diary_title")} intro={t("diary_intro")} />
-        <DiarySection />
+      {/* ============ CERTIFICATES ============ */}
+      <section id="certificates" className="mx-auto max-w-6xl px-4 md:px-6 pt-20 md:pt-28 scroll-mt-20">
+        <SectionHeader chapter={t("chapter_four")} title={t("certificates_title")} intro={t("certificates_intro")} />
+        <CertificatesSection />
       </section>
 
       {/* ============ THOUGHTS ============ */}
       <section id="thoughts" className="mx-auto max-w-6xl px-4 md:px-6 pt-20 md:pt-28 scroll-mt-20">
         <SectionHeader chapter={t("chapter_five")} title={t("thoughts_title")} intro={t("thoughts_intro")} />
         <ThoughtsSection />
+      </section>
+
+      {/* ============ RESEARCH & POSTS ============ */}
+      <section id="posts" className="mx-auto max-w-6xl px-4 md:px-6 pt-20 md:pt-28 scroll-mt-20">
+        <SectionHeader chapter={t("chapter_six")} title={t("posts_title")} intro={t("posts_intro")} />
+        <PostsFeed />
       </section>
 
       {/* ============ CONTACT ============ */}
@@ -145,7 +153,7 @@ function HomePage() {
 
 /* ------------------ Journey ------------------ */
 function JourneySection() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const ORDER = ["current", "past", "future", "certificate"] as const;
   const META: Record<string, { title: string; icon: typeof GraduationCap; tone: string }> = {
     current: { title: t("edu_current"), icon: GraduationCap, tone: "bento-blue" },
@@ -175,10 +183,10 @@ function JourneySection() {
                 {list.map((e: any) => (
                   <li key={e.id} className="relative">
                     <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full bg-foreground" />
-                    <p className="label-mono">{e.period}</p>
-                    <p className="font-display text-lg mt-1">{e.title}</p>
-                    {e.institution && <p className="text-sm text-foreground/70">{e.institution}</p>}
-                    {e.description && <p className="text-sm mt-2 text-foreground/80">{e.description}</p>}
+                    <p className="label-mono">{pickLang(e, "period", lang)}</p>
+                    <p className="font-display text-lg mt-1">{pickLang(e, "title", lang)}</p>
+                    {pickLang(e, "institution", lang) && <p className="text-sm text-foreground/70">{pickLang(e, "institution", lang)}</p>}
+                    {pickLang(e, "description", lang) && <p className="text-sm mt-2 text-foreground/80">{pickLang(e, "description", lang)}</p>}
                   </li>
                 ))}
               </ol>
@@ -195,7 +203,7 @@ function JourneySection() {
 
 /* ------------------ People ------------------ */
 function PeopleSection() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const GROUPS: { key: "family" | "teacher" | "friend"; title: string; tone: string }[] = [
     { key: "family", title: t("group_family"), tone: "bento-yellow" },
     { key: "teacher", title: t("group_teachers"), tone: "bento-blue" },
@@ -245,7 +253,7 @@ function PeopleSection() {
 
 /* ------------------ Memories ------------------ */
 function MemoriesSection() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const memories = useQuery({
     queryKey: ["memories"],
     queryFn: async () => (await supabase.from("memories").select("*").order("sort_order")).data ?? [],
@@ -264,13 +272,13 @@ function MemoriesSection() {
               <HoverCard className="bento p-5 h-full">
                 <div className="h-40 w-full rounded-2xl overflow-hidden bg-surface-2 mb-4">
                   {h.image_path ? (
-                    <SignedImage path={h.image_path} alt={h.title} className="h-full w-full object-cover" />
+                    <SignedImage path={h.image_path} alt={pickLang(h, "title", lang)} className="h-full w-full object-cover" />
                   ) : (
                     <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#FFF6DD]" />
                   )}
                 </div>
-                <p className="font-display text-xl">{h.title}</p>
-                {h.description && <p className="text-sm text-foreground/80 mt-2">{h.description}</p>}
+                <p className="font-display text-xl">{pickLang(h, "title", lang)}</p>
+                {pickLang(h, "description", lang) && <p className="text-sm text-foreground/80 mt-2">{pickLang(h, "description", lang)}</p>}
               </HoverCard>
             </StaggerItem>
           ))}
@@ -285,19 +293,19 @@ function MemoriesSection() {
               <HoverCard className="bento overflow-hidden group h-full">
                 <div className="relative h-48 w-full bg-surface-2">
                   {m.image_path ? (
-                    <SignedImage path={m.image_path} alt={m.title} className="h-full w-full object-cover" />
+                    <SignedImage path={m.image_path} alt={pickLang(m, "title", lang)} className="h-full w-full object-cover" />
                   ) : (
                     <div className="h-full w-full bg-gradient-to-br from-[#DCEEFB] to-[#FFF6DD]" />
                   )}
                 </div>
                 <div className="p-5">
-                  <p className="font-display text-xl">{m.title}</p>
+                  <p className="font-display text-xl">{pickLang(m, "title", lang)}</p>
                   {m.location && (
                     <p className="label-mono mt-1 inline-flex items-center gap-1">
-                      <MapPin className="h-3 w-3" /> {m.location}
+                      <MapPin className="h-3 w-3" /> {pickLang(m, "location", lang)}
                     </p>
                   )}
-                  {m.description && <p className="text-sm mt-2 text-foreground/80">{m.description}</p>}
+                  {(pickLang(m, "description", lang) || pickLang(m, "story", lang)) && <p className="text-sm mt-2 text-foreground/80">{pickLang(m, "description", lang) || pickLang(m, "story", lang)}</p>}
                 </div>
               </HoverCard>
             </StaggerItem>
@@ -311,44 +319,107 @@ function MemoriesSection() {
   );
 }
 
-/* ------------------ Diary ------------------ */
-function DiarySection() {
-  const { t } = useLang();
+/* ------------------ Certificates ------------------ */
+function CertificatesSection() {
+  const { t, lang } = useLang();
+  const [open, setOpen] = useState<any | null>(null);
   const q = useQuery({
-    queryKey: ["foods"],
-    queryFn: async () => (await supabase.from("foods").select("*").order("sort_order")).data ?? [],
+    queryKey: ["certificates"],
+    queryFn: async () => (await supabase.from("certificates").select("*").order("sort_order")).data ?? [],
   });
   return (
-    <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(q.data ?? []).map((f: any) => (
-        <StaggerItem key={f.id}>
+    <>
+      <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {(q.data ?? []).map((c: any) => {
+          const title = pickLang(c, "title", lang);
+          return (
+            <StaggerItem key={c.id}>
+              <HoverCard className="bento overflow-hidden h-full">
+                <button type="button" onClick={() => setOpen(c)} className="block w-full text-left">
+                  <div className="h-48 w-full bg-surface-2">
+                    {c.image_path ? (
+                      <SignedImage path={c.image_path} alt={title} className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#DCEEFB] flex items-center justify-center">
+                        <Award className="h-8 w-8 text-foreground/40" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <p className="font-display text-xl">{title}</p>
+                    {pickLang(c, "issuer", lang) && <p className="label-mono mt-1">{pickLang(c, "issuer", lang)}</p>}
+                    {pickLang(c, "description", lang) && (
+                      <p className="text-sm mt-2 text-foreground/80">{pickLang(c, "description", lang)}</p>
+                    )}
+                    <span className="mt-3 inline-flex items-center gap-1 text-sm text-primary">
+                      {t("view_certificate")} <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
+                </button>
+              </HoverCard>
+            </StaggerItem>
+          );
+        })}
+        {(q.data ?? []).length === 0 && (
+          <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("certificates_empty")}</div>
+        )}
+      </Stagger>
+      <Lightbox
+        path={open?.image_path ?? null}
+        alt={open ? pickLang(open, "title", lang) : ""}
+        caption={open ? pickLang(open, "description", lang) : undefined}
+        onClose={() => setOpen(null)}
+      />
+    </>
+  );
+}
+
+/* ------------------ Research & Posts feed ------------------ */
+function PostsFeed() {
+  const { t, lang } = useLang();
+  const q = useQuery({
+    queryKey: ["posts_feed"],
+    queryFn: async () =>
+      (await supabase
+        .from("blog_posts")
+        .select("*")
+        .eq("status", "published")
+        .order("published_at", { ascending: false })).data ?? [],
+  });
+  return (
+    <Stagger className="grid gap-5 md:grid-cols-2">
+      {(q.data ?? []).map((p: any) => (
+        <StaggerItem key={p.id}>
           <HoverCard className="bento overflow-hidden h-full">
-            <div className="h-44 w-full bg-surface-2">
-              {f.image_path ? (
-                <SignedImage path={f.image_path} alt={f.name} className="h-full w-full object-cover" />
-              ) : (
-                <div className="h-full w-full bg-gradient-to-br from-[#FFF6DD] to-[#EAF5FE] flex items-center justify-center font-display text-4xl text-foreground/40">{f.name.charAt(0)}</div>
-              )}
-            </div>
-            <div className="p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-display text-xl">{f.name}</p>
-                  {f.cuisine && <p className="label-mono mt-0.5">{f.cuisine}</p>}
-                </div>
-                <div className="flex gap-0.5">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className={"h-4 w-4 " + (i <= (f.rating ?? 0) ? "fill-yellow text-yellow" : "text-foreground/20")} />
-                  ))}
-                </div>
+            <Link to="/post/$slug" params={{ slug: p.slug }} className="block h-full">
+              <div className="h-52 w-full bg-surface-2">
+                {p.cover_path ? (
+                  <SignedImage path={p.cover_path} alt={pickLang(p, "title", lang)} className="h-full w-full object-cover" />
+                ) : (
+                  <div className="h-full w-full bg-gradient-to-br from-[#DCEEFB] to-[#EAF5FE]" />
+                )}
               </div>
-              {f.review && <p className="text-sm mt-3 text-foreground/80">{f.review}</p>}
-            </div>
+              <div className="p-6">
+                <p className="label-mono inline-flex items-center gap-1">
+                  <Calendar className="h-3 w-3" />
+                  {new Date(p.published_at ?? p.created_at).toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", {
+                    day: "numeric", month: "short", year: "numeric",
+                  })}
+                </p>
+                <h3 className="mt-2 font-display text-2xl leading-snug">{pickLang(p, "title", lang)}</h3>
+                {pickLang(p, "excerpt", lang) && (
+                  <p className="mt-2 text-sm text-foreground/80 line-clamp-3">{pickLang(p, "excerpt", lang)}</p>
+                )}
+                <span className="mt-4 inline-flex items-center gap-1 text-sm text-primary">
+                  {t("read_more")} <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </div>
+            </Link>
           </HoverCard>
         </StaggerItem>
       ))}
       {(q.data ?? []).length === 0 && (
-        <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("still_tasting")}</div>
+        <div className="bento p-8 md:col-span-2 text-center text-muted-foreground">{t("posts_empty")}</div>
       )}
     </Stagger>
   );
@@ -356,7 +427,7 @@ function DiarySection() {
 
 /* ------------------ Thoughts ------------------ */
 function ThoughtsSection() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const TONES = ["bento", "bento-blue", "bento-yellow", "bento-cream"] as const;
   const q = useQuery({
     queryKey: ["quotes"],
@@ -369,8 +440,8 @@ function ThoughtsSection() {
           <HoverCard className={`${TONES[i % TONES.length]} p-6 flex flex-col justify-between min-h-[220px] h-full`}>
             <QuoteIcon className="h-6 w-6 text-foreground/60" />
             <div className="mt-6">
-              <p className="font-display text-2xl leading-snug">"{qt.text}"</p>
-              <p className="mt-3 label-mono">— {qt.author ?? t("fullName")}{qt.category ? ` · ${qt.category}` : ""}</p>
+              <p className="font-display text-2xl leading-snug">"{pickLang(qt, "text", lang)}"</p>
+              <p className="mt-3 label-mono">— {pickLang(qt, "author", lang) || t("fullName")}{pickLang(qt, "category", lang) ? ` · ${pickLang(qt, "category", lang)}` : ""}</p>
             </div>
           </HoverCard>
         </StaggerItem>
