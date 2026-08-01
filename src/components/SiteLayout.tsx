@@ -25,8 +25,9 @@ const SECTIONS = [
   { id: "journey", key: "nav_journey" as const },
   { id: "people", key: "nav_people" as const },
   { id: "memories", key: "nav_memories" as const },
-  { id: "diary", key: "nav_diary" as const },
+  { id: "certificates", key: "nav_certificates" as const },
   { id: "thoughts", key: "nav_thoughts" as const },
+  { id: "posts", key: "nav_posts" as const },
   { id: "contact", key: "nav_contact" as const },
 ];
 

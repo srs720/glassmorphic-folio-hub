@@ -26,6 +26,7 @@ import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin.services'
 import { Route as AuthenticatedAdminQuotesRouteImport } from './routes/_authenticated/admin.quotes'
 import { Route as AuthenticatedAdminProjectsRouteImport } from './routes/_authenticated/admin.projects'
+import { Route as AuthenticatedAdminPostsRouteImport } from './routes/_authenticated/admin.posts'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminMemoriesRouteImport } from './routes/_authenticated/admin.memories'
@@ -123,6 +124,11 @@ const AuthenticatedAdminProjectsRoute =
     path: '/admin/projects',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminPostsRoute = AuthenticatedAdminPostsRouteImport.update({
+  id: '/admin/posts',
+  path: '/admin/posts',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminPeopleRoute =
   AuthenticatedAdminPeopleRouteImport.update({
     id: '/admin/people',
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/admin/quotes': typeof AuthenticatedAdminQuotesRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
@@ -200,6 +207,7 @@ export interface FileRoutesByTo {
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/admin/quotes': typeof AuthenticatedAdminQuotesRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
@@ -226,6 +234,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/memories': typeof AuthenticatedAdminMemoriesRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/_authenticated/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/_authenticated/admin/projects': typeof AuthenticatedAdminProjectsRoute
   '/_authenticated/admin/quotes': typeof AuthenticatedAdminQuotesRoute
   '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
@@ -252,6 +261,7 @@ export interface FileRouteTypes {
     | '/admin/memories'
     | '/admin/messages'
     | '/admin/people'
+    | '/admin/posts'
     | '/admin/projects'
     | '/admin/quotes'
     | '/admin/services'
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/admin/memories'
     | '/admin/messages'
     | '/admin/people'
+    | '/admin/posts'
     | '/admin/projects'
     | '/admin/quotes'
     | '/admin/services'
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/memories'
     | '/_authenticated/admin/messages'
     | '/_authenticated/admin/people'
+    | '/_authenticated/admin/posts'
     | '/_authenticated/admin/projects'
     | '/_authenticated/admin/quotes'
     | '/_authenticated/admin/services'
@@ -444,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProjectsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/posts': {
+      id: '/_authenticated/admin/posts'
+      path: '/admin/posts'
+      fullPath: '/admin/posts'
+      preLoaderRoute: typeof AuthenticatedAdminPostsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/people': {
       id: '/_authenticated/admin/people'
       path: '/admin/people'
@@ -496,6 +515,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminMemoriesRoute: typeof AuthenticatedAdminMemoriesRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
+  AuthenticatedAdminPostsRoute: typeof AuthenticatedAdminPostsRoute
   AuthenticatedAdminProjectsRoute: typeof AuthenticatedAdminProjectsRoute
   AuthenticatedAdminQuotesRoute: typeof AuthenticatedAdminQuotesRoute
   AuthenticatedAdminServicesRoute: typeof AuthenticatedAdminServicesRoute
@@ -512,6 +532,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminMemoriesRoute: AuthenticatedAdminMemoriesRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
+  AuthenticatedAdminPostsRoute: AuthenticatedAdminPostsRoute,
   AuthenticatedAdminProjectsRoute: AuthenticatedAdminProjectsRoute,
   AuthenticatedAdminQuotesRoute: AuthenticatedAdminQuotesRoute,
   AuthenticatedAdminServicesRoute: AuthenticatedAdminServicesRoute,

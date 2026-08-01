@@ -12,10 +12,14 @@ export const Route = createFileRoute("/_authenticated/admin/education")({
       subtitleField: "institution",
       fields: [
         { key: "kind", label: "Kind", type: "select", options: ["current", "past", "future", "certificate"] },
-        { key: "title", label: "Title" },
-        { key: "institution", label: "Institution" },
-        { key: "period", label: "Period (e.g. Batch 2026)" },
-        { key: "description", label: "Description", type: "textarea" },
+        { key: "title", label: "Title (EN)" },
+        { key: "title_bn", label: "শিরোনাম (BN)" },
+        { key: "institution", label: "Institution (EN)" },
+        { key: "institution_bn", label: "প্রতিষ্ঠান (BN)" },
+        { key: "period", label: "Period (EN, e.g. Batch 2026)" },
+        { key: "period_bn", label: "সময়কাল (BN)" },
+        { key: "description", label: "Description (EN)", type: "textarea" },
+        { key: "description_bn", label: "বিবরণ (BN)", type: "textarea" },
       ],
     }} />
   ),
