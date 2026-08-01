@@ -18,6 +18,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PostSlugRouteImport } from './routes/post.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminTestimonialsRouteImport } from './routes/_authenticated/admin.testimonials'
 import { Route as AuthenticatedAdminSkillsRouteImport } from './routes/_authenticated/admin.skills'
@@ -73,6 +74,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostSlugRoute = PostSlugRouteImport.update({
+  id: '/post/$slug',
+  path: '/post/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
+  '/post/$slug': typeof PostSlugRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
+  '/post/$slug': typeof PostSlugRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
+  '/post/$slug': typeof PostSlugRoute
   '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
   '/_authenticated/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/_authenticated/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
+    | '/post/$slug'
     | '/admin/education'
     | '/admin/hobbies'
     | '/admin/memories'
@@ -248,6 +258,7 @@ export interface FileRouteTypes {
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
+    | '/post/$slug'
     | '/admin/education'
     | '/admin/hobbies'
     | '/admin/memories'
@@ -271,6 +282,7 @@ export interface FileRouteTypes {
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
+    | '/post/$slug'
     | '/_authenticated/admin/education'
     | '/_authenticated/admin/hobbies'
     | '/_authenticated/admin/memories'
@@ -295,6 +307,7 @@ export interface RootRouteChildren {
   PeopleRoute: typeof PeopleRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ThoughtsRoute: typeof ThoughtsRoute
+  PostSlugRoute: typeof PostSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -360,6 +373,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/post/$slug': {
+      id: '/post/$slug'
+      path: '/post/$slug'
+      fullPath: '/post/$slug'
+      preLoaderRoute: typeof PostSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
@@ -492,6 +512,7 @@ const rootRouteChildren: RootRouteChildren = {
   PeopleRoute: PeopleRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ThoughtsRoute: ThoughtsRoute,
+  PostSlugRoute: PostSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
