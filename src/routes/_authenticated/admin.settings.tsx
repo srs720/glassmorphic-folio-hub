@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin/settings")({
   component: SettingsAdmin,
 });
 
-const ICON_OPTIONS = ["github", "linkedin", "twitter", "instagram", "youtube", "globe", "mail", "link"];
+const ICON_OPTIONS = ["github", "linkedin", "twitter", "instagram", "globe", "mail", "link"];
 
 function SettingsAdmin() {
   return (
