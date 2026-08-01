@@ -31,6 +31,7 @@ import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminMemoriesRouteImport } from './routes/_authenticated/admin.memories'
 import { Route as AuthenticatedAdminHobbiesRouteImport } from './routes/_authenticated/admin.hobbies'
 import { Route as AuthenticatedAdminEducationRouteImport } from './routes/_authenticated/admin.education'
+import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
 
 const ThoughtsRoute = ThoughtsRouteImport.update({
   id: '/thoughts',
@@ -152,6 +153,12 @@ const AuthenticatedAdminEducationRoute =
     path: '/admin/education',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminCertificatesRoute =
+  AuthenticatedAdminCertificatesRouteImport.update({
+    id: '/admin/certificates',
+    path: '/admin/certificates',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
+  '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -186,6 +194,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
+  '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -211,6 +220,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
+  '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
   '/_authenticated/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/_authenticated/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/post/$slug'
+    | '/admin/certificates'
     | '/admin/education'
     | '/admin/hobbies'
     | '/admin/memories'
@@ -259,6 +270,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/post/$slug'
+    | '/admin/certificates'
     | '/admin/education'
     | '/admin/hobbies'
     | '/admin/memories'
@@ -283,6 +295,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/post/$slug'
+    | '/_authenticated/admin/certificates'
     | '/_authenticated/admin/education'
     | '/_authenticated/admin/hobbies'
     | '/_authenticated/admin/memories'
@@ -466,10 +479,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminEducationRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/certificates': {
+      id: '/_authenticated/admin/certificates'
+      path: '/admin/certificates'
+      fullPath: '/admin/certificates'
+      preLoaderRoute: typeof AuthenticatedAdminCertificatesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
   AuthenticatedAdminEducationRoute: typeof AuthenticatedAdminEducationRoute
   AuthenticatedAdminHobbiesRoute: typeof AuthenticatedAdminHobbiesRoute
   AuthenticatedAdminMemoriesRoute: typeof AuthenticatedAdminMemoriesRoute
@@ -485,6 +506,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
   AuthenticatedAdminEducationRoute: AuthenticatedAdminEducationRoute,
   AuthenticatedAdminHobbiesRoute: AuthenticatedAdminHobbiesRoute,
   AuthenticatedAdminMemoriesRoute: AuthenticatedAdminMemoriesRoute,
