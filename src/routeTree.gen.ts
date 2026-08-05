@@ -32,6 +32,7 @@ import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminMemoriesRouteImport } from './routes/_authenticated/admin.memories'
 import { Route as AuthenticatedAdminHobbiesRouteImport } from './routes/_authenticated/admin.hobbies'
 import { Route as AuthenticatedAdminEducationRouteImport } from './routes/_authenticated/admin.education'
+import { Route as AuthenticatedAdminContactRouteImport } from './routes/_authenticated/admin.contact'
 import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
 
 const ThoughtsRoute = ThoughtsRouteImport.update({
@@ -159,6 +160,12 @@ const AuthenticatedAdminEducationRoute =
     path: '/admin/education',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminContactRoute =
+  AuthenticatedAdminContactRouteImport.update({
+    id: '/admin/contact',
+    path: '/admin/contact',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminCertificatesRoute =
   AuthenticatedAdminCertificatesRouteImport.update({
     id: '/admin/certificates',
@@ -177,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
+  '/admin/contact': typeof AuthenticatedAdminContactRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -202,6 +210,7 @@ export interface FileRoutesByTo {
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
+  '/admin/contact': typeof AuthenticatedAdminContactRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -229,6 +238,7 @@ export interface FileRoutesById {
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
   '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
+  '/_authenticated/admin/contact': typeof AuthenticatedAdminContactRoute
   '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
   '/_authenticated/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/_authenticated/admin/memories': typeof AuthenticatedAdminMemoriesRoute
@@ -256,6 +266,7 @@ export interface FileRouteTypes {
     | '/thoughts'
     | '/post/$slug'
     | '/admin/certificates'
+    | '/admin/contact'
     | '/admin/education'
     | '/admin/hobbies'
     | '/admin/memories'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/thoughts'
     | '/post/$slug'
     | '/admin/certificates'
+    | '/admin/contact'
     | '/admin/education'
     | '/admin/hobbies'
     | '/admin/memories'
@@ -307,6 +319,7 @@ export interface FileRouteTypes {
     | '/thoughts'
     | '/post/$slug'
     | '/_authenticated/admin/certificates'
+    | '/_authenticated/admin/contact'
     | '/_authenticated/admin/education'
     | '/_authenticated/admin/hobbies'
     | '/_authenticated/admin/memories'
@@ -498,6 +511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminEducationRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/contact': {
+      id: '/_authenticated/admin/contact'
+      path: '/admin/contact'
+      fullPath: '/admin/contact'
+      preLoaderRoute: typeof AuthenticatedAdminContactRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/certificates': {
       id: '/_authenticated/admin/certificates'
       path: '/admin/certificates'
@@ -510,6 +530,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
+  AuthenticatedAdminContactRoute: typeof AuthenticatedAdminContactRoute
   AuthenticatedAdminEducationRoute: typeof AuthenticatedAdminEducationRoute
   AuthenticatedAdminHobbiesRoute: typeof AuthenticatedAdminHobbiesRoute
   AuthenticatedAdminMemoriesRoute: typeof AuthenticatedAdminMemoriesRoute
@@ -527,6 +548,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
+  AuthenticatedAdminContactRoute: AuthenticatedAdminContactRoute,
   AuthenticatedAdminEducationRoute: AuthenticatedAdminEducationRoute,
   AuthenticatedAdminHobbiesRoute: AuthenticatedAdminHobbiesRoute,
   AuthenticatedAdminMemoriesRoute: AuthenticatedAdminMemoriesRoute,
@@ -560,13 +582,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

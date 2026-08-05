@@ -49,7 +49,7 @@ function ContactAdmin() {
     setSaving(true);
     const payload: Record<string, string | null> = {};
     for (const f of FIELDS) payload[f.key] = (values[f.key] ?? "").trim() || null;
-    const { error } = await supabase.from("site_settings").update(payload).eq("id", q.data.id);
+    const { error } = await supabase.from("site_settings").update(payload as any).eq("id", q.data.id);
     setSaving(false);
     if (error) { toast.error("Couldn't save contact details."); return; }
     toast.success("Contact & socials saved");
