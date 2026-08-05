@@ -3,7 +3,8 @@ import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Mail, Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { SiteLayout, useSocials, SocialIcon } from "@/components/SiteLayout";
+import { SiteLayout } from "@/components/SiteLayout";
+import { ContactLinks } from "@/components/ContactLinks";
 import { useLang } from "@/lib/i18n";
 
 const CANONICAL = "https://shoiburrahman.com";
@@ -82,15 +83,7 @@ function ContactPage() {
             </div>
             <div className="bento p-6">
               <p className="label-mono">{t("find_me_at")}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {(socials.data ?? []).map((s) => (
-                  <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer" className="chip hover:bg-surface-2">
-                    <SocialIcon name={s.icon_name} />
-                    <span>{s.platform_name}</span>
-                  </a>
-                ))}
-                {(socials.data ?? []).length === 0 && <span className="text-sm text-muted-foreground">{t("coming_soon")}</span>}
-              </div>
+              <ContactLinks className="mt-3" />
             </div>
           </div>
         </div>

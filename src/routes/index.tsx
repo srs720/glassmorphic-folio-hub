@@ -410,9 +410,16 @@ function PostsFeed() {
                 {pickLang(p, "excerpt", lang) && (
                   <p className="mt-2 text-sm text-foreground/80 line-clamp-3">{pickLang(p, "excerpt", lang)}</p>
                 )}
-                <span className="mt-4 inline-flex items-center gap-1 text-sm text-primary">
-                  {t("read_more")} <ArrowRight className="h-3.5 w-3.5" />
-                </span>
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-1 text-sm text-primary">
+                    {t("read_more")} <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                  <ShareButton
+                    title={pickLang(p, "title", lang)}
+                    text={pickLang(p, "excerpt", lang)}
+                    url={`/post/${p.slug}`}
+                  />
+                </div>
               </div>
             </Link>
           </HoverCard>
@@ -505,15 +512,7 @@ function ContactSection() {
         </div>
         <div className="bento p-6">
           <p className="label-mono">{t("find_me_at")}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {(socials.data ?? []).map((s) => (
-              <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer" className="chip hover:bg-surface-2">
-                <SocialIcon name={s.icon_name} />
-                <span>{s.platform_name}</span>
-              </a>
-            ))}
-            {(socials.data ?? []).length === 0 && <span className="text-sm text-muted-foreground">{t("coming_soon")}</span>}
-          </div>
+          <ContactLinks className="mt-3" />
         </div>
       </Reveal>
     </div>

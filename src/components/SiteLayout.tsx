@@ -170,19 +170,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </div>
           <div>
             <p className="label-mono">{t("find_me_at")}</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {(socials.data ?? []).map((s) => (
-                <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer"
-                  aria-label={s.platform_name}
-                  className="chip hover:bg-surface-2 transition">
-                  <SocialIcon name={s.icon_name} />
-                  <span>{s.platform_name}</span>
-                </a>
-              ))}
-              {(socials.data ?? []).length === 0 && (
-                <span className="text-sm text-muted-foreground">{t("coming_soon")}</span>
-              )}
-            </div>
+            <ContactLinks className="mt-2" />
           </div>
           <div className="md:text-right">
             <p className="label-mono">© {new Date().getFullYear()}</p>
