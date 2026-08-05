@@ -445,67 +445,85 @@ export type Database = {
           avatar_path: string | null
           bio: string
           bio_bn: string | null
+          contact_email: string | null
           education: string
           experience: string
+          facebook_url: string | null
+          github_url: string | null
           greeting: string | null
           greeting_bn: string | null
           hero_image_path: string | null
           id: string
           identity_line: string | null
           identity_line_bn: string | null
+          linkedin_url: string | null
           location: string
           logo_path: string | null
           name: string
           name_bn: string | null
+          phone: string | null
           resume_path: string | null
           slider_images: string[]
           tagline: string
           tagline_bn: string | null
           updated_at: string
+          youtube_url: string | null
         }
         Insert: {
           avatar_path?: string | null
           bio?: string
           bio_bn?: string | null
+          contact_email?: string | null
           education?: string
           experience?: string
+          facebook_url?: string | null
+          github_url?: string | null
           greeting?: string | null
           greeting_bn?: string | null
           hero_image_path?: string | null
           id?: string
           identity_line?: string | null
           identity_line_bn?: string | null
+          linkedin_url?: string | null
           location?: string
           logo_path?: string | null
           name?: string
           name_bn?: string | null
+          phone?: string | null
           resume_path?: string | null
           slider_images?: string[]
           tagline?: string
           tagline_bn?: string | null
           updated_at?: string
+          youtube_url?: string | null
         }
         Update: {
           avatar_path?: string | null
           bio?: string
           bio_bn?: string | null
+          contact_email?: string | null
           education?: string
           experience?: string
+          facebook_url?: string | null
+          github_url?: string | null
           greeting?: string | null
           greeting_bn?: string | null
           hero_image_path?: string | null
           id?: string
           identity_line?: string | null
           identity_line_bn?: string | null
+          linkedin_url?: string | null
           location?: string
           logo_path?: string | null
           name?: string
           name_bn?: string | null
+          phone?: string | null
           resume_path?: string | null
           slider_images?: string[]
           tagline?: string
           tagline_bn?: string | null
           updated_at?: string
+          youtube_url?: string | null
         }
         Relationships: []
       }
