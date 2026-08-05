@@ -465,7 +465,7 @@ function ThoughtsSection() {
 /* ------------------ Contact ------------------ */
 function ContactSection() {
   const { t } = useLang();
-  const socials = useSocials();
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");

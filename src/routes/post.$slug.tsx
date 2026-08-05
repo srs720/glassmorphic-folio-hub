@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SignedImage } from "@/components/SignedImage";
 import { Reveal } from "@/components/Reveal";
+import { ShareButton } from "@/components/ShareButton";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { useLang, pickLang } from "@/lib/i18n";
 
@@ -99,6 +100,14 @@ function PostPage() {
           {pickLang(post, "excerpt", lang) && (
             <p className="mt-4 text-lg text-muted-foreground">{pickLang(post, "excerpt", lang)}</p>
           )}
+          <div className="mt-5">
+            <ShareButton
+              title={title}
+              text={pickLang(post, "excerpt", lang)}
+              url={`${CANONICAL}/post/${post.slug}`}
+              label
+            />
+          </div>
         </Reveal>
 
         {post.cover_path && (
