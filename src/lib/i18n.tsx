@@ -122,7 +122,9 @@ export const T: Dict = {
   prefer_other: { en: "Prefer another way?", bn: "অন্যভাবে যোগাযোগ চান?" },
   channels_note: { en: "Use any of the channels below — I read them all.", bn: "নিচের যেকোনো মাধ্যম ব্যবহার করুন — সবগুলোই আমি পড়ি।" },
   find_me_at: { en: "Find me at", bn: "আমাকে পাবেন এখানে" },
-  coming_soon: { en: "Coming soon.", bn: "শীঘ্রই আসছে।" },
+  share: { en: "Share", bn: "শেয়ার" },
+  link_copied: { en: "Link copied to clipboard", bn: "লিংক কপি হয়েছে" },
+  share_failed: { en: "Couldn't share this link.", bn: "লিংক শেয়ার করা যায়নি।" },
 
   // Footer
   footer_note: { en: "Written from Bangladesh, with care.", bn: "যত্নের সাথে বাংলাদেশ থেকে লেখা।" },
