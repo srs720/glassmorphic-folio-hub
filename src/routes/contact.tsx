@@ -25,7 +25,7 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const { t } = useLang();
-  const socials = useSocials();
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
