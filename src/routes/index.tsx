@@ -385,7 +385,7 @@ function PostsFeed() {
       (await supabase
         .from("blog_posts")
         .select("*")
-        .eq("status", "published")
+        .in("status", ["published", "scheduled"])
         .order("published_at", { ascending: false })).data ?? [],
   });
   return (
