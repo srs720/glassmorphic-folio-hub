@@ -269,12 +269,39 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
         <input type="file" accept="image/*" className="hidden" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
       </label>
 
-      <Field label="Status">
-        <select className="glass-input px-4 py-2.5 text-sm w-full" value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="draft">Draft</option>
-          <option value="published">Published</option>
-        </select>
+      <Field label="Tags (comma separated — used for related posts)">
+        <input
+          className="glass-input px-4 py-2.5 text-sm w-full"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+          placeholder="web development, study notes, javascript"
+        />
       </Field>
+
+      <p className="text-xs text-muted-foreground">
+        Estimated reading time: {readingMinutes(content)} min (EN)
+        {contentBn ? ` · ${readingMinutes(contentBn)} min (BN)` : ""}
+      </p>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Field label="Status">
+          <select className="glass-input px-4 py-2.5 text-sm w-full" value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="draft">Draft</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="published">Published</option>
+          </select>
+        </Field>
+        {status === "scheduled" && (
+          <Field label="Goes live at">
+            <input
+              type="datetime-local"
+              className="glass-input px-4 py-2.5 text-sm w-full"
+              value={publishAt}
+              onChange={(e) => setPublishAt(e.target.value)}
+            />
+          </Field>
+        )}
+      </div>
 
       <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mt-2">SEO</p>
       <div className="grid gap-4 md:grid-cols-2">
@@ -286,11 +313,33 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
         </Field>
         <Field label="SEO description (EN)">
           <textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-16" value={seoDesc} onChange={(e) => setSeoDesc(e.target.value)} />
+          <button
+            type="button"
+            onClick={() => generateMeta("en")}
+            disabled={aiBusy !== null}
+            className="btn-ghost mt-2 inline-flex items-center gap-2 text-sm"
+          >
+            {aiBusy === "en" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            Generate SEO meta
+          </button>
         </Field>
         <Field label="SEO বিবরণ (BN)">
           <textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-16" value={seoDescBn} onChange={(e) => setSeoDescBn(e.target.value)} />
+          <button
+            type="button"
+            onClick={() => generateMeta("bn")}
+            disabled={aiBusy !== null}
+            className="btn-ghost mt-2 inline-flex items-center gap-2 text-sm"
+          >
+            {aiBusy === "bn" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            বাংলা SEO বিবরণ তৈরি করুন
+          </button>
         </Field>
       </div>
+      <p className="text-xs text-muted-foreground -mt-2">
+        AI drafts a suggestion into the box — nothing is saved until you review it and press Save.
+      </p>
+
 
       <div className="flex justify-end gap-2 pt-2">
         <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
