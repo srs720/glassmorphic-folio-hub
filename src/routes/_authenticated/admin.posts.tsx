@@ -144,12 +144,36 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
   const [seoTitleBn, setSeoTitleBn] = useState(initial?.seo_title_bn ?? "");
   const [seoDesc, setSeoDesc] = useState(initial?.seo_description ?? "");
   const [seoDescBn, setSeoDescBn] = useState(initial?.seo_description_bn ?? "");
+  const [tags, setTags] = useState((initial?.tags ?? []).join(", "));
+  const [publishAt, setPublishAt] = useState(
+    initial?.published_at ? toLocalInput(initial.published_at) : "",
+  );
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [aiBusy, setAiBusy] = useState<"en" | "bn" | null>(null);
+  const suggestMeta = useServerFn(generateSeoMeta);
+
+  async function generateMeta(locale: "en" | "bn") {
+    const body = locale === "bn" ? contentBn : content;
+    const heading = locale === "bn" ? titleBn || title : title;
+    if (!body?.trim()) return toast.error("Write the article content first.");
+    setAiBusy(locale);
+    try {
+      const { suggestion } = await suggestMeta({ data: { title: heading, body, locale } });
+      if (locale === "bn") setSeoDescBn(suggestion);
+      else setSeoDesc(suggestion);
+      toast.success("Draft generated — review and edit before saving.");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not generate a description.");
+    } finally {
+      setAiBusy(null);
+    }
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!title.trim()) return toast.error("English title is required");
+    if (status === "scheduled" && !publishAt) return toast.error("Pick a date and time to schedule this post.");
     setSaving(true);
     try {
       let cover_path = initial?.cover_path ?? null;
@@ -157,6 +181,12 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
         if (initial?.cover_path) await deleteFile(initial.cover_path);
         cover_path = await uploadFile(file, "posts");
       }
+      const published_at =
+        status === "published"
+          ? (initial?.published_at ?? new Date().toISOString())
+          : status === "scheduled"
+            ? new Date(publishAt).toISOString()
+            : null;
       const payload = {
         title: title.trim(),
         title_bn: titleBn.trim() || null,
@@ -166,12 +196,13 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
         content,
         content_bn: contentBn || null,
         status,
+        tags: parseTags(tags),
         seo_title: seoTitle.trim(),
         seo_title_bn: seoTitleBn.trim() || null,
         seo_description: seoDesc.trim(),
         seo_description_bn: seoDescBn.trim() || null,
         cover_path,
-        published_at: status === "published" ? (initial?.published_at ?? new Date().toISOString()) : null,
+        published_at,
       };
       const { error } = initial
         ? await supabase.from("blog_posts").update(payload).eq("id", initial.id)
@@ -184,6 +215,7 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
       toast.error(err?.message ?? "Save failed");
     } finally { setSaving(false); }
   }
+
 
   return (
     <form onSubmit={onSubmit} className="glass-strong p-4 sm:p-6 grid gap-4">
