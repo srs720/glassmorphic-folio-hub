@@ -86,7 +86,7 @@ export function PostView({ post, related, lang, locale }: Props) {
         {post.cover_path && (
           <Reveal delay={0.1}>
             <div className="mt-8 overflow-hidden rounded-3xl bg-surface-2">
-              <SignedImage path={post.cover_path} alt={title} className="w-full object-cover" loading="eager" />
+              <SignedImage path={post.cover_path} alt={title} className="w-full object-cover" />
             </div>
           </Reveal>
         )}
