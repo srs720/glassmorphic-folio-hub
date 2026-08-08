@@ -2,11 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Plus, Trash2, Pencil, X, Upload, FileText } from "lucide-react";
+import { Plus, Trash2, Pencil, X, Upload, FileText, Sparkles, Loader2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { uploadFile, deleteFile } from "@/lib/portfolio";
 import { SignedImage } from "@/components/SignedImage";
 import { RichTextEditor } from "@/components/RichTextEditor";
+import { generateSeoMeta } from "@/lib/ai.functions";
+import { parseTags, readingMinutes } from "@/lib/post-utils";
 
 export const Route = createFileRoute("/_authenticated/admin/posts")({
   component: PostsAdmin,
@@ -17,10 +20,12 @@ type Post = {
   excerpt: string; excerpt_bn: string | null;
   content: string; content_bn: string | null;
   cover_path: string | null; status: string;
+  tags: string[] | null;
   seo_title: string; seo_title_bn: string | null;
   seo_description: string; seo_description_bn: string | null;
   published_at: string | null; created_at: string;
 };
+
 
 function PostsAdmin() {
   const qc = useQueryClient();
