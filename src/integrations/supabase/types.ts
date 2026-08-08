@@ -31,6 +31,7 @@ export type Database = {
           slug: string
           sort_order: number
           status: string
+          tags: string[]
           title: string
           title_bn: string | null
           updated_at: string
@@ -51,6 +52,7 @@ export type Database = {
           slug: string
           sort_order?: number
           status?: string
+          tags?: string[]
           title: string
           title_bn?: string | null
           updated_at?: string
@@ -71,6 +73,7 @@ export type Database = {
           slug?: string
           sort_order?: number
           status?: string
+          tags?: string[]
           title?: string
           title_bn?: string | null
           updated_at?: string

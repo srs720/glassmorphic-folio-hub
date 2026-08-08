@@ -32,10 +32,13 @@ export const Route = createFileRoute("/sitemap.xml")({
           const { data } = await client
             .from("blog_posts")
             .select("slug")
-            .eq("status", "published");
+            .in("status", ["published", "scheduled"]);
           for (const row of data ?? []) {
             entries.push({ path: `/post/${row.slug}`, changefreq: "monthly", priority: "0.9" });
+            entries.push({ path: `/en/post/${row.slug}`, changefreq: "monthly", priority: "0.9" });
+            entries.push({ path: `/bn/post/${row.slug}`, changefreq: "monthly", priority: "0.9" });
           }
+
         } catch {
           // sitemap still serves static routes if the database is unreachable
         }

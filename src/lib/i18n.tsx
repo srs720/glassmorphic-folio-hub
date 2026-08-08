@@ -126,6 +126,24 @@ export const T: Dict = {
   link_copied: { en: "Link copied to clipboard", bn: "লিংক কপি হয়েছে" },
   share_failed: { en: "Couldn't share this link.", bn: "লিংক শেয়ার করা যায়নি।" },
 
+  // Post extras
+  min_read: { en: "min read", bn: "মিনিট পড়া" },
+  related_posts: { en: "Related posts", bn: "সম্পর্কিত পোস্ট" },
+
+  // Ask-about-this-post chat
+  chat_open: { en: "Ask about this post", bn: "এই পোস্ট নিয়ে জিজ্ঞেস করুন" },
+  chat_title: { en: "Ask about this post", bn: "এই পোস্ট নিয়ে জিজ্ঞেস করুন" },
+  chat_close: { en: "Close chat", bn: "চ্যাট বন্ধ করুন" },
+  chat_hint: {
+    en: "Ask anything about this article — answers come only from what's written here.",
+    bn: "এই লেখাটি নিয়ে যা খুশি জিজ্ঞেস করুন — উত্তর কেবল এই লেখা থেকেই আসবে।",
+  },
+  chat_placeholder: { en: "Your question…", bn: "আপনার প্রশ্ন…" },
+  chat_send: { en: "Send question", bn: "প্রশ্ন পাঠান" },
+  chat_thinking: { en: "Reading the article…", bn: "লেখাটি পড়া হচ্ছে…" },
+  chat_error: { en: "Something went wrong — please try again.", bn: "কিছু ভুল হয়েছে — আবার চেষ্টা করুন।" },
+
+
   // Footer
   footer_note: { en: "Written from Bangladesh, with care.", bn: "যত্নের সাথে বাংলাদেশ থেকে লেখা।" },
 };

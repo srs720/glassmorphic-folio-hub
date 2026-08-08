@@ -2,11 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Plus, Trash2, Pencil, X, Upload, FileText } from "lucide-react";
+import { Plus, Trash2, Pencil, X, Upload, FileText, Sparkles, Loader2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { uploadFile, deleteFile } from "@/lib/portfolio";
 import { SignedImage } from "@/components/SignedImage";
 import { RichTextEditor } from "@/components/RichTextEditor";
+import { generateSeoMeta } from "@/lib/ai.functions";
+import { parseTags, readingMinutes } from "@/lib/post-utils";
 
 export const Route = createFileRoute("/_authenticated/admin/posts")({
   component: PostsAdmin,
@@ -17,10 +20,12 @@ type Post = {
   excerpt: string; excerpt_bn: string | null;
   content: string; content_bn: string | null;
   cover_path: string | null; status: string;
+  tags: string[] | null;
   seo_title: string; seo_title_bn: string | null;
   seo_description: string; seo_description_bn: string | null;
   published_at: string | null; created_at: string;
 };
+
 
 function PostsAdmin() {
   const qc = useQueryClient();
@@ -113,6 +118,13 @@ function PostsAdmin() {
   );
 }
 
+/** ISO timestamp -> value for <input type="datetime-local"> in the admin's timezone. */
+function toLocalInput(iso: string) {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 function slugify(s: string) {
   return s.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").slice(0, 80);
 }
@@ -139,12 +151,36 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
   const [seoTitleBn, setSeoTitleBn] = useState(initial?.seo_title_bn ?? "");
   const [seoDesc, setSeoDesc] = useState(initial?.seo_description ?? "");
   const [seoDescBn, setSeoDescBn] = useState(initial?.seo_description_bn ?? "");
+  const [tags, setTags] = useState((initial?.tags ?? []).join(", "));
+  const [publishAt, setPublishAt] = useState(
+    initial?.published_at ? toLocalInput(initial.published_at) : "",
+  );
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [aiBusy, setAiBusy] = useState<"en" | "bn" | null>(null);
+  const suggestMeta = useServerFn(generateSeoMeta);
+
+  async function generateMeta(locale: "en" | "bn") {
+    const body = locale === "bn" ? contentBn : content;
+    const heading = locale === "bn" ? titleBn || title : title;
+    if (!body?.trim()) return toast.error("Write the article content first.");
+    setAiBusy(locale);
+    try {
+      const { suggestion } = await suggestMeta({ data: { title: heading, body, locale } });
+      if (locale === "bn") setSeoDescBn(suggestion);
+      else setSeoDesc(suggestion);
+      toast.success("Draft generated — review and edit before saving.");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not generate a description.");
+    } finally {
+      setAiBusy(null);
+    }
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!title.trim()) return toast.error("English title is required");
+    if (status === "scheduled" && !publishAt) return toast.error("Pick a date and time to schedule this post.");
     setSaving(true);
     try {
       let cover_path = initial?.cover_path ?? null;
@@ -152,6 +188,12 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
         if (initial?.cover_path) await deleteFile(initial.cover_path);
         cover_path = await uploadFile(file, "posts");
       }
+      const published_at =
+        status === "published"
+          ? (initial?.published_at ?? new Date().toISOString())
+          : status === "scheduled"
+            ? new Date(publishAt).toISOString()
+            : null;
       const payload = {
         title: title.trim(),
         title_bn: titleBn.trim() || null,
@@ -161,12 +203,13 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
         content,
         content_bn: contentBn || null,
         status,
+        tags: parseTags(tags),
         seo_title: seoTitle.trim(),
         seo_title_bn: seoTitleBn.trim() || null,
         seo_description: seoDesc.trim(),
         seo_description_bn: seoDescBn.trim() || null,
         cover_path,
-        published_at: status === "published" ? (initial?.published_at ?? new Date().toISOString()) : null,
+        published_at,
       };
       const { error } = initial
         ? await supabase.from("blog_posts").update(payload).eq("id", initial.id)
@@ -179,6 +222,7 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
       toast.error(err?.message ?? "Save failed");
     } finally { setSaving(false); }
   }
+
 
   return (
     <form onSubmit={onSubmit} className="glass-strong p-4 sm:p-6 grid gap-4">
@@ -225,12 +269,39 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
         <input type="file" accept="image/*" className="hidden" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
       </label>
 
-      <Field label="Status">
-        <select className="glass-input px-4 py-2.5 text-sm w-full" value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="draft">Draft</option>
-          <option value="published">Published</option>
-        </select>
+      <Field label="Tags (comma separated — used for related posts)">
+        <input
+          className="glass-input px-4 py-2.5 text-sm w-full"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+          placeholder="web development, study notes, javascript"
+        />
       </Field>
+
+      <p className="text-xs text-muted-foreground">
+        Estimated reading time: {readingMinutes(content)} min (EN)
+        {contentBn ? ` · ${readingMinutes(contentBn)} min (BN)` : ""}
+      </p>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Field label="Status">
+          <select className="glass-input px-4 py-2.5 text-sm w-full" value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="draft">Draft</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="published">Published</option>
+          </select>
+        </Field>
+        {status === "scheduled" && (
+          <Field label="Goes live at">
+            <input
+              type="datetime-local"
+              className="glass-input px-4 py-2.5 text-sm w-full"
+              value={publishAt}
+              onChange={(e) => setPublishAt(e.target.value)}
+            />
+          </Field>
+        )}
+      </div>
 
       <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mt-2">SEO</p>
       <div className="grid gap-4 md:grid-cols-2">
@@ -242,11 +313,33 @@ function PostForm({ initial, onClose, onSaved }: { initial: Post | null; onClose
         </Field>
         <Field label="SEO description (EN)">
           <textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-16" value={seoDesc} onChange={(e) => setSeoDesc(e.target.value)} />
+          <button
+            type="button"
+            onClick={() => generateMeta("en")}
+            disabled={aiBusy !== null}
+            className="btn-ghost mt-2 inline-flex items-center gap-2 text-sm"
+          >
+            {aiBusy === "en" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            Generate SEO meta
+          </button>
         </Field>
         <Field label="SEO বিবরণ (BN)">
           <textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-16" value={seoDescBn} onChange={(e) => setSeoDescBn(e.target.value)} />
+          <button
+            type="button"
+            onClick={() => generateMeta("bn")}
+            disabled={aiBusy !== null}
+            className="btn-ghost mt-2 inline-flex items-center gap-2 text-sm"
+          >
+            {aiBusy === "bn" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            বাংলা SEO বিবরণ তৈরি করুন
+          </button>
         </Field>
       </div>
+      <p className="text-xs text-muted-foreground -mt-2">
+        AI drafts a suggestion into the box — nothing is saved until you review it and press Save.
+      </p>
+
 
       <div className="flex justify-end gap-2 pt-2">
         <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>

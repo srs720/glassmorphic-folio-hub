@@ -20,6 +20,8 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostSlugRouteImport } from './routes/post.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as EnPostSlugRouteImport } from './routes/en.post.$slug'
+import { Route as BnPostSlugRouteImport } from './routes/bn.post.$slug'
 import { Route as AuthenticatedAdminTestimonialsRouteImport } from './routes/_authenticated/admin.testimonials'
 import { Route as AuthenticatedAdminSkillsRouteImport } from './routes/_authenticated/admin.skills'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
@@ -88,6 +90,16 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const EnPostSlugRoute = EnPostSlugRouteImport.update({
+  id: '/en/post/$slug',
+  path: '/en/post/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BnPostSlugRoute = BnPostSlugRouteImport.update({
+  id: '/bn/post/$slug',
+  path: '/bn/post/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminTestimonialsRoute =
   AuthenticatedAdminTestimonialsRouteImport.update({
@@ -197,6 +209,8 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
+  '/bn/post/$slug': typeof BnPostSlugRoute
+  '/en/post/$slug': typeof EnPostSlugRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -223,6 +237,8 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
+  '/bn/post/$slug': typeof BnPostSlugRoute
+  '/en/post/$slug': typeof EnPostSlugRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -251,6 +267,8 @@ export interface FileRoutesById {
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/_authenticated/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
+  '/bn/post/$slug': typeof BnPostSlugRoute
+  '/en/post/$slug': typeof EnPostSlugRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -279,6 +297,8 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/skills'
     | '/admin/testimonials'
+    | '/bn/post/$slug'
+    | '/en/post/$slug'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -305,6 +325,8 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/skills'
     | '/admin/testimonials'
+    | '/bn/post/$slug'
+    | '/en/post/$slug'
     | '/admin'
   id:
     | '__root__'
@@ -332,6 +354,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/skills'
     | '/_authenticated/admin/testimonials'
+    | '/bn/post/$slug'
+    | '/en/post/$slug'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -346,6 +370,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ThoughtsRoute: typeof ThoughtsRoute
   PostSlugRoute: typeof PostSlugRoute
+  BnPostSlugRoute: typeof BnPostSlugRoute
+  EnPostSlugRoute: typeof EnPostSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -426,6 +452,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/en/post/$slug': {
+      id: '/en/post/$slug'
+      path: '/en/post/$slug'
+      fullPath: '/en/post/$slug'
+      preLoaderRoute: typeof EnPostSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bn/post/$slug': {
+      id: '/bn/post/$slug'
+      path: '/bn/post/$slug'
+      fullPath: '/bn/post/$slug'
+      preLoaderRoute: typeof BnPostSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/testimonials': {
       id: '/_authenticated/admin/testimonials'
@@ -578,17 +618,9 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ThoughtsRoute: ThoughtsRoute,
   PostSlugRoute: PostSlugRoute,
+  BnPostSlugRoute: BnPostSlugRoute,
+  EnPostSlugRoute: EnPostSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
