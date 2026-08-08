@@ -388,8 +388,27 @@ function PostsFeed() {
         .in("status", ["published", "scheduled"])
         .order("published_at", { ascending: false })).data ?? [],
   });
+
+  if (q.isLoading) {
+    return (
+      <div className="grid gap-5 md:grid-cols-2" aria-busy="true">
+        {[0, 1].map((i) => (
+          <div key={i} className="bento overflow-hidden">
+            <div className="h-52 w-full animate-pulse bg-surface-2" />
+            <div className="p-6 space-y-3">
+              <div className="h-3 w-24 animate-pulse rounded bg-surface-2" />
+              <div className="h-6 w-3/4 animate-pulse rounded bg-surface-2" />
+              <div className="h-4 w-full animate-pulse rounded bg-surface-2" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <Stagger className="grid gap-5 md:grid-cols-2">
+
       {(q.data ?? []).map((p: any) => (
         <StaggerItem key={p.id}>
           <HoverCard className="bento overflow-hidden h-full">
