@@ -71,11 +71,11 @@ function HomePage() {
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#EAF5FE] via-white to-[#DCEEFB]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/70 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/25 to-background" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 md:px-6 py-20 md:py-28 w-full">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl rounded-[28px] border border-white/60 bg-white/60 p-6 sm:p-9 shadow-[0_20px_60px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl backdrop-saturate-150">
             <Reveal>
               <p className="label-mono">{t("home_kicker")}</p>
             </Reveal>
