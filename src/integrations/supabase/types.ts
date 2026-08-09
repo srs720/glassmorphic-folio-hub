@@ -209,57 +209,6 @@ export type Database = {
         }
         Relationships: []
       }
-      memories: {
-        Row: {
-          created_at: string
-          description: string | null
-          description_bn: string | null
-          id: string
-          image_path: string | null
-          location: string | null
-          location_bn: string | null
-          sort_order: number
-          story: string | null
-          story_bn: string | null
-          taken_on: string | null
-          title: string
-          title_bn: string | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          description_bn?: string | null
-          id?: string
-          image_path?: string | null
-          location?: string | null
-          location_bn?: string | null
-          sort_order?: number
-          story?: string | null
-          story_bn?: string | null
-          taken_on?: string | null
-          title: string
-          title_bn?: string | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          description_bn?: string | null
-          id?: string
-          image_path?: string | null
-          location?: string | null
-          location_bn?: string | null
-          sort_order?: number
-          story?: string | null
-          story_bn?: string | null
-          taken_on?: string | null
-          title?: string
-          title_bn?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       messages: {
         Row: {
           archived: boolean
@@ -328,51 +277,6 @@ export type Database = {
           relation?: string | null
           relation_bn?: string | null
           sort_order?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      projects: {
-        Row: {
-          created_at: string
-          description: string
-          detail_content: string
-          featured: boolean
-          id: string
-          image_path: string | null
-          images: string[]
-          live_url: string | null
-          sort_order: number
-          tags: string[]
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string
-          detail_content?: string
-          featured?: boolean
-          id?: string
-          image_path?: string | null
-          images?: string[]
-          live_url?: string | null
-          sort_order?: number
-          tags?: string[]
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          detail_content?: string
-          featured?: boolean
-          id?: string
-          image_path?: string | null
-          images?: string[]
-          live_url?: string | null
-          sort_order?: number
-          tags?: string[]
-          title?: string
           updated_at?: string
         }
         Relationships: []
