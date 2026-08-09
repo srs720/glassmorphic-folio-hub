@@ -11,13 +11,11 @@ export const Route = createFileRoute("/_authenticated/admin/settings")({
   component: SettingsAdmin,
 });
 
-const ICON_OPTIONS = ["github", "linkedin", "twitter", "instagram", "globe", "mail", "link"];
 
 function SettingsAdmin() {
   return (
     <div className="grid gap-6">
       <SettingsForm />
-      <SocialsManager />
     </div>
   );
 }
@@ -181,10 +179,10 @@ function SettingsForm() {
               <button
                 type="button"
                 onClick={() => removeSlider(p)}
-                className="absolute top-1 right-1 h-6 w-6 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
-                aria-label="Remove"
+                className="absolute top-1 right-1 h-7 w-7 rounded-full bg-black/70 text-white flex items-center justify-center shadow-md hover:bg-red-600 transition"
+                aria-label="Remove image"
               >
-                <X className="h-3 w-3" />
+                <Trash2 className="h-3.5 w-3.5" />
               </button>
             </div>
           ))}
@@ -258,123 +256,5 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</label>
       <div className="mt-1">{children}</div>
     </div>
-  );
-}
-
-type Social = { id: string; platform_name: string; url: string; icon_name: string; sort_order: number };
-
-function SocialsManager() {
-  const qc = useQueryClient();
-  const [editing, setEditing] = useState<Social | null>(null);
-  const [showForm, setShowForm] = useState(false);
-
-  const list = useQuery({
-    queryKey: ["admin_socials"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("social_links").select("*").order("sort_order");
-      if (error) throw error;
-      return (data ?? []) as Social[];
-    },
-  });
-
-  const del = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("social_links").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      toast.success("Removed");
-      qc.invalidateQueries({ queryKey: ["admin_socials"] });
-      qc.invalidateQueries({ queryKey: ["social_links"] });
-    },
-  });
-
-  return (
-    <div className="glass-strong p-6 grid gap-3">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold">Social links</h2>
-          <p className="text-sm text-muted-foreground">Displayed across the site.</p>
-        </div>
-        <button onClick={() => { setEditing(null); setShowForm(true); }} className="btn-primary inline-flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Add
-        </button>
-      </div>
-
-      {showForm && (
-        <SocialForm
-          initial={editing}
-          onClose={() => { setShowForm(false); setEditing(null); }}
-          onSaved={() => {
-            setShowForm(false); setEditing(null);
-            qc.invalidateQueries({ queryKey: ["admin_socials"] });
-            qc.invalidateQueries({ queryKey: ["social_links"] });
-          }}
-        />
-      )}
-
-      <div className="grid gap-2">
-        {list.data?.length === 0 && <p className="text-sm text-muted-foreground">No links yet.</p>}
-        {list.data?.map((s) => (
-          <div key={s.id} className="glass flex items-center gap-3 p-3">
-            <span className="text-xs uppercase tracking-wide bg-primary/15 text-primary rounded-md px-2 py-1">{s.icon_name}</span>
-            <div className="min-w-0 flex-1">
-              <p className="font-medium">{s.platform_name}</p>
-              <p className="text-xs text-muted-foreground truncate">{s.url}</p>
-            </div>
-            <button onClick={() => { setEditing(s); setShowForm(true); }} className="btn-ghost inline-flex items-center gap-1 text-sm">
-              <Pencil className="h-3.5 w-3.5" />
-            </button>
-            <button onClick={() => confirm("Remove this link?") && del.mutate(s.id)}
-              className="btn-ghost inline-flex items-center gap-1 text-sm text-destructive">
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SocialForm({ initial, onClose, onSaved }: { initial: Social | null; onClose: () => void; onSaved: () => void }) {
-  const [platform_name, setPlatform] = useState(initial?.platform_name ?? "");
-  const [url, setUrl] = useState(initial?.url ?? "");
-  const [icon_name, setIcon] = useState(initial?.icon_name ?? "link");
-  const [sort_order, setSort] = useState(initial?.sort_order ?? 0);
-  const [saving, setSaving] = useState(false);
-
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!platform_name.trim() || !url.trim()) return toast.error("Fields required");
-    setSaving(true);
-    const payload = { platform_name: platform_name.trim(), url: url.trim(), icon_name, sort_order };
-    const { error } = initial
-      ? await supabase.from("social_links").update(payload).eq("id", initial.id)
-      : await supabase.from("social_links").insert(payload);
-    setSaving(false);
-    if (error) return toast.error("Save failed");
-    toast.success("Saved");
-    onSaved();
-  }
-
-  return (
-    <form onSubmit={onSubmit} className="glass p-4 grid gap-3">
-      <div className="flex items-center justify-between">
-        <h3 className="font-bold">{initial ? "Edit link" : "New link"}</h3>
-        <button type="button" onClick={onClose}><X className="h-4 w-4" /></button>
-      </div>
-      <input className="glass-input px-4 py-2.5 text-sm" placeholder="Platform name (e.g. GitHub)" value={platform_name} onChange={(e) => setPlatform(e.target.value)} />
-      <input className="glass-input px-4 py-2.5 text-sm" placeholder="https://…" value={url} onChange={(e) => setUrl(e.target.value)} />
-      <div className="grid grid-cols-2 gap-3">
-        <select className="glass-input px-4 py-2.5 text-sm" value={icon_name} onChange={(e) => setIcon(e.target.value)}>
-          {ICON_OPTIONS.map((i) => <option key={i} value={i}>{i}</option>)}
-        </select>
-        <input type="number" className="glass-input px-4 py-2.5 text-sm" placeholder="Sort order" value={sort_order} onChange={(e) => setSort(Number(e.target.value))} />
-      </div>
-      <div className="flex justify-end gap-2">
-        <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
-        <button type="submit" disabled={saving} className="btn-primary">{saving ? "…" : "Save"}</button>
-      </div>
-    </form>
   );
 }

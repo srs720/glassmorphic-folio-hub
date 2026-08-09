@@ -12,7 +12,7 @@ export const T: Dict = {
   nav_home: { en: "Home", bn: "হোম" },
   nav_journey: { en: "Journey", bn: "যাত্রা" },
   nav_people: { en: "People", bn: "মানুষজন" },
-  nav_memories: { en: "Memories", bn: "স্মৃতি" },
+  nav_memories: { en: "Hobbies", bn: "শখ" },
   nav_certificates: { en: "Certificates", bn: "সার্টিফিকেট" },
   nav_posts: { en: "Research & Posts", bn: "গবেষণা ও পোস্ট" },
   nav_thoughts: { en: "Thoughts", bn: "ভাবনা" },

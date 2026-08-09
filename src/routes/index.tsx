@@ -11,7 +11,7 @@ import { SignedImage } from "@/components/SignedImage";
 import { HeroSlider } from "@/components/HeroSlider";
 import { Reveal, Stagger, StaggerItem, HoverCard } from "@/components/Reveal";
 import {
-  GraduationCap, BookOpen, Sparkles, Award, MapPin, Send, Mail, Quote as QuoteIcon,
+  GraduationCap, BookOpen, Sparkles, Award, Send, Mail, Quote as QuoteIcon,
   ArrowDown, ArrowRight, Calendar,
 } from "lucide-react";
 import { useLang, pickLang } from "@/lib/i18n";
@@ -71,11 +71,11 @@ function HomePage() {
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#EAF5FE] via-white to-[#DCEEFB]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/70 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/25 to-background" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 md:px-6 py-20 md:py-28 w-full">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl rounded-[28px] border border-white/60 bg-white/60 p-6 sm:p-9 shadow-[0_20px_60px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl backdrop-saturate-150">
             <Reveal>
               <p className="label-mono">{t("home_kicker")}</p>
             </Reveal>
@@ -115,10 +115,10 @@ function HomePage() {
         <PeopleSection />
       </section>
 
-      {/* ============ MEMORIES ============ */}
-      <section id="memories" className="mx-auto max-w-6xl px-4 md:px-6 pt-20 md:pt-28 scroll-mt-20">
-        <SectionHeader chapter={t("chapter_three")} title={t("memories_title")} intro={t("memories_intro")} />
-        <MemoriesSection />
+      {/* ============ HOBBIES ============ */}
+      <section id="hobbies" className="mx-auto max-w-6xl px-4 md:px-6 pt-20 md:pt-28 scroll-mt-20">
+        <SectionHeader chapter={t("chapter_three")} title={t("hobbies")} intro={t("memories_intro")} />
+        <HobbiesSection />
       </section>
 
       {/* ============ CERTIFICATES ============ */}
@@ -253,71 +253,37 @@ function PeopleSection() {
   );
 }
 
-/* ------------------ Memories ------------------ */
-function MemoriesSection() {
+/* ------------------ Hobbies ------------------ */
+function HobbiesSection() {
   const { t, lang } = useLang();
-  const memories = useQuery({
-    queryKey: ["memories"],
-    queryFn: async () => (await supabase.from("memories").select("*").order("sort_order")).data ?? [],
-  });
   const hobbies = useQuery({
     queryKey: ["hobbies"],
     queryFn: async () => (await supabase.from("hobbies").select("*").order("sort_order")).data ?? [],
   });
+  const list = hobbies.data ?? [];
   return (
-    <div className="grid gap-10">
-      <div>
-        <Reveal><h3 className="font-display text-2xl mb-4">{t("hobbies")}</h3></Reveal>
-        <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {(hobbies.data ?? []).map((h: any) => (
-            <StaggerItem key={h.id}>
-              <HoverCard className="bento p-5 h-full">
-                <div className="h-40 w-full rounded-2xl overflow-hidden bg-surface-2 mb-4">
-                  {h.image_path ? (
-                    <SignedImage path={h.image_path} alt={pickLang(h, "title", lang)} className="h-full w-full object-cover" />
-                  ) : (
-                    <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#FFF6DD]" />
-                  )}
-                </div>
-                <p className="font-display text-xl">{pickLang(h, "title", lang)}</p>
-                {pickLang(h, "description", lang) && <p className="text-sm text-foreground/80 mt-2">{pickLang(h, "description", lang)}</p>}
-              </HoverCard>
-            </StaggerItem>
-          ))}
-        </Stagger>
-      </div>
-
-      <div>
-        <Reveal><h3 className="font-display text-2xl mb-4">{t("travel_memories")}</h3></Reveal>
-        <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {(memories.data ?? []).map((m: any) => (
-            <StaggerItem key={m.id}>
-              <HoverCard className="bento overflow-hidden group h-full">
-                <div className="relative h-48 w-full bg-surface-2">
-                  {m.image_path ? (
-                    <SignedImage path={m.image_path} alt={pickLang(m, "title", lang)} className="h-full w-full object-cover" />
-                  ) : (
-                    <div className="h-full w-full bg-gradient-to-br from-[#DCEEFB] to-[#FFF6DD]" />
-                  )}
-                </div>
-                <div className="p-5">
-                  <p className="font-display text-xl">{pickLang(m, "title", lang)}</p>
-                  {m.location && (
-                    <p className="label-mono mt-1 inline-flex items-center gap-1">
-                      <MapPin className="h-3 w-3" /> {pickLang(m, "location", lang)}
-                    </p>
-                  )}
-                  {(pickLang(m, "description", lang) || pickLang(m, "story", lang)) && <p className="text-sm mt-2 text-foreground/80">{pickLang(m, "description", lang) || pickLang(m, "story", lang)}</p>}
-                </div>
-              </HoverCard>
-            </StaggerItem>
-          ))}
-          {(memories.data ?? []).length === 0 && (
-            <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("memory_book_empty")}</div>
-          )}
-        </Stagger>
-      </div>
-    </div>
+    <Stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(0,auto)]">
+      {list.map((h: any, idx: number) => (
+        <StaggerItem key={h.id} className={idx % 5 === 0 ? "md:col-span-2" : ""}>
+          <HoverCard className="bento p-5 h-full">
+            <div className={`w-full rounded-2xl overflow-hidden bg-surface-2 mb-4 ${idx % 5 === 0 ? "h-56" : "h-40"}`}>
+              {h.image_path ? (
+                <SignedImage path={h.image_path} alt={pickLang(h, "title", lang)} className="h-full w-full object-cover" />
+              ) : (
+                <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#FFF6DD]" />
+              )}
+            </div>
+            <p className="font-display text-xl">{pickLang(h, "title", lang)}</p>
+            {pickLang(h, "description", lang) && (
+              <p className="text-sm text-foreground/80 mt-2">{pickLang(h, "description", lang)}</p>
+            )}
+          </HoverCard>
+        </StaggerItem>
+      ))}
+      {list.length === 0 && (
+        <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("hobbies")}</div>
+      )}
+    </Stagger>
   );
 }
 
