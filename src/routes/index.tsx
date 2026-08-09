@@ -11,7 +11,7 @@ import { SignedImage } from "@/components/SignedImage";
 import { HeroSlider } from "@/components/HeroSlider";
 import { Reveal, Stagger, StaggerItem, HoverCard } from "@/components/Reveal";
 import {
-  GraduationCap, BookOpen, Sparkles, Award, MapPin, Send, Mail, Quote as QuoteIcon,
+  GraduationCap, BookOpen, Sparkles, Award, Send, Mail, Quote as QuoteIcon,
   ArrowDown, ArrowRight, Calendar,
 } from "lucide-react";
 import { useLang, pickLang } from "@/lib/i18n";
@@ -115,10 +115,10 @@ function HomePage() {
         <PeopleSection />
       </section>
 
-      {/* ============ MEMORIES ============ */}
-      <section id="memories" className="mx-auto max-w-6xl px-4 md:px-6 pt-20 md:pt-28 scroll-mt-20">
-        <SectionHeader chapter={t("chapter_three")} title={t("memories_title")} intro={t("memories_intro")} />
-        <MemoriesSection />
+      {/* ============ HOBBIES ============ */}
+      <section id="hobbies" className="mx-auto max-w-6xl px-4 md:px-6 pt-20 md:pt-28 scroll-mt-20">
+        <SectionHeader chapter={t("chapter_three")} title={t("hobbies")} intro={t("memories_intro")} />
+        <HobbiesSection />
       </section>
 
       {/* ============ CERTIFICATES ============ */}

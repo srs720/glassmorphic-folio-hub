@@ -29,12 +29,12 @@ function Dashboard() {
     queryKey: ["admin_stats"],
     queryFn: async () => {
       const [p, m, b, t] = await Promise.all([
-        supabase.from("projects").select("id", { count: "exact", head: true }),
+        supabase.from("certificates").select("id", { count: "exact", head: true }),
         supabase.from("messages").select("id", { count: "exact", head: true }),
         supabase.from("blog_posts").select("id", { count: "exact", head: true }),
         supabase.from("testimonials").select("id", { count: "exact", head: true }),
       ]);
-      return { projects: p.count ?? 0, messages: m.count ?? 0, blog: b.count ?? 0, testimonials: t.count ?? 0 };
+      return { certificates: p.count ?? 0, messages: m.count ?? 0, blog: b.count ?? 0, testimonials: t.count ?? 0 };
     },
   });
 
@@ -63,7 +63,7 @@ function Dashboard() {
         <p className="text-sm text-muted-foreground mt-1">A snapshot of your portfolio.</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat icon={FolderKanban} label="Projects" value={stats.data?.projects ?? "—"} />
+        <Stat icon={FolderKanban} label="Certificates" value={stats.data?.certificates ?? "—"} />
         <Stat icon={FileText} label="Research posts" value={stats.data?.blog ?? "—"} />
         <Stat icon={MessageSquare} label="Messages" value={stats.data?.messages ?? "—"} />
         <Stat icon={Quote} label="Testimonials" value={stats.data?.testimonials ?? "—"} />
