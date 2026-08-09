@@ -11,7 +11,6 @@ export const Route = createFileRoute("/_authenticated/admin/settings")({
   component: SettingsAdmin,
 });
 
-const ICON_OPTIONS = ["github", "linkedin", "twitter", "instagram", "globe", "mail", "link"];
 
 function SettingsAdmin() {
   return (
@@ -180,10 +179,10 @@ function SettingsForm() {
               <button
                 type="button"
                 onClick={() => removeSlider(p)}
-                className="absolute top-1 right-1 h-6 w-6 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
-                aria-label="Remove"
+                className="absolute top-1 right-1 h-7 w-7 rounded-full bg-black/70 text-white flex items-center justify-center shadow-md hover:bg-red-600 transition"
+                aria-label="Remove image"
               >
-                <X className="h-3 w-3" />
+                <Trash2 className="h-3.5 w-3.5" />
               </button>
             </div>
           ))}
@@ -259,5 +258,3 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </div>
   );
 }
-
-type Social = { id: string; platform_name: string; url: string; icon_name: string; sort_order: number };
