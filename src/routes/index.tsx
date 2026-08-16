@@ -422,33 +422,36 @@ function PostsFeed() {
   );
 }
 
-/* ------------------ Thoughts ------------------ */
+/* ------------------ Thoughts — typographic blockquotes ------------------ */
 function ThoughtsSection() {
   const { t, lang } = useLang();
-  const TONES = ["bento", "bento-blue", "bento-yellow", "bento-cream"] as const;
   const q = useQuery({
     queryKey: ["quotes"],
     queryFn: async () => (await supabase.from("quotes").select("*").order("sort_order")).data ?? [],
   });
+  const list = (q.data ?? []) as any[];
+  if (list.length === 0) return <p className="text-muted-foreground">{t("still_thinking")}</p>;
+
   return (
-    <Stagger className="grid gap-4 md:gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {(q.data ?? []).map((qt: any, i: number) => (
-        <StaggerItem key={qt.id}>
-          <HoverCard className={`${TONES[i % TONES.length]} p-6 flex flex-col justify-between min-h-[220px] h-full`}>
-            <QuoteIcon className="h-6 w-6 text-foreground/60" />
-            <div className="mt-6">
-              <p className="font-display text-2xl leading-snug">"{pickLang(qt, "text", lang)}"</p>
-              <p className="mt-3 label-mono">— {pickLang(qt, "author", lang) || t("fullName")}{pickLang(qt, "category", lang) ? ` · ${pickLang(qt, "category", lang)}` : ""}</p>
-            </div>
-          </HoverCard>
+    <Stagger className="mx-auto max-w-3xl divide-y divide-foreground/10">
+      {list.map((qt: any) => (
+        <StaggerItem key={qt.id} className="py-10 first:pt-0 last:pb-0">
+          <figure>
+            <QuoteIcon className="h-5 w-5 text-primary/70" aria-hidden />
+            <blockquote className="mt-4 font-display text-2xl md:text-[2rem] leading-[1.35] text-foreground">
+              {pickLang(qt, "text", lang)}
+            </blockquote>
+            <figcaption className="mt-4 label-mono">
+              — {pickLang(qt, "author", lang) || t("fullName")}
+              {pickLang(qt, "category", lang) ? ` · ${pickLang(qt, "category", lang)}` : ""}
+            </figcaption>
+          </figure>
         </StaggerItem>
       ))}
-      {(q.data ?? []).length === 0 && (
-        <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("still_thinking")}</div>
-      )}
     </Stagger>
   );
 }
+
 
 /* ------------------ Contact ------------------ */
 function ContactSection() {
