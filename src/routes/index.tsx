@@ -289,7 +289,7 @@ function HobbiesSection() {
   );
 }
 
-/* ------------------ Certificates ------------------ */
+/* ------------------ Certificates — masonry image grid ------------------ */
 function CertificatesSection() {
   const { t, lang } = useLang();
   const [open, setOpen] = useState<any | null>(null);
@@ -297,43 +297,43 @@ function CertificatesSection() {
     queryKey: ["certificates"],
     queryFn: async () => (await supabase.from("certificates").select("*").order("sort_order")).data ?? [],
   });
+  const list = (q.data ?? []) as any[];
+
   return (
     <>
-      <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(q.data ?? []).map((c: any) => {
-          const title = pickLang(c, "title", lang);
-          return (
-            <StaggerItem key={c.id}>
-              <HoverCard className="bento overflow-hidden h-full">
-                <button type="button" onClick={() => setOpen(c)} className="block w-full text-left">
-                  <div className="h-48 w-full bg-surface-2">
-                    {c.image_path ? (
-                      <SignedImage path={c.image_path} alt={title} className="h-full w-full object-cover" />
-                    ) : (
-                      <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#DCEEFB] flex items-center justify-center">
-                        <Award className="h-8 w-8 text-foreground/40" />
-                      </div>
+      {list.length === 0 ? (
+        <p className="text-muted-foreground">{t("certificates_empty")}</p>
+      ) : (
+        <Stagger className="columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
+          {list.map((c: any) => {
+            const title = pickLang(c, "title", lang);
+            return (
+              <StaggerItem key={c.id} className="mb-5 break-inside-avoid">
+                <button
+                  type="button"
+                  onClick={() => setOpen(c)}
+                  className="group block w-full overflow-hidden rounded-2xl bg-white text-left ring-1 ring-border/70 transition hover:ring-primary/60"
+                  aria-label={`${t("view_certificate")}: ${title}`}
+                >
+                  {c.image_path ? (
+                    <SignedImage path={c.image_path} alt={title} className="w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+                  ) : (
+                    <div className="grid h-40 w-full place-items-center bg-surface-2">
+                      <Award className="h-8 w-8 text-foreground/30" />
+                    </div>
+                  )}
+                  <div className="px-4 py-3">
+                    <p className="font-display text-lg leading-snug">{title}</p>
+                    {pickLang(c, "issuer", lang) && (
+                      <p className="label-mono mt-1">{pickLang(c, "issuer", lang)}</p>
                     )}
-                  </div>
-                  <div className="p-5">
-                    <p className="font-display text-xl">{title}</p>
-                    {pickLang(c, "issuer", lang) && <p className="label-mono mt-1">{pickLang(c, "issuer", lang)}</p>}
-                    {pickLang(c, "description", lang) && (
-                      <p className="text-sm mt-2 text-foreground/80">{pickLang(c, "description", lang)}</p>
-                    )}
-                    <span className="mt-3 inline-flex items-center gap-1 text-sm text-primary">
-                      {t("view_certificate")} <ArrowRight className="h-3.5 w-3.5" />
-                    </span>
                   </div>
                 </button>
-              </HoverCard>
-            </StaggerItem>
-          );
-        })}
-        {(q.data ?? []).length === 0 && (
-          <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("certificates_empty")}</div>
-        )}
-      </Stagger>
+              </StaggerItem>
+            );
+          })}
+        </Stagger>
+      )}
       <Lightbox
         path={open?.image_path ?? null}
         alt={open ? pickLang(open, "title", lang) : ""}
@@ -343,6 +343,7 @@ function CertificatesSection() {
     </>
   );
 }
+
 
 /* ------------------ Research & Posts feed ------------------ */
 function PostsFeed() {
