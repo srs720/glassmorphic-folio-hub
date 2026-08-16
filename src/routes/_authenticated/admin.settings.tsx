@@ -34,8 +34,6 @@ function SettingsForm() {
   const [bio, setBio] = useState("");
   const [tagline, setTagline] = useState("");
   const [location, setLocation] = useState("");
-  const [education, setEducation] = useState("");
-  const [experience, setExperience] = useState("");
   const [greeting, setGreeting] = useState("");
   const [identityLine, setIdentityLine] = useState("");
   const [nameBn, setNameBn] = useState("");
@@ -58,8 +56,6 @@ function SettingsForm() {
       setBio(q.data.bio);
       setTagline(q.data.tagline ?? "");
       setLocation(q.data.location ?? "");
-      setEducation(q.data.education ?? "");
-      setExperience(q.data.experience ?? "");
       setGreeting((q.data as any).greeting ?? "");
       setIdentityLine((q.data as any).identity_line ?? "");
       setNameBn((q.data as any).name_bn ?? "");
@@ -122,7 +118,7 @@ function SettingsForm() {
       }
       const { error } = await supabase.from("site_settings")
         .update({
-          name: name.trim(), bio: bio.trim(), tagline, location, education, experience,
+          name: name.trim(), bio: bio.trim(), tagline, location,
           resume_path, avatar_path, logo_path,
           greeting, identity_line: identityLine, hero_image_path,
           slider_images,
