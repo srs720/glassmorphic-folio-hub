@@ -73,9 +73,22 @@ function SettingsForm() {
   }, [q.data]);
 
   async function removeSlider(path: string) {
+    const next = sliderImages.filter((p) => p !== path);
+    // Persist first so the DB never points at a deleted object.
+    if (q.data) {
+      const { error } = await supabase
+        .from("site_settings")
+        .update({ slider_images: next } as any)
+        .eq("id", q.data.id);
+      if (error) { toast.error("Could not remove image"); return; }
+    }
     await deleteFile(path);
-    setSliderImages((s) => s.filter((p) => p !== path));
+    setSliderImages(next);
+    qc.invalidateQueries({ queryKey: ["site_settings_admin"] });
+    qc.invalidateQueries({ queryKey: ["site_settings"] });
+    toast.success("Image removed");
   }
+
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
