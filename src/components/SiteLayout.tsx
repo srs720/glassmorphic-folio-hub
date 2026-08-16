@@ -171,8 +171,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </div>
           <div>
             <p className="label-mono">{t("find_me_at")}</p>
-            <ContactLinks className="mt-2" />
+            <ContactLinks variant="icons" className="mt-3" />
           </div>
+
           <div className="md:text-right">
             <p className="label-mono">© {new Date().getFullYear()}</p>
             <p className="text-sm mt-2 text-muted-foreground">{t("footer_note")}</p>

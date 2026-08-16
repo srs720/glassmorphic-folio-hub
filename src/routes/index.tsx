@@ -153,55 +153,57 @@ function HomePage() {
   );
 }
 
-/* ------------------ Journey ------------------ */
+/* ------------------ Journey — vertical timeline ------------------ */
 function JourneySection() {
   const { t, lang } = useLang();
   const ORDER = ["current", "past", "future", "certificate"] as const;
-  const META: Record<string, { title: string; icon: typeof GraduationCap; tone: string }> = {
-    current: { title: t("edu_current"), icon: GraduationCap, tone: "bento-blue" },
-    past: { title: t("edu_past"), icon: BookOpen, tone: "bento" },
-    future: { title: t("edu_future"), icon: Sparkles, tone: "bento-yellow" },
-    certificate: { title: t("edu_cert"), icon: Award, tone: "bento-cream" },
+  const META: Record<string, { title: string; icon: typeof GraduationCap }> = {
+    current: { title: t("edu_current"), icon: GraduationCap },
+    past: { title: t("edu_past"), icon: BookOpen },
+    future: { title: t("edu_future"), icon: Sparkles },
+    certificate: { title: t("edu_cert"), icon: Award },
   };
   const q = useQuery({
     queryKey: ["education_entries"],
     queryFn: async () => (await supabase.from("education_entries").select("*").order("sort_order")).data ?? [],
   });
-  const grouped = (q.data ?? []).reduce<Record<string, any[]>>((acc, e) => { (acc[e.kind] ||= []).push(e); return acc; }, {});
+  const entries = (q.data ?? [])
+    .slice()
+    .sort((a: any, b: any) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind) || a.sort_order - b.sort_order);
+
+  if (entries.length === 0) {
+    return <p className="text-muted-foreground">{t("timeline_soon")}</p>;
+  }
+
   return (
-    <Stagger className="grid gap-5 md:grid-cols-2">
-      {ORDER.map((kind) => {
-        const list = grouped[kind] ?? [];
-        if (list.length === 0) return null;
-        const m = META[kind]; const Icon = m.icon;
+    <Stagger className="relative ml-1 border-l border-foreground/12 pl-8 md:pl-10">
+      {entries.map((e: any) => {
+        const m = META[e.kind] ?? META["past"]!;
+        const Icon = m.icon;
         return (
-          <StaggerItem key={kind}>
-            <HoverCard className={`${m.tone} p-6 md:p-8 h-full`}>
-              <div className="flex items-center gap-3">
-                <Icon className="h-5 w-5" />
-                <h3 className="font-display text-2xl">{m.title}</h3>
-              </div>
-              <ol className="mt-6 relative border-l border-foreground/15 pl-6 grid gap-5">
-                {list.map((e: any) => (
-                  <li key={e.id} className="relative">
-                    <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full bg-foreground" />
-                    <p className="label-mono">{pickLang(e, "period", lang)}</p>
-                    <p className="font-display text-lg mt-1">{pickLang(e, "title", lang)}</p>
-                    {pickLang(e, "institution", lang) && <p className="text-sm text-foreground/70">{pickLang(e, "institution", lang)}</p>}
-                    {pickLang(e, "description", lang) && <p className="text-sm mt-2 text-foreground/80">{pickLang(e, "description", lang)}</p>}
-                  </li>
-                ))}
-              </ol>
-            </HoverCard>
+          <StaggerItem key={e.id} className="relative pb-10 last:pb-0">
+            <span className="absolute -left-[42px] md:-left-[50px] top-0 grid h-8 w-8 place-items-center rounded-full bg-white ring-1 ring-border shadow-sm">
+              <Icon className="h-4 w-4 text-primary" />
+            </span>
+            <p className="label-mono">{pickLang(e, "period", lang) || m.title}</p>
+            <h3 className="mt-1.5 font-display text-2xl md:text-3xl leading-tight">
+              {pickLang(e, "title", lang)}
+            </h3>
+            {pickLang(e, "institution", lang) && (
+              <p className="mt-1 text-sm text-foreground/70">{pickLang(e, "institution", lang)}</p>
+            )}
+            {pickLang(e, "description", lang) && (
+              <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-foreground/80">
+                {pickLang(e, "description", lang)}
+              </p>
+            )}
           </StaggerItem>
         );
       })}
-      {(q.data ?? []).length === 0 && (
-        <div className="bento p-8 text-center text-muted-foreground md:col-span-2">{t("timeline_soon")}</div>
-      )}
     </Stagger>
   );
 }
+
 
 /* ------------------ People ------------------ */
 function PeopleSection() {
@@ -287,7 +289,7 @@ function HobbiesSection() {
   );
 }
 
-/* ------------------ Certificates ------------------ */
+/* ------------------ Certificates — masonry image grid ------------------ */
 function CertificatesSection() {
   const { t, lang } = useLang();
   const [open, setOpen] = useState<any | null>(null);
@@ -295,43 +297,43 @@ function CertificatesSection() {
     queryKey: ["certificates"],
     queryFn: async () => (await supabase.from("certificates").select("*").order("sort_order")).data ?? [],
   });
+  const list = (q.data ?? []) as any[];
+
   return (
     <>
-      <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(q.data ?? []).map((c: any) => {
-          const title = pickLang(c, "title", lang);
-          return (
-            <StaggerItem key={c.id}>
-              <HoverCard className="bento overflow-hidden h-full">
-                <button type="button" onClick={() => setOpen(c)} className="block w-full text-left">
-                  <div className="h-48 w-full bg-surface-2">
-                    {c.image_path ? (
-                      <SignedImage path={c.image_path} alt={title} className="h-full w-full object-cover" />
-                    ) : (
-                      <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#DCEEFB] flex items-center justify-center">
-                        <Award className="h-8 w-8 text-foreground/40" />
-                      </div>
+      {list.length === 0 ? (
+        <p className="text-muted-foreground">{t("certificates_empty")}</p>
+      ) : (
+        <Stagger className="columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
+          {list.map((c: any) => {
+            const title = pickLang(c, "title", lang);
+            return (
+              <StaggerItem key={c.id} className="mb-5 break-inside-avoid">
+                <button
+                  type="button"
+                  onClick={() => setOpen(c)}
+                  className="group block w-full overflow-hidden rounded-2xl bg-white text-left ring-1 ring-border/70 transition hover:ring-primary/60"
+                  aria-label={`${t("view_certificate")}: ${title}`}
+                >
+                  {c.image_path ? (
+                    <SignedImage path={c.image_path} alt={title} className="w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+                  ) : (
+                    <div className="grid h-40 w-full place-items-center bg-surface-2">
+                      <Award className="h-8 w-8 text-foreground/30" />
+                    </div>
+                  )}
+                  <div className="px-4 py-3">
+                    <p className="font-display text-lg leading-snug">{title}</p>
+                    {pickLang(c, "issuer", lang) && (
+                      <p className="label-mono mt-1">{pickLang(c, "issuer", lang)}</p>
                     )}
-                  </div>
-                  <div className="p-5">
-                    <p className="font-display text-xl">{title}</p>
-                    {pickLang(c, "issuer", lang) && <p className="label-mono mt-1">{pickLang(c, "issuer", lang)}</p>}
-                    {pickLang(c, "description", lang) && (
-                      <p className="text-sm mt-2 text-foreground/80">{pickLang(c, "description", lang)}</p>
-                    )}
-                    <span className="mt-3 inline-flex items-center gap-1 text-sm text-primary">
-                      {t("view_certificate")} <ArrowRight className="h-3.5 w-3.5" />
-                    </span>
                   </div>
                 </button>
-              </HoverCard>
-            </StaggerItem>
-          );
-        })}
-        {(q.data ?? []).length === 0 && (
-          <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("certificates_empty")}</div>
-        )}
-      </Stagger>
+              </StaggerItem>
+            );
+          })}
+        </Stagger>
+      )}
       <Lightbox
         path={open?.image_path ?? null}
         alt={open ? pickLang(open, "title", lang) : ""}
@@ -341,6 +343,7 @@ function CertificatesSection() {
     </>
   );
 }
+
 
 /* ------------------ Research & Posts feed ------------------ */
 function PostsFeed() {
@@ -419,33 +422,36 @@ function PostsFeed() {
   );
 }
 
-/* ------------------ Thoughts ------------------ */
+/* ------------------ Thoughts — typographic blockquotes ------------------ */
 function ThoughtsSection() {
   const { t, lang } = useLang();
-  const TONES = ["bento", "bento-blue", "bento-yellow", "bento-cream"] as const;
   const q = useQuery({
     queryKey: ["quotes"],
     queryFn: async () => (await supabase.from("quotes").select("*").order("sort_order")).data ?? [],
   });
+  const list = (q.data ?? []) as any[];
+  if (list.length === 0) return <p className="text-muted-foreground">{t("still_thinking")}</p>;
+
   return (
-    <Stagger className="grid gap-4 md:gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {(q.data ?? []).map((qt: any, i: number) => (
-        <StaggerItem key={qt.id}>
-          <HoverCard className={`${TONES[i % TONES.length]} p-6 flex flex-col justify-between min-h-[220px] h-full`}>
-            <QuoteIcon className="h-6 w-6 text-foreground/60" />
-            <div className="mt-6">
-              <p className="font-display text-2xl leading-snug">"{pickLang(qt, "text", lang)}"</p>
-              <p className="mt-3 label-mono">— {pickLang(qt, "author", lang) || t("fullName")}{pickLang(qt, "category", lang) ? ` · ${pickLang(qt, "category", lang)}` : ""}</p>
-            </div>
-          </HoverCard>
+    <Stagger className="mx-auto max-w-3xl divide-y divide-foreground/10">
+      {list.map((qt: any) => (
+        <StaggerItem key={qt.id} className="py-10 first:pt-0 last:pb-0">
+          <figure>
+            <QuoteIcon className="h-5 w-5 text-primary/70" aria-hidden />
+            <blockquote className="mt-4 font-display text-2xl md:text-[2rem] leading-[1.35] text-foreground">
+              {pickLang(qt, "text", lang)}
+            </blockquote>
+            <figcaption className="mt-4 label-mono">
+              — {pickLang(qt, "author", lang) || t("fullName")}
+              {pickLang(qt, "category", lang) ? ` · ${pickLang(qt, "category", lang)}` : ""}
+            </figcaption>
+          </figure>
         </StaggerItem>
       ))}
-      {(q.data ?? []).length === 0 && (
-        <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("still_thinking")}</div>
-      )}
     </Stagger>
   );
 }
+
 
 /* ------------------ Contact ------------------ */
 function ContactSection() {

@@ -42,26 +42,61 @@ export function ContactIcon({ name }: { name: string }) {
   return <Icon className="h-4 w-4" />;
 }
 
-export function ContactLinks({ className = "" }: { className?: string }) {
+/**
+ * Minimal contact list.
+ * variant="list"  → icon + label rows (used in the contact section)
+ * variant="icons" → bare icons only (used in the footer)
+ */
+export function ContactLinks({
+  className = "",
+  variant = "list",
+}: {
+  className?: string;
+  variant?: "list" | "icons";
+}) {
   const links = useContactLinks();
   if (links.length === 0) return null;
+
+  if (variant === "icons") {
+    return (
+      <div className={`flex flex-wrap items-center gap-4 ${className}`}>
+        {links.map((l) => {
+          const external = l.href.startsWith("http");
+          return (
+            <a
+              key={l.key}
+              href={l.href}
+              aria-label={l.label}
+              title={l.label}
+              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              className="text-foreground/50 hover:text-primary transition"
+            >
+              <ContactIcon name={l.icon} />
+            </a>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
-    <div className={`flex flex-wrap gap-2 ${className}`}>
+    <ul className={`grid gap-2.5 ${className}`}>
       {links.map((l) => {
         const external = l.href.startsWith("http");
         return (
-          <a
-            key={l.key}
-            href={l.href}
-            aria-label={l.label}
-            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="chip hover:bg-surface-2 transition"
-          >
-            <ContactIcon name={l.icon} />
-            <span>{l.label}</span>
-          </a>
+          <li key={l.key}>
+            <a
+              href={l.href}
+              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              className="inline-flex items-center gap-2.5 text-sm text-foreground/75 hover:text-primary transition"
+            >
+              <ContactIcon name={l.icon} />
+              <span className="truncate">{l.label}</span>
+            </a>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }
+

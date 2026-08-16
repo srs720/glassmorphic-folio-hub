@@ -34,8 +34,6 @@ function SettingsForm() {
   const [bio, setBio] = useState("");
   const [tagline, setTagline] = useState("");
   const [location, setLocation] = useState("");
-  const [education, setEducation] = useState("");
-  const [experience, setExperience] = useState("");
   const [greeting, setGreeting] = useState("");
   const [identityLine, setIdentityLine] = useState("");
   const [nameBn, setNameBn] = useState("");
@@ -58,8 +56,6 @@ function SettingsForm() {
       setBio(q.data.bio);
       setTagline(q.data.tagline ?? "");
       setLocation(q.data.location ?? "");
-      setEducation(q.data.education ?? "");
-      setExperience(q.data.experience ?? "");
       setGreeting((q.data as any).greeting ?? "");
       setIdentityLine((q.data as any).identity_line ?? "");
       setNameBn((q.data as any).name_bn ?? "");
@@ -73,9 +69,22 @@ function SettingsForm() {
   }, [q.data]);
 
   async function removeSlider(path: string) {
+    const next = sliderImages.filter((p) => p !== path);
+    // Persist first so the DB never points at a deleted object.
+    if (q.data) {
+      const { error } = await supabase
+        .from("site_settings")
+        .update({ slider_images: next } as any)
+        .eq("id", q.data.id);
+      if (error) { toast.error("Could not remove image"); return; }
+    }
     await deleteFile(path);
-    setSliderImages((s) => s.filter((p) => p !== path));
+    setSliderImages(next);
+    qc.invalidateQueries({ queryKey: ["site_settings_admin"] });
+    qc.invalidateQueries({ queryKey: ["site_settings"] });
+    toast.success("Image removed");
   }
+
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -109,7 +118,7 @@ function SettingsForm() {
       }
       const { error } = await supabase.from("site_settings")
         .update({
-          name: name.trim(), bio: bio.trim(), tagline, location, education, experience,
+          name: name.trim(), bio: bio.trim(), tagline, location,
           resume_path, avatar_path, logo_path,
           greeting, identity_line: identityLine, hero_image_path,
           slider_images,
@@ -214,11 +223,11 @@ function SettingsForm() {
       <Field label="Identity line (footer)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={identityLine} onChange={(e) => setIdentityLine(e.target.value)} placeholder="Student · Web developer · Curious mind" /></Field>
       <Field label="Tagline"><input className="glass-input px-4 py-2.5 text-sm w-full" value={tagline} onChange={(e) => setTagline(e.target.value)} /></Field>
       <Field label="Bio"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-32" value={bio} onChange={(e) => setBio(e.target.value)} /></Field>
-      <div className="grid gap-3 md:grid-cols-2">
-        <Field label="Location"><input className="glass-input px-4 py-2.5 text-sm w-full" value={location} onChange={(e) => setLocation(e.target.value)} /></Field>
-        <Field label="Education"><input className="glass-input px-4 py-2.5 text-sm w-full" value={education} onChange={(e) => setEducation(e.target.value)} /></Field>
-      </div>
-      <Field label="Experience"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-20" value={experience} onChange={(e) => setExperience(e.target.value)} /></Field>
+      <Field label="Location"><input className="glass-input px-4 py-2.5 text-sm w-full" value={location} onChange={(e) => setLocation(e.target.value)} /></Field>
+      <p className="text-xs text-muted-foreground">
+        Education timeline lives on the <strong>Education</strong> page. Phone, email and social links live on the <strong>Contact &amp; Socials</strong> page.
+      </p>
+
 
       <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Hero image (large photo on home)</label>
       <label className="glass-input flex items-center gap-3 px-4 py-2.5 text-sm cursor-pointer">
