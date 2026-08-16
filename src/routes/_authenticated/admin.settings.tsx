@@ -227,11 +227,11 @@ function SettingsForm() {
       <Field label="Identity line (footer)"><input className="glass-input px-4 py-2.5 text-sm w-full" value={identityLine} onChange={(e) => setIdentityLine(e.target.value)} placeholder="Student · Web developer · Curious mind" /></Field>
       <Field label="Tagline"><input className="glass-input px-4 py-2.5 text-sm w-full" value={tagline} onChange={(e) => setTagline(e.target.value)} /></Field>
       <Field label="Bio"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-32" value={bio} onChange={(e) => setBio(e.target.value)} /></Field>
-      <div className="grid gap-3 md:grid-cols-2">
-        <Field label="Location"><input className="glass-input px-4 py-2.5 text-sm w-full" value={location} onChange={(e) => setLocation(e.target.value)} /></Field>
-        <Field label="Education"><input className="glass-input px-4 py-2.5 text-sm w-full" value={education} onChange={(e) => setEducation(e.target.value)} /></Field>
-      </div>
-      <Field label="Experience"><textarea className="glass-input px-4 py-2.5 text-sm w-full min-h-20" value={experience} onChange={(e) => setExperience(e.target.value)} /></Field>
+      <Field label="Location"><input className="glass-input px-4 py-2.5 text-sm w-full" value={location} onChange={(e) => setLocation(e.target.value)} /></Field>
+      <p className="text-xs text-muted-foreground">
+        Education timeline lives on the <strong>Education</strong> page. Phone, email and social links live on the <strong>Contact &amp; Socials</strong> page.
+      </p>
+
 
       <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Hero image (large photo on home)</label>
       <label className="glass-input flex items-center gap-3 px-4 py-2.5 text-sm cursor-pointer">
