@@ -153,55 +153,57 @@ function HomePage() {
   );
 }
 
-/* ------------------ Journey ------------------ */
+/* ------------------ Journey — vertical timeline ------------------ */
 function JourneySection() {
   const { t, lang } = useLang();
   const ORDER = ["current", "past", "future", "certificate"] as const;
-  const META: Record<string, { title: string; icon: typeof GraduationCap; tone: string }> = {
-    current: { title: t("edu_current"), icon: GraduationCap, tone: "bento-blue" },
-    past: { title: t("edu_past"), icon: BookOpen, tone: "bento" },
-    future: { title: t("edu_future"), icon: Sparkles, tone: "bento-yellow" },
-    certificate: { title: t("edu_cert"), icon: Award, tone: "bento-cream" },
+  const META: Record<string, { title: string; icon: typeof GraduationCap }> = {
+    current: { title: t("edu_current"), icon: GraduationCap },
+    past: { title: t("edu_past"), icon: BookOpen },
+    future: { title: t("edu_future"), icon: Sparkles },
+    certificate: { title: t("edu_cert"), icon: Award },
   };
   const q = useQuery({
     queryKey: ["education_entries"],
     queryFn: async () => (await supabase.from("education_entries").select("*").order("sort_order")).data ?? [],
   });
-  const grouped = (q.data ?? []).reduce<Record<string, any[]>>((acc, e) => { (acc[e.kind] ||= []).push(e); return acc; }, {});
+  const entries = (q.data ?? [])
+    .slice()
+    .sort((a: any, b: any) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind) || a.sort_order - b.sort_order);
+
+  if (entries.length === 0) {
+    return <p className="text-muted-foreground">{t("timeline_soon")}</p>;
+  }
+
   return (
-    <Stagger className="grid gap-5 md:grid-cols-2">
-      {ORDER.map((kind) => {
-        const list = grouped[kind] ?? [];
-        if (list.length === 0) return null;
-        const m = META[kind]; const Icon = m.icon;
+    <Stagger className="relative ml-1 border-l border-foreground/12 pl-8 md:pl-10">
+      {entries.map((e: any) => {
+        const m = META[e.kind] ?? META["past"]!;
+        const Icon = m.icon;
         return (
-          <StaggerItem key={kind}>
-            <HoverCard className={`${m.tone} p-6 md:p-8 h-full`}>
-              <div className="flex items-center gap-3">
-                <Icon className="h-5 w-5" />
-                <h3 className="font-display text-2xl">{m.title}</h3>
-              </div>
-              <ol className="mt-6 relative border-l border-foreground/15 pl-6 grid gap-5">
-                {list.map((e: any) => (
-                  <li key={e.id} className="relative">
-                    <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full bg-foreground" />
-                    <p className="label-mono">{pickLang(e, "period", lang)}</p>
-                    <p className="font-display text-lg mt-1">{pickLang(e, "title", lang)}</p>
-                    {pickLang(e, "institution", lang) && <p className="text-sm text-foreground/70">{pickLang(e, "institution", lang)}</p>}
-                    {pickLang(e, "description", lang) && <p className="text-sm mt-2 text-foreground/80">{pickLang(e, "description", lang)}</p>}
-                  </li>
-                ))}
-              </ol>
-            </HoverCard>
+          <StaggerItem key={e.id} className="relative pb-10 last:pb-0">
+            <span className="absolute -left-[42px] md:-left-[50px] top-0 grid h-8 w-8 place-items-center rounded-full bg-white ring-1 ring-border shadow-sm">
+              <Icon className="h-4 w-4 text-primary" />
+            </span>
+            <p className="label-mono">{pickLang(e, "period", lang) || m.title}</p>
+            <h3 className="mt-1.5 font-display text-2xl md:text-3xl leading-tight">
+              {pickLang(e, "title", lang)}
+            </h3>
+            {pickLang(e, "institution", lang) && (
+              <p className="mt-1 text-sm text-foreground/70">{pickLang(e, "institution", lang)}</p>
+            )}
+            {pickLang(e, "description", lang) && (
+              <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-foreground/80">
+                {pickLang(e, "description", lang)}
+              </p>
+            )}
           </StaggerItem>
         );
       })}
-      {(q.data ?? []).length === 0 && (
-        <div className="bento p-8 text-center text-muted-foreground md:col-span-2">{t("timeline_soon")}</div>
-      )}
     </Stagger>
   );
 }
+
 
 /* ------------------ People ------------------ */
 function PeopleSection() {
