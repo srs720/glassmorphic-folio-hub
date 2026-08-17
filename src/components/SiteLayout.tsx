@@ -155,34 +155,69 @@ function TopNav() {
   );
 }
 
+const QUICK_LINKS = [
+  { id: "home", key: "nav_home" as const },
+  { id: "posts", key: "nav_posts" as const },
+  { id: "journey", key: "nav_journey" as const },
+  { id: "contact", key: "nav_contact" as const },
+];
+
 export function SiteLayout({ children }: { children: ReactNode }) {
-  const socials = useSocials();
   const { t } = useLang();
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const onHome = pathname === "/";
+
+  function goTo(id: string) {
+    if (onHome) scrollToId(id);
+    else navigate({ to: "/", hash: id }).then(() => setTimeout(() => scrollToId(id), 200));
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <TopNav />
       <main className="flex-1">{children}</main>
-      <footer className="mt-24 border-t border-border bg-surface-2/40">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 py-10 grid gap-8 md:grid-cols-3 items-start">
+      <footer className="mt-24 border-t border-slate-200 bg-surface-2/40">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 py-12 grid gap-10 md:grid-cols-3 items-start">
           <div>
             <p className="font-display text-2xl">{t("fullName")}</p>
-            <p className="text-sm text-muted-foreground mt-1">{t("tagline")}</p>
-          </div>
-          <div>
-            <p className="label-mono">{t("find_me_at")}</p>
-            <ContactLinks variant="icons" className="mt-3" />
+            <p className="text-sm text-muted-foreground mt-1 max-w-xs">{t("tagline")}</p>
+            <p className="text-sm mt-3 text-muted-foreground">{t("footer_note")}</p>
           </div>
 
+          <nav aria-label="Quick links">
+            <p className="label-mono">{t("quick_links")}</p>
+            <ul className="mt-3 grid gap-2">
+              {QUICK_LINKS.map((l) => (
+                <li key={l.id}>
+                  <button
+                    onClick={() => goTo(l.id)}
+                    className="text-sm text-foreground/75 hover:text-primary transition"
+                  >
+                    {t(l.key)}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <div className="md:text-right">
-            <p className="label-mono">© {new Date().getFullYear()}</p>
-            <p className="text-sm mt-2 text-muted-foreground">{t("footer_note")}</p>
+            <p className="label-mono">{t("find_me_at")}</p>
+            <ContactLinks variant="icons" className="mt-3 md:justify-end" />
           </div>
         </div>
+
+        <div className="border-t border-slate-200">
+          <p className="mx-auto max-w-7xl px-4 md:px-6 py-5 text-center text-xs text-muted-foreground">
+            © 2026 All Rights Reserved. Design by Shoibur Rahman
+          </p>
+        </div>
       </footer>
+      <SiteChat />
     </div>
   );
 }
+
 
 export function useSettings() {
   return useQuery({
