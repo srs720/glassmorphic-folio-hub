@@ -33,6 +33,7 @@ import { Route as AuthenticatedAdminHobbiesRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminEducationRouteImport } from './routes/_authenticated/admin.education'
 import { Route as AuthenticatedAdminContactRouteImport } from './routes/_authenticated/admin.contact'
 import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
+import { Route as AuthenticatedAdminAiRouteImport } from './routes/_authenticated/admin.ai'
 
 const ThoughtsRoute = ThoughtsRouteImport.update({
   id: '/thoughts',
@@ -164,6 +165,11 @@ const AuthenticatedAdminCertificatesRoute =
     path: '/admin/certificates',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminAiRoute = AuthenticatedAdminAiRouteImport.update({
+  id: '/admin/ai',
+  path: '/admin/ai',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
+  '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
@@ -199,6 +206,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
+  '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
@@ -226,6 +234,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/post/$slug': typeof PostSlugRoute
+  '/_authenticated/admin/ai': typeof AuthenticatedAdminAiRoute
   '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/_authenticated/admin/contact': typeof AuthenticatedAdminContactRoute
   '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
@@ -253,6 +262,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/post/$slug'
+    | '/admin/ai'
     | '/admin/certificates'
     | '/admin/contact'
     | '/admin/education'
@@ -278,6 +288,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/post/$slug'
+    | '/admin/ai'
     | '/admin/certificates'
     | '/admin/contact'
     | '/admin/education'
@@ -304,6 +315,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/thoughts'
     | '/post/$slug'
+    | '/_authenticated/admin/ai'
     | '/_authenticated/admin/certificates'
     | '/_authenticated/admin/contact'
     | '/_authenticated/admin/education'
@@ -505,10 +517,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCertificatesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/ai': {
+      id: '/_authenticated/admin/ai'
+      path: '/admin/ai'
+      fullPath: '/admin/ai'
+      preLoaderRoute: typeof AuthenticatedAdminAiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminAiRoute: typeof AuthenticatedAdminAiRoute
   AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
   AuthenticatedAdminContactRoute: typeof AuthenticatedAdminContactRoute
   AuthenticatedAdminEducationRoute: typeof AuthenticatedAdminEducationRoute
@@ -525,6 +545,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminAiRoute: AuthenticatedAdminAiRoute,
   AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
   AuthenticatedAdminContactRoute: AuthenticatedAdminContactRoute,
   AuthenticatedAdminEducationRoute: AuthenticatedAdminEducationRoute,

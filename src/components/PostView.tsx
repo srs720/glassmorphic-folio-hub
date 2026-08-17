@@ -4,7 +4,6 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { SignedImage } from "@/components/SignedImage";
 import { Reveal } from "@/components/Reveal";
 import { ShareButton } from "@/components/ShareButton";
-import { PostChat } from "@/components/PostChat";
 import { pickLang, T, type Lang } from "@/lib/i18n";
 import { readingMinutes } from "@/lib/post-utils";
 import type { PostRow } from "@/lib/posts-load";
@@ -119,8 +118,6 @@ export function PostView({ post, related, lang, locale }: Props) {
           </Reveal>
         )}
       </article>
-
-      <PostChat slug={post.slug} lang={lang} />
     </SiteLayout>
   );
 }

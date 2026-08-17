@@ -71,21 +71,21 @@ function HomePage() {
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#EAF5FE] via-white to-[#DCEEFB]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/25 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-background" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 md:px-6 py-20 md:py-28 w-full">
-          <div className="max-w-3xl rounded-[28px] border border-white/60 bg-white/60 p-6 sm:p-9 shadow-[0_20px_60px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl backdrop-saturate-150">
+          <div className="max-w-3xl bg-transparent [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]">
             <Reveal>
-              <p className="label-mono">{t("home_kicker")}</p>
+              <p className="label-mono text-white/80">{t("home_kicker")}</p>
             </Reveal>
             <Reveal delay={0.1}>
-              <h1 className="mt-4 font-display text-4xl sm:text-6xl md:text-7xl leading-[1.02] tracking-tight text-foreground drop-shadow-sm">
+              <h1 className="mt-4 font-display text-4xl sm:text-6xl md:text-7xl leading-[1.02] tracking-tight text-white">
                 {t("home_greeting")}
               </h1>
             </Reveal>
             <Reveal delay={0.2}>
-              <p className="mt-6 max-w-2xl text-lg md:text-xl text-foreground/80 leading-relaxed">
+              <p className="mt-6 max-w-2xl text-lg md:text-xl text-white/90 leading-relaxed">
                 {t("home_bio")}
               </p>
             </Reveal>
