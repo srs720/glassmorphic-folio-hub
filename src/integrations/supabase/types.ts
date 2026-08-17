@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_knowledge_base: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          sort_order: number
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           content: string
