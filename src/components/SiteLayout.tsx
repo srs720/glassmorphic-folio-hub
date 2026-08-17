@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { SignedImage } from "@/components/SignedImage";
 import { ContactLinks } from "@/components/ContactLinks";
+import { SiteChat } from "@/components/SiteChat";
 
 const ICON_MAP: Record<string, typeof Github> = {
   github: Github, linkedin: Linkedin, twitter: Twitter, x: Twitter,
