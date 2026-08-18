@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.2",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "aura-portfolio",
+      "version": "0.1.0",
+      "title": "Aura Portfolio"
+    },
+    "tools": [
+      {
+        "name": "get_profile",
+        "title": "Get profile",
+        "description": "Get Shoibur Rahman's public profile: name, tagline, bio and location in English and Bengali, plus public contact and social links.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_education",
+        "title": "List education",
+        "description": "List the public education and academic journey entries, bilingual (English and Bengali).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_certificates",
+        "title": "List certificates",
+        "description": "List the public certificates and achievements, with issuer and issue date, bilingual.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_diary",
+        "title": "List diary sections",
+        "description": "List public diary content by section: `people` (family and friends), `hobbies` (hobbies and memories) or `quotes` (thoughts and quotes).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "section": {
+              "type": "string",
+              "enum": [
+                "people",
+                "hobbies",
+                "quotes"
+              ],
+              "description": "Which diary section to read."
+            }
+          },
+          "required": [
+            "section"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_posts",
+        "title": "List published articles",
+        "description": "List published research articles and blog posts with title, slug, excerpt, tags and publish date. Optionally filter by a search term or tag.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "search": {
+              "description": "Optional text to match in the title.",
+              "type": "string",
+              "maxLength": 120
+            },
+            "tag": {
+              "description": "Optional tag to filter by.",
+              "type": "string",
+              "maxLength": 60
+            },
+            "limit": {
+              "default": 20,
+              "description": "Maximum number of articles to return.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_post",
+        "title": "Read an article",
+        "description": "Read the full text of one published article by its slug, in English and Bengali when available.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "The article slug, e.g. `my-article`."
+            }
+          },
+          "required": [
+            "slug"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
