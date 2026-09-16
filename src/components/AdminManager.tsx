@@ -88,7 +88,7 @@ export function AdminManager({ cfg }: { cfg: ManagerConfig }) {
             {cfg.imageField && (
               <div className="h-12 w-12 rounded-xl overflow-hidden bg-surface-2 flex-shrink-0">
                 {row[cfg.imageField] ? (
-                  <SignedImage path={row[cfg.imageField]} alt="" className="h-full w-full object-cover" />
+                  <SignedImage path={row[cfg.imageField]} alt={row.title ?? row.name ?? "Uploaded image"} className="h-full w-full object-cover" />
                 ) : (
                   <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#FFF6DD]" />
                 )}

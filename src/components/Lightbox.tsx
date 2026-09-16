@@ -7,11 +7,15 @@ import { useLang } from "@/lib/i18n";
 export function Lightbox({
   path,
   alt,
+  title,
   caption,
   onClose,
 }: {
   path: string | null;
+  /** SEO image description; not shown on screen. */
   alt: string;
+  /** Visible heading. Falls back to `alt` when omitted. */
+  title?: string;
   caption?: string;
   onClose: () => void;
 }) {
@@ -55,7 +59,7 @@ export function Lightbox({
             <SignedImage path={path} alt={alt} className="max-h-[76vh] w-full object-contain bg-surface-2" />
             {caption && (
               <div className="px-5 py-4">
-                <p className="font-display text-xl">{alt}</p>
+                <p className="font-display text-xl">{title ?? alt}</p>
                 <p className="text-sm text-muted-foreground mt-1">{caption}</p>
               </div>
             )}

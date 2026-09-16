@@ -23,10 +23,11 @@ const CANONICAL = "https://shoiburrahman.com";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Shoibur Rahman - Student & Web Developer" },
-      { name: "description", content: "Shoibur Rahman — student of Darunnazat Siddikia Kamil Madrasah and passionate full-stack web developer. A bilingual personal digital diary." },
-      { property: "og:title", content: "Shoibur Rahman - Student & Web Developer" },
-      { property: "og:description", content: "Shoibur Rahman — student of Darunnazat Siddikia Kamil Madrasah and passionate full-stack web developer. A bilingual personal digital diary." },
+      { title: "Shoibur Rahman | Full-Stack Web Developer" },
+      { name: "description", content: "Official site of Shoibur Rahman (Siam) — full-stack web developer from Bangladesh and student of Darunnazat Siddikia Kamil Madrasah. Projects, certificates, research posts and contact." },
+      { name: "keywords", content: "Shoibur Rahman, Siam, Full Stack Developer, Web Developer, Bangladesh" },
+      { property: "og:title", content: "Shoibur Rahman | Full-Stack Web Developer" },
+      { property: "og:description", content: "Official site of Shoibur Rahman (Siam) — full-stack web developer from Bangladesh. Projects, certificates, research posts and contact." },
       { property: "og:url", content: `${CANONICAL}/` },
       { property: "og:site_name", content: "Shoibur Rahman" },
     ],
@@ -35,8 +36,14 @@ export const Route = createFileRoute("/")({
       type: "application/ld+json",
       children: JSON.stringify({
         "@context": "https://schema.org", "@type": "Person",
-        name: "Shoibur Rahman", url: CANONICAL,
-        description: "Student of Darunnazat Siddikia Kamil Madrasah and full-stack web developer.",
+        name: "Shoibur Rahman",
+        alternateName: ["Siam", "শোয়াইবুর রহমান"],
+        url: CANONICAL,
+        jobTitle: "Full-Stack Web Developer",
+        nationality: "Bangladeshi",
+        alumniOf: { "@type": "EducationalOrganization", name: "Darunnazat Siddikia Kamil Madrasah" },
+        knowsAbout: ["Web Development", "JavaScript", "Python", "Databases"],
+        description: "Full-stack web developer from Bangladesh and student of Darunnazat Siddikia Kamil Madrasah.",
       }),
     }],
   }),
@@ -65,9 +72,9 @@ function HomePage() {
       <section id="home" className="relative min-h-[92vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           {sliderPaths.length > 0 ? (
-            <HeroSlider paths={sliderPaths} alt={t("fullName")} />
+            <HeroSlider paths={sliderPaths} alt={`${t("fullName")} — full-stack web developer portrait`} />
           ) : heroFallback ? (
-            <SignedImage path={heroFallback} alt={t("fullName")} className="absolute inset-0 h-full w-full object-cover" />
+            <SignedImage path={heroFallback} alt={`${t("fullName")} — full-stack web developer portrait`} className="absolute inset-0 h-full w-full object-cover" />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#EAF5FE] via-white to-[#DCEEFB]" />
           )}
@@ -231,7 +238,11 @@ function PeopleSection() {
                   <HoverCard className={`${g.tone} p-5 flex gap-4 items-start h-full`}>
                     <div className="h-20 w-20 rounded-2xl overflow-hidden shrink-0 bg-white border border-border">
                       {p.image_path ? (
-                        <SignedImage path={p.image_path} alt={pickLang(p, "name", lang)} className="h-full w-full object-cover" />
+                        <SignedImage
+                          path={p.image_path}
+                          alt={`${pickLang(p, "name", lang)}${pickLang(p, "relation", lang) ? ` — ${pickLang(p, "relation", lang)}` : ""} of ${t("fullName")}`}
+                          className="h-full w-full object-cover"
+                        />
                       ) : (
                         <div className="h-full w-full flex items-center justify-center font-display text-3xl text-foreground/50">{pickLang(p, "name", lang).charAt(0)}</div>
                       )}
@@ -270,7 +281,11 @@ function HobbiesSection() {
           <HoverCard className="bento p-5 h-full">
             <div className={`w-full rounded-2xl overflow-hidden bg-surface-2 mb-4 ${idx % 5 === 0 ? "h-56" : "h-40"}`}>
               {h.image_path ? (
-                <SignedImage path={h.image_path} alt={pickLang(h, "title", lang)} className="h-full w-full object-cover" />
+                <SignedImage
+                  path={h.image_path}
+                  alt={`${t("fullName")} — ${pickLang(h, "title", lang)} hobby`}
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#FFF6DD]" />
               )}
@@ -316,7 +331,11 @@ function CertificatesSection() {
                   aria-label={`${t("view_certificate")}: ${title}`}
                 >
                   {c.image_path ? (
-                    <SignedImage path={c.image_path} alt={title} className="w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+                    <SignedImage
+                      path={c.image_path}
+                      alt={`${t("fullName")} — ${title} certificate${pickLang(c, "issuer", lang) ? `, ${pickLang(c, "issuer", lang)}` : ""}`}
+                      className="w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                    />
                   ) : (
                     <div className="grid h-40 w-full place-items-center bg-surface-2">
                       <Award className="h-8 w-8 text-foreground/30" />
@@ -336,7 +355,8 @@ function CertificatesSection() {
       )}
       <Lightbox
         path={open?.image_path ?? null}
-        alt={open ? pickLang(open, "title", lang) : ""}
+        alt={open ? `${t("fullName")} — ${pickLang(open, "title", lang)} certificate` : ""}
+        title={open ? pickLang(open, "title", lang) : undefined}
         caption={open ? pickLang(open, "description", lang) : undefined}
         onClose={() => setOpen(null)}
       />
@@ -384,7 +404,11 @@ function PostsFeed() {
             <Link to="/post/$slug" params={{ slug: p.slug }} className="block h-full">
               <div className="h-52 w-full bg-surface-2">
                 {p.cover_path ? (
-                  <SignedImage path={p.cover_path} alt={pickLang(p, "title", lang)} className="h-full w-full object-cover" />
+                  <SignedImage
+                    path={p.cover_path}
+                    alt={`${pickLang(p, "title", lang)} — article by ${t("fullName")}`}
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
                   <div className="h-full w-full bg-gradient-to-br from-[#DCEEFB] to-[#EAF5FE]" />
                 )}
