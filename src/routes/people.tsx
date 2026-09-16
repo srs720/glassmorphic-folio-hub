@@ -53,7 +53,7 @@ function PeoplePage() {
                     <div key={p.id} className={`${g.tone} p-5 flex gap-4 items-start`}>
                       <div className="h-20 w-20 rounded-2xl overflow-hidden flex-shrink-0 bg-white border border-border">
                         {p.image_path ? (
-                          <SignedImage path={p.image_path} alt={p.name} className="h-full w-full object-cover" />
+                          <SignedImage path={p.image_path} alt={`${p.name} — ${p.relation ?? "person"} of Shoibur Rahman`} className="h-full w-full object-cover" />
                         ) : (
                           <div className="h-full w-full flex items-center justify-center font-display text-3xl text-foreground/50">
                             {p.name.charAt(0)}
