@@ -7,6 +7,7 @@ interface SitemapEntry {
   path: string;
   changefreq?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
   priority?: string;
+  lastmod?: string;
 }
 
 export const Route = createFileRoute("/sitemap.xml")({
@@ -28,14 +29,23 @@ export const Route = createFileRoute("/sitemap.xml")({
             process.env["SUPABASE_PUBLISHABLE_KEY"]!,
             { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
           );
-          const { data } = await client
+          const { data, error } = await client
             .from("blog_posts")
-            .select("slug")
+            .select("slug, updated_at, published_at")
             .in("status", ["published", "scheduled"]);
+          if (error) throw error;
           for (const row of data ?? []) {
-            entries.push({ path: `/post/${row.slug}`, changefreq: "monthly", priority: "0.9" });
-            entries.push({ path: `/en/post/${row.slug}`, changefreq: "monthly", priority: "0.9" });
-            entries.push({ path: `/bn/post/${row.slug}`, changefreq: "monthly", priority: "0.9" });
+            const lastmod = (row.updated_at ?? row.published_at)
+              ? new Date(row.updated_at ?? row.published_at).toISOString()
+              : undefined;
+            for (const prefix of ["", "/en", "/bn"]) {
+              entries.push({
+                path: `${prefix}/post/${row.slug}`,
+                changefreq: "monthly",
+                priority: "0.9",
+                ...(lastmod ? { lastmod } : {}),
+              });
+            }
           }
 
         } catch {
