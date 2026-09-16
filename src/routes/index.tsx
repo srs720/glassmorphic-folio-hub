@@ -23,10 +23,11 @@ const CANONICAL = "https://shoiburrahman.com";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Shoibur Rahman - Student & Web Developer" },
-      { name: "description", content: "Shoibur Rahman — student of Darunnazat Siddikia Kamil Madrasah and passionate full-stack web developer. A bilingual personal digital diary." },
-      { property: "og:title", content: "Shoibur Rahman - Student & Web Developer" },
-      { property: "og:description", content: "Shoibur Rahman — student of Darunnazat Siddikia Kamil Madrasah and passionate full-stack web developer. A bilingual personal digital diary." },
+      { title: "Shoibur Rahman | Full-Stack Web Developer" },
+      { name: "description", content: "Official site of Shoibur Rahman (Siam) — full-stack web developer from Bangladesh and student of Darunnazat Siddikia Kamil Madrasah. Projects, certificates, research posts and contact." },
+      { name: "keywords", content: "Shoibur Rahman, Siam, Full Stack Developer, Web Developer, Bangladesh" },
+      { property: "og:title", content: "Shoibur Rahman | Full-Stack Web Developer" },
+      { property: "og:description", content: "Official site of Shoibur Rahman (Siam) — full-stack web developer from Bangladesh. Projects, certificates, research posts and contact." },
       { property: "og:url", content: `${CANONICAL}/` },
       { property: "og:site_name", content: "Shoibur Rahman" },
     ],
@@ -35,8 +36,14 @@ export const Route = createFileRoute("/")({
       type: "application/ld+json",
       children: JSON.stringify({
         "@context": "https://schema.org", "@type": "Person",
-        name: "Shoibur Rahman", url: CANONICAL,
-        description: "Student of Darunnazat Siddikia Kamil Madrasah and full-stack web developer.",
+        name: "Shoibur Rahman",
+        alternateName: ["Siam", "শোয়াইবুর রহমান"],
+        url: CANONICAL,
+        jobTitle: "Full-Stack Web Developer",
+        nationality: "Bangladeshi",
+        alumniOf: { "@type": "EducationalOrganization", name: "Darunnazat Siddikia Kamil Madrasah" },
+        knowsAbout: ["Web Development", "JavaScript", "Python", "Databases"],
+        description: "Full-stack web developer from Bangladesh and student of Darunnazat Siddikia Kamil Madrasah.",
       }),
     }],
   }),
