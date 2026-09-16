@@ -324,7 +324,11 @@ function CertificatesSection() {
                   aria-label={`${t("view_certificate")}: ${title}`}
                 >
                   {c.image_path ? (
-                    <SignedImage path={c.image_path} alt={title} className="w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+                    <SignedImage
+                      path={c.image_path}
+                      alt={`${t("fullName")} — ${title} certificate${pickLang(c, "issuer", lang) ? `, ${pickLang(c, "issuer", lang)}` : ""}`}
+                      className="w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                    />
                   ) : (
                     <div className="grid h-40 w-full place-items-center bg-surface-2">
                       <Award className="h-8 w-8 text-foreground/30" />
@@ -392,7 +396,11 @@ function PostsFeed() {
             <Link to="/post/$slug" params={{ slug: p.slug }} className="block h-full">
               <div className="h-52 w-full bg-surface-2">
                 {p.cover_path ? (
-                  <SignedImage path={p.cover_path} alt={pickLang(p, "title", lang)} className="h-full w-full object-cover" />
+                  <SignedImage
+                    path={p.cover_path}
+                    alt={`${pickLang(p, "title", lang)} — article by ${t("fullName")}`}
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
                   <div className="h-full w-full bg-gradient-to-br from-[#DCEEFB] to-[#EAF5FE]" />
                 )}
