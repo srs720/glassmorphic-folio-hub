@@ -48,15 +48,20 @@ export const Route = createFileRoute("/sitemap.xml")({
             }
           }
 
-        } catch {
-          // sitemap still serves static routes if the database is unreachable
+        } catch (err) {
+          // Never serve a partial sitemap — crawlers would drop the missing URLs.
+          console.error("sitemap: failed to load posts", err);
+          return new Response("Sitemap temporarily unavailable", {
+            status: 503,
+            headers: { "Cache-Control": "no-store" },
+          });
         }
-
 
         const urls = entries.map((e) =>
           [
             `  <url>`,
             `    <loc>${BASE_URL}${e.path}</loc>`,
+            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             `  </url>`,
