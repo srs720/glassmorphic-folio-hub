@@ -7,11 +7,15 @@ import { useLang } from "@/lib/i18n";
 export function Lightbox({
   path,
   alt,
+  title,
   caption,
   onClose,
 }: {
   path: string | null;
+  /** SEO image description; not shown on screen. */
   alt: string;
+  /** Visible heading. Falls back to `alt` when omitted. */
+  title?: string;
   caption?: string;
   onClose: () => void;
 }) {
