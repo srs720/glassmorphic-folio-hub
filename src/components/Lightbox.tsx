@@ -59,7 +59,7 @@ export function Lightbox({
             <SignedImage path={path} alt={alt} className="max-h-[76vh] w-full object-contain bg-surface-2" />
             {caption && (
               <div className="px-5 py-4">
-                <p className="font-display text-xl">{alt}</p>
+                <p className="font-display text-xl">{title ?? alt}</p>
                 <p className="text-sm text-muted-foreground mt-1">{caption}</p>
               </div>
             )}

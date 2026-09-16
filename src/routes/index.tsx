@@ -349,6 +349,7 @@ function CertificatesSection() {
       <Lightbox
         path={open?.image_path ?? null}
         alt={open ? `${t("fullName")} — ${pickLang(open, "title", lang)} certificate` : ""}
+        title={open ? pickLang(open, "title", lang) : undefined}
         caption={open ? pickLang(open, "description", lang) : undefined}
         onClose={() => setOpen(null)}
       />
