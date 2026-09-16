@@ -65,9 +65,9 @@ function HomePage() {
       <section id="home" className="relative min-h-[92vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           {sliderPaths.length > 0 ? (
-            <HeroSlider paths={sliderPaths} alt={t("fullName")} />
+            <HeroSlider paths={sliderPaths} alt={`${t("fullName")} — full-stack web developer portrait`} />
           ) : heroFallback ? (
-            <SignedImage path={heroFallback} alt={t("fullName")} className="absolute inset-0 h-full w-full object-cover" />
+            <SignedImage path={heroFallback} alt={`${t("fullName")} — full-stack web developer portrait`} className="absolute inset-0 h-full w-full object-cover" />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#EAF5FE] via-white to-[#DCEEFB]" />
           )}
@@ -231,7 +231,11 @@ function PeopleSection() {
                   <HoverCard className={`${g.tone} p-5 flex gap-4 items-start h-full`}>
                     <div className="h-20 w-20 rounded-2xl overflow-hidden shrink-0 bg-white border border-border">
                       {p.image_path ? (
-                        <SignedImage path={p.image_path} alt={pickLang(p, "name", lang)} className="h-full w-full object-cover" />
+                        <SignedImage
+                          path={p.image_path}
+                          alt={`${pickLang(p, "name", lang)}${pickLang(p, "relation", lang) ? ` — ${pickLang(p, "relation", lang)}` : ""} of ${t("fullName")}`}
+                          className="h-full w-full object-cover"
+                        />
                       ) : (
                         <div className="h-full w-full flex items-center justify-center font-display text-3xl text-foreground/50">{pickLang(p, "name", lang).charAt(0)}</div>
                       )}
@@ -270,7 +274,11 @@ function HobbiesSection() {
           <HoverCard className="bento p-5 h-full">
             <div className={`w-full rounded-2xl overflow-hidden bg-surface-2 mb-4 ${idx % 5 === 0 ? "h-56" : "h-40"}`}>
               {h.image_path ? (
-                <SignedImage path={h.image_path} alt={pickLang(h, "title", lang)} className="h-full w-full object-cover" />
+                <SignedImage
+                  path={h.image_path}
+                  alt={`${t("fullName")} — ${pickLang(h, "title", lang)} hobby`}
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#FFF6DD]" />
               )}
