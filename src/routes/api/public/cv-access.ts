@@ -32,7 +32,7 @@ export const Route = createFileRoute("/api/public/cv-access")({
           supabaseAdmin.from("cv_content").select("*").limit(1).maybeSingle(),
           supabaseAdmin
             .from("site_settings")
-            .select("name, tagline, bio, contact_email, phone, location, linkedin_url, github_url")
+            .select("name, tagline, bio, contact_email, phone, location, linkedin_url, github_url, avatar_path")
             .limit(1)
             .maybeSingle(),
           supabaseAdmin
