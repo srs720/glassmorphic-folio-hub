@@ -18,6 +18,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CvIndexRouteImport } from './routes/cv.index'
 import { Route as PostSlugRouteImport } from './routes/post.$slug'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
@@ -38,6 +39,7 @@ import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminHobbiesRouteImport } from './routes/_authenticated/admin.hobbies'
 import { Route as AuthenticatedAdminEmailRouteImport } from './routes/_authenticated/admin.email'
 import { Route as AuthenticatedAdminEducationRouteImport } from './routes/_authenticated/admin.education'
+import { Route as AuthenticatedAdminCvRouteImport } from './routes/_authenticated/admin.cv'
 import { Route as AuthenticatedAdminContactRouteImport } from './routes/_authenticated/admin.contact'
 import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
 import { Route as AuthenticatedAdminAiRouteImport } from './routes/_authenticated/admin.ai'
@@ -85,6 +87,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CvIndexRoute = CvIndexRouteImport.update({
+  id: '/cv/',
+  path: '/cv/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostSlugRoute = PostSlugRouteImport.update({
@@ -198,6 +205,11 @@ const AuthenticatedAdminEducationRoute =
     path: '/admin/education',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminCvRoute = AuthenticatedAdminCvRouteImport.update({
+  id: '/admin/cv',
+  path: '/admin/cv',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminContactRoute =
   AuthenticatedAdminContactRouteImport.update({
     id: '/admin/contact',
@@ -234,10 +246,12 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/post/$slug': typeof PostSlugRoute
+  '/cv/': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
+  '/admin/cv': typeof AuthenticatedAdminCvRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/email': typeof AuthenticatedAdminEmailRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
@@ -268,10 +282,12 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/post/$slug': typeof PostSlugRoute
+  '/cv': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
+  '/admin/cv': typeof AuthenticatedAdminCvRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/email': typeof AuthenticatedAdminEmailRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
@@ -304,10 +320,12 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/post/$slug': typeof PostSlugRoute
+  '/cv/': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/ai': typeof AuthenticatedAdminAiRoute
   '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/_authenticated/admin/contact': typeof AuthenticatedAdminContactRoute
+  '/_authenticated/admin/cv': typeof AuthenticatedAdminCvRoute
   '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
   '/_authenticated/admin/email': typeof AuthenticatedAdminEmailRoute
   '/_authenticated/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
@@ -340,10 +358,12 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/post/$slug'
+    | '/cv/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/ai'
     | '/admin/certificates'
     | '/admin/contact'
+    | '/admin/cv'
     | '/admin/education'
     | '/admin/email'
     | '/admin/hobbies'
@@ -374,10 +394,12 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/post/$slug'
+    | '/cv'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/ai'
     | '/admin/certificates'
     | '/admin/contact'
+    | '/admin/cv'
     | '/admin/education'
     | '/admin/email'
     | '/admin/hobbies'
@@ -409,10 +431,12 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/post/$slug'
+    | '/cv/'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/ai'
     | '/_authenticated/admin/certificates'
     | '/_authenticated/admin/contact'
+    | '/_authenticated/admin/cv'
     | '/_authenticated/admin/education'
     | '/_authenticated/admin/email'
     | '/_authenticated/admin/hobbies'
@@ -445,6 +469,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   PostSlugRoute: typeof PostSlugRoute
+  CvIndexRoute: typeof CvIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicCvAccessRoute: typeof ApiPublicCvAccessRoute
   ApiPublicRequestCvRoute: typeof ApiPublicRequestCvRoute
@@ -516,6 +541,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cv/': {
+      id: '/cv/'
+      path: '/cv'
+      fullPath: '/cv/'
+      preLoaderRoute: typeof CvIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/post/$slug': {
@@ -658,6 +690,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminEducationRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/cv': {
+      id: '/_authenticated/admin/cv'
+      path: '/admin/cv'
+      fullPath: '/admin/cv'
+      preLoaderRoute: typeof AuthenticatedAdminCvRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/contact': {
       id: '/_authenticated/admin/contact'
       path: '/admin/contact'
@@ -693,6 +732,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminAiRoute: typeof AuthenticatedAdminAiRoute
   AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
   AuthenticatedAdminContactRoute: typeof AuthenticatedAdminContactRoute
+  AuthenticatedAdminCvRoute: typeof AuthenticatedAdminCvRoute
   AuthenticatedAdminEducationRoute: typeof AuthenticatedAdminEducationRoute
   AuthenticatedAdminEmailRoute: typeof AuthenticatedAdminEmailRoute
   AuthenticatedAdminHobbiesRoute: typeof AuthenticatedAdminHobbiesRoute
@@ -711,6 +751,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminAiRoute: AuthenticatedAdminAiRoute,
   AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
   AuthenticatedAdminContactRoute: AuthenticatedAdminContactRoute,
+  AuthenticatedAdminCvRoute: AuthenticatedAdminCvRoute,
   AuthenticatedAdminEducationRoute: AuthenticatedAdminEducationRoute,
   AuthenticatedAdminEmailRoute: AuthenticatedAdminEmailRoute,
   AuthenticatedAdminHobbiesRoute: AuthenticatedAdminHobbiesRoute,
@@ -742,6 +783,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   PostSlugRoute: PostSlugRoute,
+  CvIndexRoute: CvIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicCvAccessRoute: ApiPublicCvAccessRoute,
   ApiPublicRequestCvRoute: ApiPublicRequestCvRoute,
