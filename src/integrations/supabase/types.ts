@@ -152,6 +152,75 @@ export type Database = {
         }
         Relationships: []
       }
+      cv_content: {
+        Row: {
+          contact_address: string
+          contact_phone: string
+          created_at: string
+          id: string
+          languages: Json
+          professional_summary: string
+          skills: Json
+          updated_at: string
+        }
+        Insert: {
+          contact_address?: string
+          contact_phone?: string
+          created_at?: string
+          id?: string
+          languages?: Json
+          professional_summary?: string
+          skills?: Json
+          updated_at?: string
+        }
+        Update: {
+          contact_address?: string
+          contact_phone?: string
+          created_at?: string
+          id?: string
+          languages?: Json
+          professional_summary?: string
+          skills?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cv_requests: {
+        Row: {
+          created_at: string
+          id: string
+          otp: string | null
+          otp_expiry: string | null
+          purpose: string
+          status: Database["public"]["Enums"]["cv_request_status"]
+          updated_at: string
+          user_email: string
+          user_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          otp?: string | null
+          otp_expiry?: string | null
+          purpose?: string
+          status?: Database["public"]["Enums"]["cv_request_status"]
+          updated_at?: string
+          user_email: string
+          user_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          otp?: string | null
+          otp_expiry?: string | null
+          purpose?: string
+          status?: Database["public"]["Enums"]["cv_request_status"]
+          updated_at?: string
+          user_email?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
       education_entries: {
         Row: {
           created_at: string
@@ -196,6 +265,30 @@ export type Database = {
           sort_order?: number
           title?: string
           title_bn?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      email_settings: {
+        Row: {
+          app_password: string
+          created_at: string
+          id: string
+          sender_email: string
+          updated_at: string
+        }
+        Insert: {
+          app_password?: string
+          created_at?: string
+          id?: string
+          sender_email?: string
+          updated_at?: string
+        }
+        Update: {
+          app_password?: string
+          created_at?: string
+          id?: string
+          sender_email?: string
           updated_at?: string
         }
         Relationships: []
@@ -578,6 +671,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      cv_request_status: "unverified" | "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -706,6 +800,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      cv_request_status: ["unverified", "pending", "approved", "rejected"],
     },
   },
 } as const
