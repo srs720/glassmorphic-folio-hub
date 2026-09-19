@@ -18,6 +18,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CvIndexRouteImport } from './routes/cv.index'
 import { Route as PostSlugRouteImport } from './routes/post.$slug'
 import { Route as CvRequestRouteImport } from './routes/cv.request'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -87,6 +88,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CvIndexRoute = CvIndexRouteImport.update({
+  id: '/cv/',
+  path: '/cv/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostSlugRoute = PostSlugRouteImport.update({
@@ -247,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
   '/post/$slug': typeof PostSlugRoute
+  '/cv/': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
@@ -283,6 +290,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
   '/post/$slug': typeof PostSlugRoute
+  '/cv': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
@@ -321,6 +329,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
   '/post/$slug': typeof PostSlugRoute
+  '/cv/': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/ai': typeof AuthenticatedAdminAiRoute
   '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
@@ -359,6 +368,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
     | '/post/$slug'
+    | '/cv/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/ai'
     | '/admin/certificates'
@@ -395,6 +405,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
     | '/post/$slug'
+    | '/cv'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/ai'
     | '/admin/certificates'
@@ -432,6 +443,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
     | '/post/$slug'
+    | '/cv/'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/ai'
     | '/_authenticated/admin/certificates'
@@ -470,6 +482,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CvRequestRoute: typeof CvRequestRoute
   PostSlugRoute: typeof PostSlugRoute
+  CvIndexRoute: typeof CvIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicCvAccessRoute: typeof ApiPublicCvAccessRoute
   ApiPublicRequestCvRoute: typeof ApiPublicRequestCvRoute
@@ -541,6 +554,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cv/': {
+      id: '/cv/'
+      path: '/cv'
+      fullPath: '/cv/'
+      preLoaderRoute: typeof CvIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/post/$slug': {
@@ -784,6 +804,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CvRequestRoute: CvRequestRoute,
   PostSlugRoute: PostSlugRoute,
+  CvIndexRoute: CvIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicCvAccessRoute: ApiPublicCvAccessRoute,
   ApiPublicRequestCvRoute: ApiPublicRequestCvRoute,
