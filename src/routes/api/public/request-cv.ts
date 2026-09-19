@@ -31,17 +31,13 @@ export const Route = createFileRoute("/api/public/request-cv")({
           .eq("user_email", email)
           .maybeSingle();
 
-        if (existing?.status === "approved") {
-          return Response.json({ approved: true, message: "Your access is already approved." });
-        }
-
         const row = {
           user_name: parsed.name,
           user_email: email,
           purpose: parsed.purpose,
           otp,
           otp_expiry: otpExpiry,
-          status: "unverified" as const,
+          status: existing?.status === "approved" ? "approved" as const : "unverified" as const,
         };
 
         const { error } = existing
@@ -62,7 +58,12 @@ export const Route = createFileRoute("/api/public/request-cv")({
           );
         }
 
-        return Response.json({ ok: true, message: "We emailed you a 6-digit code." });
+        return Response.json({
+          ok: true,
+          message: existing?.status === "approved"
+            ? "We emailed you a fresh 6-digit code to open the CV."
+            : "We emailed you a 6-digit code.",
+        });
       },
     },
   },

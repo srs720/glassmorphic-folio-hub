@@ -1,5 +1,8 @@
 // Server-only helpers for the CV request / OTP flow.
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { createHmac, timingSafeEqual } from "crypto";
+
+const CV_GRANT_MAX_AGE_SECONDS = 8 * 60 * 60;
 
 export function generateOtp(): string {
   return String(Math.floor(100000 + Math.random() * 900000));
@@ -7,6 +10,42 @@ export function generateOtp(): string {
 
 export function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
+}
+
+function grantSecret() {
+  const secret = process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  if (!secret) throw new Error("CV access signing is unavailable.");
+  return secret;
+}
+
+export function createCvAccessGrant(email: string): string {
+  const payload = Buffer.from(JSON.stringify({
+    email: normalizeEmail(email),
+    expiresAt: Date.now() + CV_GRANT_MAX_AGE_SECONDS * 1000,
+  })).toString("base64url");
+  const signature = createHmac("sha256", grantSecret()).update(payload).digest("base64url");
+  return `${payload}.${signature}`;
+}
+
+export function verifyCvAccessGrant(token: string | undefined): string | null {
+  if (!token) return null;
+  const [payload, signature, extra] = token.split(".");
+  if (!payload || !signature || extra) return null;
+  const expected = createHmac("sha256", grantSecret()).update(payload).digest("base64url");
+  const actualBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expected);
+  if (actualBuffer.length !== expectedBuffer.length || !timingSafeEqual(actualBuffer, expectedBuffer)) return null;
+  try {
+    const value = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { email?: unknown; expiresAt?: unknown };
+    if (typeof value.email !== "string" || typeof value.expiresAt !== "number" || value.expiresAt < Date.now()) return null;
+    return normalizeEmail(value.email);
+  } catch {
+    return null;
+  }
+}
+
+export function cvGrantCookie(token: string): string {
+  return `cv_access=${token}; Path=/cv; HttpOnly; SameSite=Strict; Max-Age=${CV_GRANT_MAX_AGE_SECONDS}; Secure`;
 }
 
 export async function getEmailSettings() {

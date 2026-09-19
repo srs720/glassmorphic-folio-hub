@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Github, Linkedin, Twitter, Instagram, Youtube, Globe, Mail, Link as LinkIcon, Menu, X,
+  Github, Linkedin, Twitter, Instagram, Youtube, Globe, Mail, Link as LinkIcon, Menu, X, FileText,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
@@ -148,6 +148,13 @@ function TopNav() {
                   {t(s.key)}
                 </motion.button>
               ))}
+              <Link
+                to="/cv/request"
+                onClick={() => setOpen(false)}
+                className="btn-primary mt-2 justify-center sm:col-span-2 md:col-span-3"
+              >
+                <FileText className="h-4 w-4" /> Request CV
+              </Link>
             </nav>
           </motion.div>
         )}
@@ -199,6 +206,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   </button>
                 </li>
               ))}
+              <li>
+                <Link to="/cv/request" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-highlight transition">
+                  <FileText className="h-4 w-4" /> Request CV
+                </Link>
+              </li>
             </ul>
           </nav>
 

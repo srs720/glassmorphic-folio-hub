@@ -49,11 +49,6 @@ function CvRequestPage() {
       });
       const json = await res.json();
       if (!res.ok) { toast.error(json.error ?? "Something went wrong."); return; }
-      if (json.approved) {
-        sessionStorage.setItem("cv_viewer_email", email.trim().toLowerCase());
-        navigate({ to: "/cv/viewer" });
-        return;
-      }
       toast.success(json.message ?? "Code sent.");
       setStep("otp");
     } catch {
@@ -72,7 +67,6 @@ function CvRequestPage() {
       });
       const json = await res.json();
       if (!res.ok) { toast.error(json.error ?? "Could not verify the code."); return; }
-      sessionStorage.setItem("cv_viewer_email", email.trim().toLowerCase());
       if (json.status === "approved") { navigate({ to: "/cv/viewer" }); return; }
       toast.success("Email verified.");
       setStep("waiting");
