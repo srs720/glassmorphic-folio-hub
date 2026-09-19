@@ -18,7 +18,7 @@ export const Route = createFileRoute("/api/public/verify-otp")({
         }
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { normalizeEmail } = await import("@/lib/cv.server");
+        const { createCvAccessGrant, cvGrantCookie, normalizeEmail } = await import("@/lib/cv.server");
         const email = normalizeEmail(parsed.email);
 
         const { data: row } = await supabaseAdmin
@@ -28,7 +28,6 @@ export const Route = createFileRoute("/api/public/verify-otp")({
           .maybeSingle();
 
         if (!row) return Response.json({ error: "No request found for this email." }, { status: 404 });
-        if (row.status === "approved") return Response.json({ ok: true, status: "approved" });
         if (row.status === "rejected")
           return Response.json({ error: "This request was declined." }, { status: 403 });
         if (!row.otp || row.otp !== parsed.otp)
@@ -36,18 +35,21 @@ export const Route = createFileRoute("/api/public/verify-otp")({
         if (!row.otp_expiry || new Date(row.otp_expiry).getTime() < Date.now())
           return Response.json({ error: "That code has expired. Request a new one." }, { status: 400 });
 
+        const nextStatus = row.status === "approved" ? "approved" : "pending";
         const { error } = await supabaseAdmin
           .from("cv_requests")
-          .update({ status: "pending", otp: null, otp_expiry: null })
+          .update({ status: nextStatus, otp: null, otp_expiry: null })
           .eq("id", row.id);
 
         if (error) return Response.json({ error: "Could not verify right now." }, { status: 500 });
 
-        return Response.json({
-          ok: true,
-          status: "pending",
-          message: "Email verified. Your request is now waiting for approval.",
-        });
+        if (nextStatus === "approved") {
+          return Response.json(
+            { ok: true, status: "approved", message: "Email verified. Opening the CV." },
+            { headers: { "Set-Cookie": cvGrantCookie(createCvAccessGrant(email)) } },
+          );
+        }
+        return Response.json({ ok: true, status: "pending", message: "Email verified. Your request is now waiting for approval." });
       },
     },
   },

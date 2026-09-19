@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { LayoutDashboard, MessageSquare, Settings, LogOut, Home, FileText, Wrench, Sparkles, Quote, Menu, X, Award, Phone, Brain } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Settings, LogOut, Home, FileText, Wrench, Sparkles, Quote, Menu, X, Award, Phone, Brain, Mail } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -29,6 +29,8 @@ const NAV: Array<{ to: string; label: string; icon: typeof LayoutDashboard; exac
   { to: "/admin/ai", label: "AI Knowledge Base", icon: Brain },
   { to: "/admin/messages", label: "Messages", icon: MessageSquare },
   { to: "/admin/contact", label: "Contact & Socials", icon: Phone },
+  { to: "/admin/cv", label: "CV Manager", icon: FileText },
+  { to: "/admin/email", label: "Email Settings", icon: Mail },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

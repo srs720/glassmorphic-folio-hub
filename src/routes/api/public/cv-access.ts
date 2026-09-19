@@ -1,22 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod";
-
-const schema = z.object({ email: z.string().trim().email().max(255) });
-
 export const Route = createFileRoute("/api/public/cv-access")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        let parsed;
-        try {
-          parsed = schema.parse(await request.json());
-        } catch {
-          return Response.json({ error: "Enter a valid email." }, { status: 400 });
-        }
-
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { normalizeEmail } = await import("@/lib/cv.server");
-        const email = normalizeEmail(parsed.email);
+        const { verifyCvAccessGrant } = await import("@/lib/cv.server");
+        const token = request.headers.get("cookie")
+          ?.split(";")
+          .map((part) => part.trim())
+          .find((part) => part.startsWith("cv_access="))
+          ?.slice("cv_access=".length);
+        const email = verifyCvAccessGrant(token);
+        if (!email) return Response.json({ error: "CV access verification is required." }, { status: 401 });
 
         const { data: req } = await supabaseAdmin
           .from("cv_requests")
@@ -29,7 +24,11 @@ export const Route = createFileRoute("/api/public/cv-access")({
           return Response.json({ error: "Your request is not approved yet.", status: req.status }, { status: 403 });
 
         const [{ data: cv }, { data: settings }, { data: education }] = await Promise.all([
-          supabaseAdmin.from("cv_content").select("*").limit(1).maybeSingle(),
+          supabaseAdmin
+            .from("cv_content")
+            .select("professional_summary, skills, languages, contact_phone, contact_address")
+            .limit(1)
+            .maybeSingle(),
           supabaseAdmin
             .from("site_settings")
             .select("name, tagline, bio, contact_email, phone, location, linkedin_url, github_url, avatar_path")
