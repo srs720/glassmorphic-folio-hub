@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { SiteLayout } from "@/components/SiteLayout";
 
-export const Route = createFileRoute("/cv/")({
+export const Route = createFileRoute("/cv/request")({
   head: () => ({
     meta: [
       { title: "Request CV Access | Shoibur Rahman" },
