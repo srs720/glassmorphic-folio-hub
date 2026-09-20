@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Github, Linkedin, Twitter, Instagram, Youtube, Globe, Mail, Link as LinkIcon, Menu, X, FileText,
+  Github, Linkedin, Twitter, Instagram, Youtube, Globe, Mail, Link as LinkIcon, Menu, X, FileText, Lock,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
@@ -155,6 +155,13 @@ function TopNav() {
               >
                 <FileText className="h-4 w-4" /> Request CV
               </Link>
+              <Link
+                to="/notes"
+                onClick={() => setOpen(false)}
+                className="btn-ghost justify-center sm:col-span-2 md:col-span-3"
+              >
+                <Lock className="h-4 w-4" /> Secret Notes
+              </Link>
             </nav>
           </motion.div>
         )}
@@ -209,6 +216,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               <li>
                 <Link to="/cv/request" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-highlight transition">
                   <FileText className="h-4 w-4" /> Request CV
+                </Link>
+              </li>
+              <li>
+                <Link to="/notes" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-highlight transition">
+                  <Lock className="h-4 w-4" /> Secret Notes
                 </Link>
               </li>
             </ul>

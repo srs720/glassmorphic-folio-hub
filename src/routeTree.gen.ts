@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ThoughtsRouteImport } from './routes/thoughts'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PeopleRouteImport } from './routes/people'
+import { Route as NotesRouteImport } from './routes/notes'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as JourneyRouteImport } from './routes/journey'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -20,6 +21,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CvIndexRouteImport } from './routes/cv.index'
 import { Route as PostSlugRouteImport } from './routes/post.$slug'
+import { Route as CvViewerRouteImport } from './routes/cv.viewer'
 import { Route as CvRequestRouteImport } from './routes/cv.request'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
@@ -27,6 +29,7 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as EnPostSlugRouteImport } from './routes/en.post.$slug'
 import { Route as BnPostSlugRouteImport } from './routes/bn.post.$slug'
 import { Route as ApiPublicVerifyOtpRouteImport } from './routes/api/public/verify-otp'
+import { Route as ApiPublicUnlockNotesRouteImport } from './routes/api/public/unlock-notes'
 import { Route as ApiPublicRequestCvRouteImport } from './routes/api/public/request-cv'
 import { Route as ApiPublicCvAccessRouteImport } from './routes/api/public/cv-access'
 import { Route as AuthenticatedAdminTestimonialsRouteImport } from './routes/_authenticated/admin.testimonials'
@@ -36,6 +39,7 @@ import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminQuotesRouteImport } from './routes/_authenticated/admin.quotes'
 import { Route as AuthenticatedAdminPostsRouteImport } from './routes/_authenticated/admin.posts'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
+import { Route as AuthenticatedAdminNotesRouteImport } from './routes/_authenticated/admin.notes'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminHobbiesRouteImport } from './routes/_authenticated/admin.hobbies'
 import { Route as AuthenticatedAdminEmailRouteImport } from './routes/_authenticated/admin.email'
@@ -59,6 +63,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const PeopleRoute = PeopleRouteImport.update({
   id: '/people',
   path: '/people',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const McpRoute = McpRouteImport.update({
@@ -100,6 +109,11 @@ const PostSlugRoute = PostSlugRouteImport.update({
   path: '/post/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CvViewerRoute = CvViewerRouteImport.update({
+  id: '/cv/viewer',
+  path: '/cv/viewer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CvRequestRoute = CvRequestRouteImport.update({
   id: '/cv/request',
   path: '/cv/request',
@@ -135,6 +149,11 @@ const BnPostSlugRoute = BnPostSlugRouteImport.update({
 const ApiPublicVerifyOtpRoute = ApiPublicVerifyOtpRouteImport.update({
   id: '/api/public/verify-otp',
   path: '/api/public/verify-otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicUnlockNotesRoute = ApiPublicUnlockNotesRouteImport.update({
+  id: '/api/public/unlock-notes',
+  path: '/api/public/unlock-notes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicRequestCvRoute = ApiPublicRequestCvRouteImport.update({
@@ -188,6 +207,11 @@ const AuthenticatedAdminPeopleRoute =
     path: '/admin/people',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminNotesRoute = AuthenticatedAdminNotesRouteImport.update({
+  id: '/admin/notes',
+  path: '/admin/notes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminMessagesRoute =
   AuthenticatedAdminMessagesRouteImport.update({
     id: '/admin/messages',
@@ -246,12 +270,14 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/journey': typeof JourneyRoute
   '/mcp': typeof McpRoute
+  '/notes': typeof NotesRoute
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
+  '/cv/viewer': typeof CvViewerRoute
   '/post/$slug': typeof PostSlugRoute
   '/cv/': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -263,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/admin/email': typeof AuthenticatedAdminEmailRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/notes': typeof AuthenticatedAdminNotesRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/admin/quotes': typeof AuthenticatedAdminQuotesRoute
@@ -272,6 +299,7 @@ export interface FileRoutesByFullPath {
   '/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
   '/api/public/cv-access': typeof ApiPublicCvAccessRoute
   '/api/public/request-cv': typeof ApiPublicRequestCvRoute
+  '/api/public/unlock-notes': typeof ApiPublicUnlockNotesRoute
   '/api/public/verify-otp': typeof ApiPublicVerifyOtpRoute
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
@@ -283,12 +311,14 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/journey': typeof JourneyRoute
   '/mcp': typeof McpRoute
+  '/notes': typeof NotesRoute
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
+  '/cv/viewer': typeof CvViewerRoute
   '/post/$slug': typeof PostSlugRoute
   '/cv': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -300,6 +330,7 @@ export interface FileRoutesByTo {
   '/admin/email': typeof AuthenticatedAdminEmailRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/notes': typeof AuthenticatedAdminNotesRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/admin/quotes': typeof AuthenticatedAdminQuotesRoute
@@ -309,6 +340,7 @@ export interface FileRoutesByTo {
   '/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
   '/api/public/cv-access': typeof ApiPublicCvAccessRoute
   '/api/public/request-cv': typeof ApiPublicRequestCvRoute
+  '/api/public/unlock-notes': typeof ApiPublicUnlockNotesRoute
   '/api/public/verify-otp': typeof ApiPublicVerifyOtpRoute
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
@@ -322,12 +354,14 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/journey': typeof JourneyRoute
   '/mcp': typeof McpRoute
+  '/notes': typeof NotesRoute
   '/people': typeof PeopleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
+  '/cv/viewer': typeof CvViewerRoute
   '/post/$slug': typeof PostSlugRoute
   '/cv/': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -339,6 +373,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/email': typeof AuthenticatedAdminEmailRoute
   '/_authenticated/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/_authenticated/admin/notes': typeof AuthenticatedAdminNotesRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/_authenticated/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/_authenticated/admin/quotes': typeof AuthenticatedAdminQuotesRoute
@@ -348,6 +383,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
   '/api/public/cv-access': typeof ApiPublicCvAccessRoute
   '/api/public/request-cv': typeof ApiPublicRequestCvRoute
+  '/api/public/unlock-notes': typeof ApiPublicUnlockNotesRoute
   '/api/public/verify-otp': typeof ApiPublicVerifyOtpRoute
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
@@ -361,12 +397,14 @@ export interface FileRouteTypes {
     | '/contact'
     | '/journey'
     | '/mcp'
+    | '/notes'
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
+    | '/cv/viewer'
     | '/post/$slug'
     | '/cv/'
     | '/.mcp/invoke-tool/$tool'
@@ -378,6 +416,7 @@ export interface FileRouteTypes {
     | '/admin/email'
     | '/admin/hobbies'
     | '/admin/messages'
+    | '/admin/notes'
     | '/admin/people'
     | '/admin/posts'
     | '/admin/quotes'
@@ -387,6 +426,7 @@ export interface FileRouteTypes {
     | '/admin/testimonials'
     | '/api/public/cv-access'
     | '/api/public/request-cv'
+    | '/api/public/unlock-notes'
     | '/api/public/verify-otp'
     | '/bn/post/$slug'
     | '/en/post/$slug'
@@ -398,12 +438,14 @@ export interface FileRouteTypes {
     | '/contact'
     | '/journey'
     | '/mcp'
+    | '/notes'
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
+    | '/cv/viewer'
     | '/post/$slug'
     | '/cv'
     | '/.mcp/invoke-tool/$tool'
@@ -415,6 +457,7 @@ export interface FileRouteTypes {
     | '/admin/email'
     | '/admin/hobbies'
     | '/admin/messages'
+    | '/admin/notes'
     | '/admin/people'
     | '/admin/posts'
     | '/admin/quotes'
@@ -424,6 +467,7 @@ export interface FileRouteTypes {
     | '/admin/testimonials'
     | '/api/public/cv-access'
     | '/api/public/request-cv'
+    | '/api/public/unlock-notes'
     | '/api/public/verify-otp'
     | '/bn/post/$slug'
     | '/en/post/$slug'
@@ -436,12 +480,14 @@ export interface FileRouteTypes {
     | '/contact'
     | '/journey'
     | '/mcp'
+    | '/notes'
     | '/people'
     | '/sitemap.xml'
     | '/thoughts'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
+    | '/cv/viewer'
     | '/post/$slug'
     | '/cv/'
     | '/.mcp/invoke-tool/$tool'
@@ -453,6 +499,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/email'
     | '/_authenticated/admin/hobbies'
     | '/_authenticated/admin/messages'
+    | '/_authenticated/admin/notes'
     | '/_authenticated/admin/people'
     | '/_authenticated/admin/posts'
     | '/_authenticated/admin/quotes'
@@ -462,6 +509,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/testimonials'
     | '/api/public/cv-access'
     | '/api/public/request-cv'
+    | '/api/public/unlock-notes'
     | '/api/public/verify-otp'
     | '/bn/post/$slug'
     | '/en/post/$slug'
@@ -475,17 +523,20 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   JourneyRoute: typeof JourneyRoute
   McpRoute: typeof McpRoute
+  NotesRoute: typeof NotesRoute
   PeopleRoute: typeof PeopleRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ThoughtsRoute: typeof ThoughtsRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CvRequestRoute: typeof CvRequestRoute
+  CvViewerRoute: typeof CvViewerRoute
   PostSlugRoute: typeof PostSlugRoute
   CvIndexRoute: typeof CvIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicCvAccessRoute: typeof ApiPublicCvAccessRoute
   ApiPublicRequestCvRoute: typeof ApiPublicRequestCvRoute
+  ApiPublicUnlockNotesRoute: typeof ApiPublicUnlockNotesRoute
   ApiPublicVerifyOtpRoute: typeof ApiPublicVerifyOtpRoute
   BnPostSlugRoute: typeof BnPostSlugRoute
   EnPostSlugRoute: typeof EnPostSlugRoute
@@ -512,6 +563,13 @@ declare module '@tanstack/react-router' {
       path: '/people'
       fullPath: '/people'
       preLoaderRoute: typeof PeopleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mcp': {
@@ -570,6 +628,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cv/viewer': {
+      id: '/cv/viewer'
+      path: '/cv/viewer'
+      fullPath: '/cv/viewer'
+      preLoaderRoute: typeof CvViewerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cv/request': {
       id: '/cv/request'
       path: '/cv/request'
@@ -617,6 +682,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/verify-otp'
       fullPath: '/api/public/verify-otp'
       preLoaderRoute: typeof ApiPublicVerifyOtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/unlock-notes': {
+      id: '/api/public/unlock-notes'
+      path: '/api/public/unlock-notes'
+      fullPath: '/api/public/unlock-notes'
+      preLoaderRoute: typeof ApiPublicUnlockNotesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/request-cv': {
@@ -680,6 +752,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/people'
       fullPath: '/admin/people'
       preLoaderRoute: typeof AuthenticatedAdminPeopleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/notes': {
+      id: '/_authenticated/admin/notes'
+      path: '/admin/notes'
+      fullPath: '/admin/notes'
+      preLoaderRoute: typeof AuthenticatedAdminNotesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/messages': {
@@ -757,6 +836,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminEmailRoute: typeof AuthenticatedAdminEmailRoute
   AuthenticatedAdminHobbiesRoute: typeof AuthenticatedAdminHobbiesRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
+  AuthenticatedAdminNotesRoute: typeof AuthenticatedAdminNotesRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
   AuthenticatedAdminPostsRoute: typeof AuthenticatedAdminPostsRoute
   AuthenticatedAdminQuotesRoute: typeof AuthenticatedAdminQuotesRoute
@@ -776,6 +856,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminEmailRoute: AuthenticatedAdminEmailRoute,
   AuthenticatedAdminHobbiesRoute: AuthenticatedAdminHobbiesRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
+  AuthenticatedAdminNotesRoute: AuthenticatedAdminNotesRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
   AuthenticatedAdminPostsRoute: AuthenticatedAdminPostsRoute,
   AuthenticatedAdminQuotesRoute: AuthenticatedAdminQuotesRoute,
@@ -796,6 +877,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   JourneyRoute: JourneyRoute,
   McpRoute: McpRoute,
+  NotesRoute: NotesRoute,
   PeopleRoute: PeopleRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ThoughtsRoute: ThoughtsRoute,
@@ -803,11 +885,13 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CvRequestRoute: CvRequestRoute,
+  CvViewerRoute: CvViewerRoute,
   PostSlugRoute: PostSlugRoute,
   CvIndexRoute: CvIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicCvAccessRoute: ApiPublicCvAccessRoute,
   ApiPublicRequestCvRoute: ApiPublicRequestCvRoute,
+  ApiPublicUnlockNotesRoute: ApiPublicUnlockNotesRoute,
   ApiPublicVerifyOtpRoute: ApiPublicVerifyOtpRoute,
   BnPostSlugRoute: BnPostSlugRoute,
   EnPostSlugRoute: EnPostSlugRoute,

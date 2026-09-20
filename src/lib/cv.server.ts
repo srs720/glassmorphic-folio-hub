@@ -90,7 +90,9 @@ export async function sendOtpEmail(to: string, name: string, otp: string) {
   const settings = await getEmailSettings();
   const nodemailer = (await import("nodemailer")).default;
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: { user: settings.sender_email, pass: settings.app_password },
   });
   await transporter.sendMail({
