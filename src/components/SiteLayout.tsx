@@ -1,11 +1,10 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Github, Linkedin, Twitter, Instagram, Youtube, Globe, Mail, Link as LinkIcon, Menu, X, FileText, Lock,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { usePublicContent } from "@/lib/public-content";
 import { useLang } from "@/lib/i18n";
 import { SignedImage } from "@/components/SignedImage";
 import { ContactLinks } from "@/components/ContactLinks";
@@ -245,21 +244,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
 
 export function useSettings() {
-  return useQuery({
-    queryKey: ["site_settings"],
-    queryFn: async () => {
-      const { data } = await supabase.from("site_settings").select("*").limit(1).maybeSingle();
-      return data as any;
-    },
-  });
+  return { data: usePublicContent().settings as any };
 }
 
 export function useSocials() {
-  return useQuery({
-    queryKey: ["social_links"],
-    queryFn: async () => {
-      const { data } = await supabase.from("social_links").select("*").order("sort_order");
-      return data ?? [];
-    },
-  });
+  return { data: usePublicContent().socials };
 }

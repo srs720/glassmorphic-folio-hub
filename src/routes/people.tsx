@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { usePublicContent } from "@/lib/public-content";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SignedImage } from "@/components/SignedImage";
 import { useLang } from "@/lib/i18n";
@@ -29,10 +28,7 @@ function PeoplePage() {
     { key: "friend", title: t("group_friends"), tone: "bento" },
   ];
 
-  const q = useQuery({
-    queryKey: ["people"],
-    queryFn: async () => (await supabase.from("people").select("*").order("sort_order")).data ?? [],
-  });
+  const q = { data: usePublicContent().people };
 
   return (
     <SiteLayout>
