@@ -43,16 +43,24 @@ function NotesPage() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ passkey: passkey.trim() }),
       });
-      const json = await res.json();
+      const text = await res.text();
+      let json: any;
+      try {
+        json = JSON.parse(text);
+      } catch {
+        setNotes(null);
+        setMessage(`Server error ${res.status}: ${text.slice(0, 300) || "empty response"}`);
+        return;
+      }
       if (!res.ok) {
         setNotes(null);
-        setMessage(json.error ?? "No notes found for this passkey.");
+        setMessage(json?.error || `Unknown error occurred (status ${res.status})`);
         return;
       }
       setNotes(json.notes as Note[]);
-    } catch {
+    } catch (err) {
       setNotes(null);
-      setMessage("Network problem. Please try again.");
+      setMessage(err instanceof Error ? err.message : "Unknown error occurred");
     } finally {
       setBusy(false);
     }
