@@ -15,17 +15,22 @@ export const Route = createFileRoute("/api/public/unlock-notes")({
         }
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { data, error } = await supabaseAdmin
+        const { data: rows, error } = await supabaseAdmin
           .from("secret_notes")
-          .select("id, title, content, created_at")
-          .eq("passkey", parsed.passkey)
+          .select("id, title, content, created_at, passkey")
           .order("sort_order")
           .order("created_at", { ascending: false });
 
         if (error) {
           return Response.json({ error: "Something went wrong. Try again." }, { status: 500 });
         }
-        if (!data || data.length === 0) {
+
+        const input = parsed.passkey.trim();
+        const data = (rows ?? [])
+          .filter((n) => (n.passkey ?? "").trim() === input)
+          .map(({ passkey: _passkey, ...note }) => note);
+
+        if (data.length === 0) {
           return Response.json({ error: "No notes found for this passkey." }, { status: 404 });
         }
         return Response.json({ ok: true, notes: data });
