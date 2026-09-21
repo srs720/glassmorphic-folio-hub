@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { usePublicContent } from "@/lib/public-content";
 import { SiteLayout, useSettings } from "@/components/SiteLayout";
 import { ContactLinks } from "@/components/ContactLinks";
 import { ShareButton } from "@/components/ShareButton";
@@ -170,10 +170,7 @@ function JourneySection() {
     future: { title: t("edu_future"), icon: Sparkles },
     certificate: { title: t("edu_cert"), icon: Award },
   };
-  const q = useQuery({
-    queryKey: ["education_entries"],
-    queryFn: async () => (await supabase.from("education_entries").select("*").order("sort_order")).data ?? [],
-  });
+  const q = { data: usePublicContent().education };
   const entries = (q.data ?? [])
     .slice()
     .sort((a: any, b: any) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind) || a.sort_order - b.sort_order);
@@ -220,10 +217,7 @@ function PeopleSection() {
     { key: "teacher", title: t("group_teachers"), tone: "bento-blue" },
     { key: "friend", title: t("group_friends"), tone: "bento" },
   ];
-  const q = useQuery({
-    queryKey: ["people"],
-    queryFn: async () => (await supabase.from("people").select("*").order("sort_order")).data ?? [],
-  });
+  const q = { data: usePublicContent().people };
   return (
     <div className="grid gap-10">
       {GROUPS.map((g) => {
@@ -269,10 +263,7 @@ function PeopleSection() {
 /* ------------------ Hobbies ------------------ */
 function HobbiesSection() {
   const { t, lang } = useLang();
-  const hobbies = useQuery({
-    queryKey: ["hobbies"],
-    queryFn: async () => (await supabase.from("hobbies").select("*").order("sort_order")).data ?? [],
-  });
+  const hobbies = { data: usePublicContent().hobbies };
   const list = hobbies.data ?? [];
   return (
     <Stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(0,auto)]">
@@ -308,10 +299,7 @@ function HobbiesSection() {
 function CertificatesSection() {
   const { t, lang } = useLang();
   const [open, setOpen] = useState<any | null>(null);
-  const q = useQuery({
-    queryKey: ["certificates"],
-    queryFn: async () => (await supabase.from("certificates").select("*").order("sort_order")).data ?? [],
-  });
+  const q = { data: usePublicContent().certificates };
   const list = (q.data ?? []) as any[];
 
   return (
@@ -368,15 +356,7 @@ function CertificatesSection() {
 /* ------------------ Research & Posts feed ------------------ */
 function PostsFeed() {
   const { t, lang } = useLang();
-  const q = useQuery({
-    queryKey: ["posts_feed"],
-    queryFn: async () =>
-      (await supabase
-        .from("blog_posts")
-        .select("*")
-        .in("status", ["published", "scheduled"])
-        .order("published_at", { ascending: false })).data ?? [],
-  });
+  const q = { data: usePublicContent().posts, isLoading: false };
 
   if (q.isLoading) {
     return (
@@ -449,10 +429,7 @@ function PostsFeed() {
 /* ------------------ Thoughts — typographic blockquotes ------------------ */
 function ThoughtsSection() {
   const { t, lang } = useLang();
-  const q = useQuery({
-    queryKey: ["quotes"],
-    queryFn: async () => (await supabase.from("quotes").select("*").order("sort_order")).data ?? [],
-  });
+  const q = { data: usePublicContent().quotes };
   const list = (q.data ?? []) as any[];
   if (list.length === 0) return <p className="text-muted-foreground">{t("still_thinking")}</p>;
 

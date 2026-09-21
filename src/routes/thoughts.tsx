@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { usePublicContent } from "@/lib/public-content";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Quote as QuoteIcon } from "lucide-react";
 import { useLang } from "@/lib/i18n";
@@ -25,10 +24,7 @@ const TONES = ["bento", "bento-blue", "bento-yellow", "bento-cream"] as const;
 
 function ThoughtsPage() {
   const { t } = useLang();
-  const q = useQuery({
-    queryKey: ["quotes"],
-    queryFn: async () => (await supabase.from("quotes").select("*").order("sort_order")).data ?? [],
-  });
+  const q = { data: usePublicContent().quotes };
 
   return (
     <SiteLayout>

@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { usePublicContent } from "@/lib/public-content";
 import { SiteLayout } from "@/components/SiteLayout";
 import { GraduationCap, BookOpen, Sparkles, Award } from "lucide-react";
 import { useLang } from "@/lib/i18n";
@@ -31,10 +30,7 @@ function JourneyPage() {
     future: { title: t("edu_future"), icon: Sparkles, tone: "bento-yellow" },
     certificate: { title: t("edu_cert"), icon: Award, tone: "bento-cream" },
   };
-  const q = useQuery({
-    queryKey: ["education_entries"],
-    queryFn: async () => (await supabase.from("education_entries").select("*").order("sort_order")).data ?? [],
-  });
+  const q = { data: usePublicContent().education };
 
   const grouped = (q.data ?? []).reduce<Record<string, any[]>>(
     (acc, e) => { (acc[e.kind] ||= []).push(e); return acc; }, {}
