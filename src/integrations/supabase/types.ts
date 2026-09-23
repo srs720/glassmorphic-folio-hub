@@ -188,6 +188,7 @@ export type Database = {
       cv_requests: {
         Row: {
           created_at: string
+          expires_at: string | null
           id: string
           otp: string | null
           otp_expiry: string | null
@@ -199,6 +200,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          expires_at?: string | null
           id?: string
           otp?: string | null
           otp_expiry?: string | null
@@ -210,6 +212,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          expires_at?: string | null
           id?: string
           otp?: string | null
           otp_expiry?: string | null
@@ -691,12 +694,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_cv_access: {
+        Args: { _email: string }
+        Returns: {
+          expires_at: string
+          status: string
+          user_name: string
+        }[]
+      }
+      get_cv_for_email: { Args: { _email: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      notes_by_passkey: {
+        Args: { _passkey: string }
+        Returns: {
+          content: string
+          created_at: string
+          id: string
+          title: string
+        }[]
       }
     }
     Enums: {
