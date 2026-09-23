@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SignedImage } from "@/components/SignedImage";
+import { supabase } from "@/integrations/supabase/client";
+import { readCvAccessEmail } from "@/lib/cv-access";
 
 export const Route = createFileRoute("/cv/viewer")({
   ssr: false,
