@@ -115,24 +115,47 @@ function CvContentForm() {
   );
 }
 
+const DURATIONS = [
+  { label: "24 hours", hours: 24 },
+  { label: "3 days", hours: 72 },
+  { label: "1 week", hours: 168 },
+  { label: "30 days", hours: 720 },
+];
+
 function CvRequests() {
   const qc = useQueryClient();
+  const [openFor, setOpenFor] = useState<string | null>(null);
   const q = useQuery({
     queryKey: ["cv_requests"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cv_requests")
-        .select("id, user_name, user_email, purpose, status, created_at")
+        .select("id, user_name, user_email, purpose, status, expires_at, created_at")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
     },
   });
 
-  async function setStatus(id: string, status: "approved" | "rejected") {
-    const { error } = await supabase.from("cv_requests").update({ status }).eq("id", id);
+  async function approve(id: string, hours: number) {
+    const expires = new Date(Date.now() + hours * 3600 * 1000).toISOString();
+    const { error } = await supabase
+      .from("cv_requests")
+      .update({ status: "approved", expires_at: expires })
+      .eq("id", id);
     if (error) { toast.error("Couldn't update the request."); return; }
-    toast.success(status === "approved" ? "Approved" : "Rejected");
+    setOpenFor(null);
+    toast.success("Approved");
+    qc.invalidateQueries({ queryKey: ["cv_requests"] });
+  }
+
+  async function reject(id: string) {
+    const { error } = await supabase
+      .from("cv_requests")
+      .update({ status: "rejected", expires_at: null })
+      .eq("id", id);
+    if (error) { toast.error("Couldn't update the request."); return; }
+    toast.success("Rejected");
     qc.invalidateQueries({ queryKey: ["cv_requests"] });
   }
 
@@ -140,25 +163,46 @@ function CvRequests() {
     <div className="bento p-5 md:p-7 grid gap-3">
       <div>
         <h2 className="font-display text-2xl">CV Requests</h2>
-        <p className="text-sm text-muted-foreground mt-1">Approve who is allowed to open your CV.</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Approve who is allowed to open your CV, and for how long.
+        </p>
       </div>
       {q.isLoading && <p className="text-sm text-muted-foreground">Loading...</p>}
       {q.data?.length === 0 && <p className="text-sm text-muted-foreground">No requests yet.</p>}
       {q.data?.map((r) => (
-        <div key={r.id} className="rounded-2xl border border-border p-4 grid gap-2 sm:flex sm:items-center sm:gap-4">
-          <div className="min-w-0 flex-1">
-            <p className="font-medium truncate">{r.user_name} <span className="text-muted-foreground">· {r.user_email}</span></p>
-            <p className="text-sm text-muted-foreground">{r.purpose}</p>
-            <p className="text-xs uppercase tracking-wide mt-1 text-primary">{labelFor(r.status)}</p>
+        <div key={r.id} className="rounded-2xl border border-border p-4 grid gap-3">
+          <div className="grid gap-2 sm:flex sm:items-center sm:gap-4">
+            <div className="min-w-0 flex-1">
+              <p className="font-medium truncate">{r.user_name} <span className="text-muted-foreground">· {r.user_email}</span></p>
+              <p className="text-sm text-muted-foreground">{r.purpose}</p>
+              <p className="text-xs uppercase tracking-wide mt-1 text-primary">
+                {labelFor(r.status)}
+                {r.status === "approved" && r.expires_at
+                  ? ` · ${new Date(r.expires_at).getTime() > Date.now() ? "until" : "expired"} ${new Date(r.expires_at).toLocaleString()}`
+                  : ""}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setOpenFor(openFor === r.id ? null : r.id)} className="btn-primary text-sm">
+                <Check className="h-4 w-4" /> Approve
+              </button>
+              <button onClick={() => reject(r.id)} className="btn-ghost text-sm text-destructive">
+                <X className="h-4 w-4" /> Reject
+              </button>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <button onClick={() => setStatus(r.id, "approved")} className="btn-primary text-sm">
-              <Check className="h-4 w-4" /> Approve
-            </button>
-            <button onClick={() => setStatus(r.id, "rejected")} className="btn-ghost text-sm text-destructive">
-              <X className="h-4 w-4" /> Reject
-            </button>
-          </div>
+          {openFor === r.id && (
+            <div className="rounded-xl bg-surface-2 p-3 grid gap-2">
+              <p className="label-mono">Access valid for</p>
+              <div className="flex flex-wrap gap-2">
+                {DURATIONS.map((d) => (
+                  <button key={d.hours} onClick={() => approve(r.id, d.hours)} className="btn-ghost text-sm">
+                    {d.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -166,8 +210,7 @@ function CvRequests() {
 }
 
 function labelFor(status: string) {
-  if (status === "unverified") return "Email not verified";
-  if (status === "pending") return "Waiting for approval";
+  if (status === "pending" || status === "unverified") return "Waiting for approval";
   if (status === "approved") return "Approved";
   return "Rejected";
 }

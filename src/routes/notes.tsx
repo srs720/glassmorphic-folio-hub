@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { KeyRound, Lock } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/notes")({
   head: () => ({
@@ -38,26 +39,19 @@ function NotesPage() {
     setBusy(true);
     setMessage("");
     try {
-      const res = await fetch("/api/public/unlock-notes", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ passkey: passkey.trim() }),
-      });
-      const text = await res.text();
-      let json: any;
-      try {
-        json = JSON.parse(text);
-      } catch {
+      const { data, error } = await (supabase as any).rpc("notes_by_passkey", { _passkey: passkey.trim() });
+      if (error) {
         setNotes(null);
-        setMessage(`Server error ${res.status}: ${text.slice(0, 300) || "empty response"}`);
+        setMessage(error.message || "Unknown error occurred");
         return;
       }
-      if (!res.ok) {
+      const rows = (data ?? []) as Note[];
+      if (rows.length === 0) {
         setNotes(null);
-        setMessage(json?.error || `Unknown error occurred (status ${res.status})`);
+        setMessage("No notes found for this passkey.");
         return;
       }
-      setNotes(json.notes as Note[]);
+      setNotes(rows);
     } catch (err) {
       setNotes(null);
       setMessage(err instanceof Error ? err.message : "Unknown error occurred");

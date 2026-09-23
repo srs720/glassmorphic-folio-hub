@@ -28,10 +28,6 @@ import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as EnPostSlugRouteImport } from './routes/en.post.$slug'
 import { Route as BnPostSlugRouteImport } from './routes/bn.post.$slug'
-import { Route as ApiPublicVerifyOtpRouteImport } from './routes/api/public/verify-otp'
-import { Route as ApiPublicUnlockNotesRouteImport } from './routes/api/public/unlock-notes'
-import { Route as ApiPublicRequestCvRouteImport } from './routes/api/public/request-cv'
-import { Route as ApiPublicCvAccessRouteImport } from './routes/api/public/cv-access'
 import { Route as AuthenticatedAdminTestimonialsRouteImport } from './routes/_authenticated/admin.testimonials'
 import { Route as AuthenticatedAdminSkillsRouteImport } from './routes/_authenticated/admin.skills'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
@@ -144,26 +140,6 @@ const EnPostSlugRoute = EnPostSlugRouteImport.update({
 const BnPostSlugRoute = BnPostSlugRouteImport.update({
   id: '/bn/post/$slug',
   path: '/bn/post/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicVerifyOtpRoute = ApiPublicVerifyOtpRouteImport.update({
-  id: '/api/public/verify-otp',
-  path: '/api/public/verify-otp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicUnlockNotesRoute = ApiPublicUnlockNotesRouteImport.update({
-  id: '/api/public/unlock-notes',
-  path: '/api/public/unlock-notes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicRequestCvRoute = ApiPublicRequestCvRouteImport.update({
-  id: '/api/public/request-cv',
-  path: '/api/public/request-cv',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicCvAccessRoute = ApiPublicCvAccessRouteImport.update({
-  id: '/api/public/cv-access',
-  path: '/api/public/cv-access',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminTestimonialsRoute =
@@ -297,10 +273,6 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
-  '/api/public/cv-access': typeof ApiPublicCvAccessRoute
-  '/api/public/request-cv': typeof ApiPublicRequestCvRoute
-  '/api/public/unlock-notes': typeof ApiPublicUnlockNotesRoute
-  '/api/public/verify-otp': typeof ApiPublicVerifyOtpRoute
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -338,10 +310,6 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
-  '/api/public/cv-access': typeof ApiPublicCvAccessRoute
-  '/api/public/request-cv': typeof ApiPublicRequestCvRoute
-  '/api/public/unlock-notes': typeof ApiPublicUnlockNotesRoute
-  '/api/public/verify-otp': typeof ApiPublicVerifyOtpRoute
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -381,10 +349,6 @@ export interface FileRoutesById {
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/skills': typeof AuthenticatedAdminSkillsRoute
   '/_authenticated/admin/testimonials': typeof AuthenticatedAdminTestimonialsRoute
-  '/api/public/cv-access': typeof ApiPublicCvAccessRoute
-  '/api/public/request-cv': typeof ApiPublicRequestCvRoute
-  '/api/public/unlock-notes': typeof ApiPublicUnlockNotesRoute
-  '/api/public/verify-otp': typeof ApiPublicVerifyOtpRoute
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -424,10 +388,6 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/skills'
     | '/admin/testimonials'
-    | '/api/public/cv-access'
-    | '/api/public/request-cv'
-    | '/api/public/unlock-notes'
-    | '/api/public/verify-otp'
     | '/bn/post/$slug'
     | '/en/post/$slug'
     | '/admin/'
@@ -465,10 +425,6 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/skills'
     | '/admin/testimonials'
-    | '/api/public/cv-access'
-    | '/api/public/request-cv'
-    | '/api/public/unlock-notes'
-    | '/api/public/verify-otp'
     | '/bn/post/$slug'
     | '/en/post/$slug'
     | '/admin'
@@ -507,10 +463,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/skills'
     | '/_authenticated/admin/testimonials'
-    | '/api/public/cv-access'
-    | '/api/public/request-cv'
-    | '/api/public/unlock-notes'
-    | '/api/public/verify-otp'
     | '/bn/post/$slug'
     | '/en/post/$slug'
     | '/_authenticated/admin/'
@@ -534,10 +486,6 @@ export interface RootRouteChildren {
   PostSlugRoute: typeof PostSlugRoute
   CvIndexRoute: typeof CvIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
-  ApiPublicCvAccessRoute: typeof ApiPublicCvAccessRoute
-  ApiPublicRequestCvRoute: typeof ApiPublicRequestCvRoute
-  ApiPublicUnlockNotesRoute: typeof ApiPublicUnlockNotesRoute
-  ApiPublicVerifyOtpRoute: typeof ApiPublicVerifyOtpRoute
   BnPostSlugRoute: typeof BnPostSlugRoute
   EnPostSlugRoute: typeof EnPostSlugRoute
 }
@@ -675,34 +623,6 @@ declare module '@tanstack/react-router' {
       path: '/bn/post/$slug'
       fullPath: '/bn/post/$slug'
       preLoaderRoute: typeof BnPostSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/verify-otp': {
-      id: '/api/public/verify-otp'
-      path: '/api/public/verify-otp'
-      fullPath: '/api/public/verify-otp'
-      preLoaderRoute: typeof ApiPublicVerifyOtpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/unlock-notes': {
-      id: '/api/public/unlock-notes'
-      path: '/api/public/unlock-notes'
-      fullPath: '/api/public/unlock-notes'
-      preLoaderRoute: typeof ApiPublicUnlockNotesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/request-cv': {
-      id: '/api/public/request-cv'
-      path: '/api/public/request-cv'
-      fullPath: '/api/public/request-cv'
-      preLoaderRoute: typeof ApiPublicRequestCvRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/cv-access': {
-      id: '/api/public/cv-access'
-      path: '/api/public/cv-access'
-      fullPath: '/api/public/cv-access'
-      preLoaderRoute: typeof ApiPublicCvAccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/testimonials': {
@@ -889,10 +809,6 @@ const rootRouteChildren: RootRouteChildren = {
   PostSlugRoute: PostSlugRoute,
   CvIndexRoute: CvIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
-  ApiPublicCvAccessRoute: ApiPublicCvAccessRoute,
-  ApiPublicRequestCvRoute: ApiPublicRequestCvRoute,
-  ApiPublicUnlockNotesRoute: ApiPublicUnlockNotesRoute,
-  ApiPublicVerifyOtpRoute: ApiPublicVerifyOtpRoute,
   BnPostSlugRoute: BnPostSlugRoute,
   EnPostSlugRoute: EnPostSlugRoute,
 }

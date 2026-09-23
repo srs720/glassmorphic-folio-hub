@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { SignedImage } from "@/components/SignedImage";
+import { supabase } from "@/integrations/supabase/client";
+import { readCvAccessEmail } from "@/lib/cv-access";
 
 export const Route = createFileRoute("/cv/viewer")({
   ssr: false,
@@ -62,16 +64,17 @@ function CvViewer() {
     let active = true;
     (async () => {
       try {
-        const res = await fetch("/api/public/cv-access", { method: "POST" });
-        const json = await res.json();
+        const email = readCvAccessEmail();
+        if (!email) { navigate({ to: "/cv", replace: true }); return; }
+        const { data: result, error } = await (supabase as any).rpc("get_cv_for_email", { _email: email });
         if (!active) return;
-        if (!res.ok || !json?.ok) {
-          navigate({ to: "/cv/request", replace: true });
+        if (error || !result?.ok) {
+          navigate({ to: "/cv", replace: true });
           return;
         }
-        setData(json as CvData);
+        setData(result as CvData);
       } catch {
-        if (active) navigate({ to: "/cv/request", replace: true });
+        if (active) navigate({ to: "/cv", replace: true });
       } finally {
         if (active) setLoading(false);
       }
