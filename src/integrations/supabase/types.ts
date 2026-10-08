@@ -154,32 +154,53 @@ export type Database = {
       }
       cv_content: {
         Row: {
+          achievements_awards: Json
           contact_address: string
+          contact_email: string
           contact_phone: string
           created_at: string
+          experience: Json
+          github_url: string
           id: string
           languages: Json
+          linkedin_url: string
           professional_summary: string
+          projects: Json
+          skill_groups: Json
           skills: Json
           updated_at: string
         }
         Insert: {
+          achievements_awards?: Json
           contact_address?: string
+          contact_email?: string
           contact_phone?: string
           created_at?: string
+          experience?: Json
+          github_url?: string
           id?: string
           languages?: Json
+          linkedin_url?: string
           professional_summary?: string
+          projects?: Json
+          skill_groups?: Json
           skills?: Json
           updated_at?: string
         }
         Update: {
+          achievements_awards?: Json
           contact_address?: string
+          contact_email?: string
           contact_phone?: string
           created_at?: string
+          experience?: Json
+          github_url?: string
           id?: string
           languages?: Json
+          linkedin_url?: string
           professional_summary?: string
+          projects?: Json
+          skill_groups?: Json
           skills?: Json
           updated_at?: string
         }
