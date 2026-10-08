@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Save, Check, X } from "lucide-react";
+import { Save, Check, X, Plus, Trash2, ArrowUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/cv")({
@@ -29,6 +29,48 @@ function CvAdmin() {
   );
 }
 
+type Field = { key: string; label: string; multiline?: boolean; hint?: string };
+type Row = Record<string, string>;
+
+const SECTIONS: { key: "skill_groups" | "experience" | "projects" | "achievements_awards"; title: string; fields: Field[] }[] = [
+  { key: "skill_groups", title: "Skill groups", fields: [
+    { key: "group", label: "Group (e.g. Frontend)" },
+    { key: "items", label: "Skills (comma separated)" },
+  ] },
+  { key: "experience", title: "Experience", fields: [
+    { key: "role", label: "Role" },
+    { key: "organization", label: "Organization" },
+    { key: "date", label: "Date (e.g. 2024 - Present)" },
+    { key: "points", label: "Description points (one per line)", multiline: true },
+  ] },
+  { key: "projects", title: "Projects", fields: [
+    { key: "title", label: "Title" },
+    { key: "tech", label: "Tech stack" },
+    { key: "link", label: "Link (optional)" },
+    { key: "description", label: "Description points (one per line)", multiline: true },
+  ] },
+  { key: "achievements_awards", title: "Achievements & Awards", fields: [
+    { key: "title", label: "Title" },
+    { key: "date", label: "Date" },
+    { key: "description", label: "Description", multiline: true },
+  ] },
+];
+
+function toRows(v: unknown): Row[] {
+  return Array.isArray(v) ? v.filter((x) => x && typeof x === "object").map((x: any) => {
+    const r: Row = {};
+    for (const [k, val] of Object.entries(x)) r[k] = Array.isArray(val) ? val.join(k === "items" ? ", " : "\n") : String(val ?? "");
+    return r;
+  }) : [];
+}
+
+function cleanRows(rows: Row[]): Row[] {
+  return rows
+    .map((r) => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, v.trim().slice(0, 2000)])))
+    .filter((r) => Object.values(r).some(Boolean))
+    .slice(0, 40);
+}
+
 function CvContentForm() {
   const qc = useQueryClient();
   const q = useQuery({
@@ -36,7 +78,7 @@ function CvContentForm() {
     queryFn: async () => {
       const { data, error } = await supabase.from("cv_content").select("*").limit(1).maybeSingle();
       if (error) throw error;
-      return data;
+      return data as any;
     },
   });
 
@@ -45,27 +87,40 @@ function CvContentForm() {
   const [languages, setLanguages] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [linkedin, setLinkedin] = useState("");
+  const [github, setGithub] = useState("");
+  const [lists, setLists] = useState<Record<string, Row[]>>({});
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!q.data) return;
-    setSummary(q.data.professional_summary ?? "");
-    setSkills(toList(q.data.skills).join(", "));
-    setLanguages(toList(q.data.languages).join(", "));
-    setPhone(q.data.contact_phone ?? "");
-    setAddress(q.data.contact_address ?? "");
+    const d = q.data;
+    setSummary(d.professional_summary ?? "");
+    setSkills(toList(d.skills).join(", "));
+    setLanguages(toList(d.languages).join(", "));
+    setPhone(d.contact_phone ?? "");
+    setAddress(d.contact_address ?? "");
+    setEmail(d.contact_email ?? "");
+    setLinkedin(d.linkedin_url ?? "");
+    setGithub(d.github_url ?? "");
+    setLists(Object.fromEntries(SECTIONS.map((s) => [s.key, toRows(d[s.key])])));
   }, [q.data]);
 
   async function save(e: FormEvent) {
     e.preventDefault();
     setSaving(true);
-    const payload = {
+    const payload: any = {
       professional_summary: summary.trim().slice(0, 4000),
       skills: splitList(skills),
       languages: splitList(languages),
       contact_phone: phone.trim().slice(0, 60),
       contact_address: address.trim().slice(0, 300),
+      contact_email: email.trim().slice(0, 200),
+      linkedin_url: linkedin.trim().slice(0, 300),
+      github_url: github.trim().slice(0, 300),
     };
+    for (const s of SECTIONS) payload[s.key] = cleanRows(lists[s.key] ?? []);
     const { error } = q.data?.id
       ? await supabase.from("cv_content").update(payload).eq("id", q.data.id)
       : await supabase.from("cv_content").insert(payload);
@@ -75,8 +130,15 @@ function CvContentForm() {
     qc.invalidateQueries({ queryKey: ["cv_content"] });
   }
 
+  const input = (id: string, label: string, value: string, set: (v: string) => void, placeholder?: string) => (
+    <div>
+      <label className="label-mono" htmlFor={id}>{label}</label>
+      <input id={id} className="field mt-2" value={value} onChange={(e) => set(e.target.value)} placeholder={placeholder} />
+    </div>
+  );
+
   return (
-    <form onSubmit={save} className="bento p-5 md:p-7 grid gap-4 max-w-2xl">
+    <form onSubmit={save} className="bento p-5 md:p-7 grid gap-5 max-w-3xl">
       <div>
         <h2 className="font-display text-2xl">CV Manager</h2>
         <p className="text-sm text-muted-foreground mt-1">
@@ -84,28 +146,62 @@ function CvContentForm() {
         </p>
       </div>
       <div>
-        <label className="label-mono" htmlFor="summary">Professional summary</label>
-        <textarea id="summary" className="field mt-2 min-h-32" value={summary}
+        <label className="label-mono" htmlFor="summary">Professional summary (2-3 lines)</label>
+        <textarea id="summary" className="field mt-2 min-h-28" value={summary}
           onChange={(e) => setSummary(e.target.value)} maxLength={4000} />
       </div>
-      <div>
-        <label className="label-mono" htmlFor="skills">Skills (comma separated)</label>
-        <input id="skills" className="field mt-2" value={skills} onChange={(e) => setSkills(e.target.value)}
-          placeholder="Research writing, Public speaking, Web development" />
+      <div className="grid gap-4 sm:grid-cols-2">
+        {input("cv_email", "Email", email, setEmail)}
+        {input("cv_phone", "Phone", phone, setPhone)}
+        {input("cv_address", "Location", address, setAddress)}
+        {input("cv_languages", "Languages (comma separated)", languages, setLanguages, "Bangla, English")}
+        {input("cv_linkedin", "LinkedIn URL", linkedin, setLinkedin, "https://linkedin.com/in/username")}
+        {input("cv_github", "GitHub URL", github, setGithub, "https://github.com/username")}
       </div>
-      <div>
-        <label className="label-mono" htmlFor="languages">Languages (comma separated)</label>
-        <input id="languages" className="field mt-2" value={languages} onChange={(e) => setLanguages(e.target.value)}
-          placeholder="Bangla, English, Arabic" />
-      </div>
-      <div>
-        <label className="label-mono" htmlFor="cv_phone">Phone</label>
-        <input id="cv_phone" className="field mt-2" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={60} />
-      </div>
-      <div>
-        <label className="label-mono" htmlFor="cv_address">Address</label>
-        <input id="cv_address" className="field mt-2" value={address} onChange={(e) => setAddress(e.target.value)} maxLength={300} />
-      </div>
+      {input("skills", "Other skills (comma separated, used if no groups)", skills, setSkills)}
+
+      {SECTIONS.map((s) => {
+        const rows = lists[s.key] ?? [];
+        const setRows = (r: Row[]) => setLists((p) => ({ ...p, [s.key]: r }));
+        return (
+          <div key={s.key} className="grid gap-3 border-t border-border pt-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-lg">{s.title}</h3>
+              <button type="button" className="btn-ghost text-sm" onClick={() => setRows([...rows, {}])}>
+                <Plus className="h-4 w-4" /> Add
+              </button>
+            </div>
+            {rows.length === 0 && <p className="text-sm text-muted-foreground">No entries yet.</p>}
+            {rows.map((row, i) => (
+              <div key={i} className="rounded-2xl border border-border p-4 grid gap-3 sm:grid-cols-2">
+                {s.fields.map((f) => (
+                  <div key={f.key} className={f.multiline ? "sm:col-span-2" : ""}>
+                    <label className="label-mono">{f.label}</label>
+                    {f.multiline ? (
+                      <textarea className="field mt-2 min-h-24" value={row[f.key] ?? ""}
+                        onChange={(e) => setRows(rows.map((r, j) => j === i ? { ...r, [f.key]: e.target.value } : r))} />
+                    ) : (
+                      <input className="field mt-2" value={row[f.key] ?? ""}
+                        onChange={(e) => setRows(rows.map((r, j) => j === i ? { ...r, [f.key]: e.target.value } : r))} />
+                    )}
+                  </div>
+                ))}
+                <div className="sm:col-span-2 flex gap-2 justify-end">
+                  <button type="button" disabled={i === 0} className="btn-ghost text-sm"
+                    onClick={() => { const r = [...rows]; [r[i - 1], r[i]] = [r[i], r[i - 1]]; setRows(r); }}>
+                    <ArrowUp className="h-4 w-4" />
+                  </button>
+                  <button type="button" className="btn-ghost text-sm text-destructive"
+                    onClick={() => setRows(rows.filter((_, j) => j !== i))}>
+                    <Trash2 className="h-4 w-4" /> Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      })}
+
       <div>
         <button disabled={saving} className="btn-primary">
           {saving ? "Saving..." : (<>Save <Save className="h-4 w-4" /></>)}
