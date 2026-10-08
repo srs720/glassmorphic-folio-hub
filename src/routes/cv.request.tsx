@@ -32,6 +32,7 @@ function CvRequestPage() {
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const [duplicate, setDuplicate] = useState(false);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -41,13 +42,27 @@ function CvRequestPage() {
     }
     setBusy(true);
     setError("");
+    setDuplicate(false);
+    const value = email.trim().toLowerCase().slice(0, 255);
+    // Friendly path: check whether this email already requested access
+    const { data: existing } = await (supabase as any).rpc("check_cv_access", { _email: value });
+    const existingRow = Array.isArray(existing) ? existing[0] : existing;
+    if (existingRow) {
+      setBusy(false);
+      setDuplicate(true);
+      return;
+    }
     const { error: insertError } = await supabase.from("cv_requests").insert({
       user_name: name.trim().slice(0, 100),
-      user_email: email.trim().toLowerCase().slice(0, 255),
+      user_email: value,
       purpose: purpose.trim().slice(0, 600),
     });
     setBusy(false);
     if (insertError) {
+      if (insertError.code === "23505" || /duplicate key/i.test(insertError.message)) {
+        setDuplicate(true);
+        return;
+      }
       setError(insertError.message || "Could not send your request. Please try again.");
       return;
     }
