@@ -148,11 +148,11 @@ function TopNav() {
                 </motion.button>
               ))}
               <Link
-                to="/cv/request"
+                to="/cv"
                 onClick={() => setOpen(false)}
                 className="btn-primary mt-2 justify-center sm:col-span-2 md:col-span-3"
               >
-                <FileText className="h-4 w-4" /> Request CV
+                <FileText className="h-4 w-4" /> View CV
               </Link>
               <Link
                 to="/notes"
@@ -213,8 +213,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 </li>
               ))}
               <li>
-                <Link to="/cv/request" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-highlight transition">
-                  <FileText className="h-4 w-4" /> Request CV
+                <Link to="/cv" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-highlight transition">
+                  <FileText className="h-4 w-4" /> View CV
                 </Link>
               </li>
               <li>
