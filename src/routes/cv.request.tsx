@@ -107,6 +107,14 @@ function CvRequestPage() {
                 {busy ? "Sending..." : "Send request"}
               </button>
               {error && <p className="text-sm text-destructive">{error}</p>}
+              {duplicate && (
+                <div className="grid gap-3 rounded-2xl border border-border bg-surface-2/60 p-4">
+                  <p className="text-sm">
+                    This email is already registered. Please go to the Access Page to check your status or view the CV.
+                  </p>
+                  <Link to="/cv" className="btn-primary justify-self-start">Go to Access Page</Link>
+                </div>
+              )}
             </form>
           )}
         </div>
