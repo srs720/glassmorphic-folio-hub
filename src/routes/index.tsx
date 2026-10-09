@@ -9,10 +9,11 @@ import { ContactLinks } from "@/components/ContactLinks";
 import { ShareButton } from "@/components/ShareButton";
 import { SignedImage } from "@/components/SignedImage";
 import { HeroSlider } from "@/components/HeroSlider";
+import { Button } from "@/components/ui/button";
 import { Reveal, Stagger, StaggerItem, HoverCard } from "@/components/Reveal";
 import {
   GraduationCap, BookOpen, Sparkles, Award, Send, Mail, Quote as QuoteIcon,
-  ArrowDown, ArrowRight, Calendar,
+  ArrowDown, ArrowRight, Calendar, Code2, Cpu, Camera, Compass, Headphones, Heart, Maximize2,
 } from "lucide-react";
 import { useLang, pickLang } from "@/lib/i18n";
 import { Lightbox } from "@/components/Lightbox";
@@ -30,6 +31,8 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Official site of Shoibur Rahman (Siam) — full-stack web developer from Bangladesh. Projects, certificates, research posts and contact." },
       { property: "og:url", content: `${CANONICAL}/` },
       { property: "og:site_name", content: "Shoibur Rahman" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: `${CANONICAL}/` }],
     scripts: [{
@@ -267,28 +270,30 @@ function HobbiesSection() {
   const hobbies = { data: usePublicContent().hobbies };
   const list = hobbies.data ?? [];
   return (
-    <Stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(0,auto)]">
-      {list.map((h: any, idx: number) => (
-        <StaggerItem key={h.id} className={idx % 5 === 0 ? "md:col-span-2" : ""}>
-          <HoverCard className="bento p-5 h-full">
-            <div className={`w-full rounded-2xl overflow-hidden bg-surface-2 mb-4 ${idx % 5 === 0 ? "h-56" : "h-40"}`}>
-              {h.image_path ? (
-                <SignedImage
-                  path={h.image_path}
-                  alt={`${t("fullName")} — ${pickLang(h, "title", lang)} hobby`}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#FFF6DD]" />
+    <Stagger className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {list.map((h: any) => {
+        const title = pickLang(h, "title", lang);
+        const subject = `${h.title_en ?? ""} ${h.title ?? ""} ${title}`.toLowerCase();
+        const Icon = /pc|computer|hardware|কম্পিউটার/.test(subject) ? Cpu
+          : /cod|program|develop|প্রোগ্রাম/.test(subject) ? Code2
+          : /read|book|পড়|বই/.test(subject) ? BookOpen
+          : /photo|camera|ছবি/.test(subject) ? Camera
+          : /travel|safari|explor|ভ্রমণ/.test(subject) ? Compass
+          : /music|audio|গান/.test(subject) ? Headphones : Heart;
+        return (
+          <StaggerItem key={h.id} className="min-w-0">
+            <article className="portfolio-card h-full p-6">
+              <div className="mb-5 grid h-10 w-10 place-items-center rounded-md bg-surface-2 text-primary">
+                <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden />
+              </div>
+              <h3 className="line-clamp-2 break-words font-sans text-base font-semibold leading-snug">{title}</h3>
+              {pickLang(h, "description", lang) && (
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{pickLang(h, "description", lang)}</p>
               )}
-            </div>
-            <p className="font-display text-xl">{pickLang(h, "title", lang)}</p>
-            {pickLang(h, "description", lang) && (
-              <p className="text-sm text-foreground/80 mt-2">{pickLang(h, "description", lang)}</p>
-            )}
-          </HoverCard>
-        </StaggerItem>
-      ))}
+            </article>
+          </StaggerItem>
+        );
+      })}
       {list.length === 0 && (
         <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("hobbies")}</div>
       )}
@@ -296,7 +301,7 @@ function HobbiesSection() {
   );
 }
 
-/* ------------------ Certificates — masonry image grid ------------------ */
+/* ------------------ Certificates — uniform image grid ------------------ */
 function CertificatesSection() {
   const { t, lang } = useLang();
   const [open, setOpen] = useState<any | null>(null);
@@ -308,35 +313,41 @@ function CertificatesSection() {
       {list.length === 0 ? (
         <p className="text-muted-foreground">{t("certificates_empty")}</p>
       ) : (
-        <Stagger className="columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
+        <Stagger className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {list.map((c: any) => {
             const title = pickLang(c, "title", lang);
             return (
-              <StaggerItem key={c.id} className="mb-5 break-inside-avoid">
-                <button
+              <StaggerItem key={c.id} className="min-w-0">
+                <Button
+                  variant="ghost"
                   type="button"
                   onClick={() => setOpen(c)}
-                  className="group block w-full overflow-hidden rounded-2xl bg-white text-left ring-1 ring-border/70 transition hover:ring-primary/60"
+                  className="portfolio-card group block h-full w-full overflow-hidden whitespace-normal p-0 text-left hover:bg-surface hover:text-foreground [&_svg]:size-5"
                   aria-label={`${t("view_certificate")}: ${title}`}
                 >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-border bg-surface-2 p-4">
                   {c.image_path ? (
                     <SignedImage
                       path={c.image_path}
                       alt={`${t("fullName")} — ${title} certificate${pickLang(c, "issuer", lang) ? `, ${pickLang(c, "issuer", lang)}` : ""}`}
-                      className="w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                      className="h-full w-full object-contain"
                     />
                   ) : (
-                    <div className="grid h-40 w-full place-items-center bg-surface-2">
+                    <div className="grid h-full w-full place-items-center">
                       <Award className="h-8 w-8 text-foreground/30" />
                     </div>
                   )}
-                  <div className="px-4 py-3">
-                    <p className="font-display text-lg leading-snug">{title}</p>
+                    <span className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-md border border-border bg-surface text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden>
+                      <Maximize2 />
+                    </span>
+                  </div>
+                  <div className="p-5">
+                    <p className="line-clamp-2 min-h-12 break-words font-sans text-base font-semibold leading-6">{title}</p>
                     {pickLang(c, "issuer", lang) && (
-                      <p className="label-mono mt-1">{pickLang(c, "issuer", lang)}</p>
+                      <p className="mt-2 truncate text-xs font-normal text-muted-foreground">{pickLang(c, "issuer", lang)}</p>
                     )}
                   </div>
-                </button>
+                </Button>
               </StaggerItem>
             );
           })}
