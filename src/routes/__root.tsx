@@ -61,7 +61,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "google-site-verification", content: "Z_QJyL-d0fwOOF_yHt-MpNDyUD14IgvLLUAFjuYFuP8" },
       { title: "Shoibur Rahman | Full-Stack Web Developer" },
       { name: "description", content: "Shoibur Rahman (Siam) — full-stack web developer from Bangladesh and student of Darunnazat Siddikia Kamil Madrasah. Bilingual personal portfolio, research posts and digital diary." },
-      { name: "keywords", content: "Shoibur Rahman, Siam, Full Stack Developer, Web Developer, Bangladesh, শোয়াইবুর রহমান" },
+      { name: "keywords", content: "Shoibur Rahman, Siam, শোয়াইবুর রহমান, Web Developer in Bangladesh, Full Stack Developer, Shoibur Rahman Siam" },
       { name: "author", content: "Shoibur Rahman" },
       { property: "og:site_name", content: "Shoibur Rahman" },
       { property: "og:title", content: "Shoibur Rahman | Full-Stack Web Developer" },
@@ -79,6 +79,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" },
     ],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify([
+        { "@context": "https://schema.org", "@type": "Person", "@id": "https://shoiburrahman.com/#person", name: "Shoibur Rahman", alternateName: ["Siam", "শোয়াইবুর রহমান"], url: "https://shoiburrahman.com", jobTitle: "Full-Stack Web Developer", address: { "@type": "PostalAddress", addressLocality: "Demra, Dhaka", addressCountry: "Bangladesh" } },
+        { "@context": "https://schema.org", "@type": "WebSite", name: "Shoibur Rahman", alternateName: "শোয়াইবুর রহমান", url: "https://shoiburrahman.com", inLanguage: ["en", "bn"], publisher: { "@id": "https://shoiburrahman.com/#person" } },
+      ]),
+    }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
