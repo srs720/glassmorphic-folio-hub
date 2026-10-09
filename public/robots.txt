@@ -2,5 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /auth
+Disallow: /notes
+Disallow: /cv/viewer
+Disallow: /api
 
 Sitemap: https://shoiburrahman.com/sitemap.xml

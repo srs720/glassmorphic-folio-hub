@@ -145,9 +145,9 @@ export function postHead(post: PostRow | undefined, slug: string, lang: Lang, lo
 
   return {
     meta: [
-      { title: `${title} — Shoibur Rahman` },
+      { title: `${title} | Shoibur Rahman` },
       { name: "description", content: desc },
-      { property: "og:title", content: title },
+      { property: "og:title", content: `${title} | Shoibur Rahman` },
       { property: "og:description", content: desc },
       { property: "og:type", content: "article" },
       { property: "og:url", content: url },

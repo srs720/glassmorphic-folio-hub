@@ -32,5 +32,6 @@ export function SignedImage({
     );
   }
   if (!url) return <div className={"animate-pulse bg-white/40 " + (className ?? "")} />;
-  return <img src={url} alt={alt} className={className} loading="lazy" />;
+  const seoAlt = alt.startsWith("Shoibur Rahman - ") ? alt : `Shoibur Rahman - ${alt.replace(/^(Shoibur Rahman|শোয়াইবুর রহমান)\s*[—-]\s*/, "")}`;
+  return <img src={url} alt={seoAlt} className={className} loading="lazy" />;
 }
