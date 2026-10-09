@@ -38,6 +38,7 @@
   --font-display: "Fraunces", "Cormorant Garamond", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --shadow-portfolio-hover: var(--portfolio-hover-shadow);
 }
 
 :root {
@@ -58,6 +59,24 @@
 
   --muted-foreground: #64748B;
   --border: #E2E8F0;
+  --portfolio-hover-shadow: 0 12px 28px -12px color-mix(in oklab, var(--primary) 22%, transparent);
+}
+
+@utility portfolio-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+  &:hover, &:focus-visible {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--primary) 35%, var(--border));
+    box-shadow: var(--portfolio-hover-shadow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-card { transition: none; }
+  .portfolio-card:hover, .portfolio-card:focus-visible { transform: none; }
 }
 
 @layer base {

@@ -1,4 +1,4 @@
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
 
 const variants: Variants = {
@@ -18,10 +18,11 @@ export function Reveal({
   as?: any;
 }) {
   const M = (motion as any)[Tag] ?? motion.div;
+  const reducedMotion = useReducedMotion();
   return (
     <M
       className={className}
-      initial="hidden"
+      initial={reducedMotion ? false : "hidden"}
       whileInView="show"
       viewport={{ once: true, margin: "-80px" }}
       variants={variants}
@@ -41,13 +42,14 @@ export function Stagger({
   className?: string;
   stagger?: number;
 }) {
+  const reducedMotion = useReducedMotion();
   return (
     <motion.div
       className={className}
-      initial="hidden"
+      initial={reducedMotion ? false : "hidden"}
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      variants={{ hidden: {}, show: { transition: { staggerChildren: stagger } } }}
+      variants={{ hidden: {}, show: { transition: { staggerChildren: reducedMotion ? 0 : stagger } } }}
     >
       {children}
     </motion.div>
@@ -55,8 +57,9 @@ export function Stagger({
 }
 
 export function StaggerItem({ children, className }: { children: ReactNode; className?: string }) {
+  const reducedMotion = useReducedMotion();
   return (
-    <motion.div className={className} variants={variants}>
+    <motion.div className={className} variants={reducedMotion ? { hidden: { opacity: 1, y: 0 }, show: { opacity: 1, y: 0 } } : variants}>
       {children}
     </motion.div>
   );

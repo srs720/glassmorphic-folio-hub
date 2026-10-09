@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Use the shared Reveal/Stagger primitives for portfolio scroll motion and honor reduced-motion preferences so all content remains accessible.
+- Use the semantic portfolio-card utility for compact hobbies and certificate controls so their border, lift, and shadow behavior stays consistent.
