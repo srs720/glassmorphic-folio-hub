@@ -40,6 +40,7 @@ export const Route = createFileRoute("/")({
         alternateName: ["Siam", "শোয়াইবুর রহমান"],
         url: CANONICAL,
         jobTitle: "Full-Stack Web Developer",
+        address: { "@type": "PostalAddress", addressLocality: "Demra, Dhaka", addressCountry: "Bangladesh" },
         nationality: "Bangladeshi",
         alumniOf: { "@type": "EducationalOrganization", name: "Darunnazat Siddikia Kamil Madrasah" },
         knowsAbout: ["Web Development", "JavaScript", "Python", "Databases"],

@@ -60,7 +60,7 @@ export function HeroSlider({
         <motion.img
           key={urls[i] ?? i}
           src={urls[i]}
-          alt={alt}
+          alt={alt.startsWith("Shoibur Rahman - ") ? alt : `Shoibur Rahman - ${alt.replace(/^(Shoibur Rahman|শোয়াইবুর রহমান)\s*[—-]\s*/, "")}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
