@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal, Stagger, StaggerItem, HoverCard } from "@/components/Reveal";
 import {
   GraduationCap, BookOpen, Sparkles, Award, Send, Mail, Quote as QuoteIcon,
-  ArrowDown, ArrowRight, Calendar, Code2, Cpu, Camera, Compass, Headphones, Heart, Maximize2,
+  ArrowDown, ArrowRight, Calendar, Maximize2,
 } from "lucide-react";
 import { useLang, pickLang } from "@/lib/i18n";
 import { Lightbox } from "@/components/Lightbox";
@@ -270,30 +270,28 @@ function HobbiesSection() {
   const hobbies = { data: usePublicContent().hobbies };
   const list = hobbies.data ?? [];
   return (
-    <Stagger className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {list.map((h: any) => {
-        const title = pickLang(h, "title", lang);
-        const subject = `${h.title_en ?? ""} ${h.title ?? ""} ${title}`.toLowerCase();
-        const Icon = /pc|computer|hardware|কম্পিউটার/.test(subject) ? Cpu
-          : /cod|program|develop|প্রোগ্রাম/.test(subject) ? Code2
-          : /read|book|পড়|বই/.test(subject) ? BookOpen
-          : /photo|camera|ছবি/.test(subject) ? Camera
-          : /travel|safari|explor|ভ্রমণ/.test(subject) ? Compass
-          : /music|audio|গান/.test(subject) ? Headphones : Heart;
-        return (
-          <StaggerItem key={h.id} className="min-w-0">
-            <article className="portfolio-card h-full p-6">
-              <div className="mb-5 grid h-10 w-10 place-items-center rounded-md bg-surface-2 text-primary">
-                <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden />
-              </div>
-              <h3 className="line-clamp-2 break-words font-sans text-base font-semibold leading-snug">{title}</h3>
-              {pickLang(h, "description", lang) && (
-                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{pickLang(h, "description", lang)}</p>
+    <Stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(0,auto)]">
+      {list.map((h: any, idx: number) => (
+        <StaggerItem key={h.id} className={idx % 5 === 0 ? "md:col-span-2" : ""}>
+          <HoverCard className="bento p-5 h-full">
+            <div className={`w-full rounded-2xl overflow-hidden bg-surface-2 mb-4 ${idx % 5 === 0 ? "h-56" : "h-40"}`}>
+              {h.image_path ? (
+                <SignedImage
+                  path={h.image_path}
+                  alt={`${t("fullName")} — ${pickLang(h, "title", lang)} hobby`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="h-full w-full bg-gradient-to-br from-[#EAF5FE] to-[#FFF6DD]" />
               )}
-            </article>
-          </StaggerItem>
-        );
-      })}
+            </div>
+            <p className="font-display text-xl">{pickLang(h, "title", lang)}</p>
+            {pickLang(h, "description", lang) && (
+              <p className="text-sm text-foreground/80 mt-2">{pickLang(h, "description", lang)}</p>
+            )}
+          </HoverCard>
+        </StaggerItem>
+      ))}
       {list.length === 0 && (
         <div className="bento p-8 col-span-full text-center text-muted-foreground">{t("hobbies")}</div>
       )}
