@@ -14,6 +14,8 @@ export const Route = createFileRoute("/thoughts")({
       { property: "og:title", content: "Thoughts — Shoibur Rahman" },
       { property: "og:description", content: "Personal quotes and reflections." },
       { property: "og:url", content: `${CANONICAL}/thoughts` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: `${CANONICAL}/thoughts` }],
   }),

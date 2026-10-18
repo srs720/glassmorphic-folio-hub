@@ -1,0 +1,4 @@
+- [x] Add server-only Telegram notifications after successful contact and CV saves.
+- [x] Verify contact/CV saves, duplicate handling, and non-blocking Telegram failures.
+- [ ] Publish the notification update.
+- [ ] Confirm Telegram delivery: blocked by Telegram "chat not found" for the supplied chat; user must start the bot or correct the chat ID.

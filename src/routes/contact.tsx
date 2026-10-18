@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Mail, Send } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { submitContact } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/SiteLayout";
 import { ContactLinks } from "@/components/ContactLinks";
 import { useLang } from "@/lib/i18n";
@@ -17,6 +18,8 @@ export const Route = createFileRoute("/contact")({
       { property: "og:title", content: "Contact — Shoibur Rahman" },
       { property: "og:description", content: "Say hello to Shoibur Rahman." },
       { property: "og:url", content: `${CANONICAL}/contact` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: `${CANONICAL}/contact` }],
   }),
@@ -25,6 +28,7 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const { t } = useLang();
+  const sendContact = useServerFn(submitContact);
   
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,14 +42,16 @@ function ContactPage() {
       return;
     }
     setSending(true);
-    const { error } = await supabase.from("messages").insert({ name, email, message });
-    setSending(false);
-    if (error) {
+    try {
+      const result = await sendContact({ data: { name, email, message } });
+      if (!result.ok) { toast.error(t("send_error")); return; }
+      toast.success(t("send_ok"));
+      setName(""); setEmail(""); setMessage("");
+    } catch {
       toast.error(t("send_error"));
-      return;
+    } finally {
+      setSending(false);
     }
-    toast.success(t("send_ok"));
-    setName(""); setEmail(""); setMessage("");
   }
 
   return (
@@ -58,15 +64,15 @@ function ContactPage() {
           <form onSubmit={submit} className="bento p-6 md:p-8 md:col-span-3 grid gap-4">
             <div>
               <label className="label-mono">{t("your_name")}</label>
-              <input className="field mt-2" value={name} onChange={(e) => setName(e.target.value)} placeholder={t("name_placeholder")} />
+              <input className="field mt-2" maxLength={100} value={name} onChange={(e) => setName(e.target.value)} placeholder={t("name_placeholder")} />
             </div>
             <div>
               <label className="label-mono">{t("your_email")}</label>
-              <input type="email" className="field mt-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+              <input type="email" maxLength={255} className="field mt-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
             </div>
             <div>
               <label className="label-mono">{t("message")}</label>
-              <textarea className="field mt-2 min-h-[140px]" value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("msg_placeholder")} />
+              <textarea maxLength={3000} className="field mt-2 min-h-[140px]" value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("msg_placeholder")} />
             </div>
             <div>
               <button disabled={sending} className="btn-primary">

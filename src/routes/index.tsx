@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { FormEvent } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { submitContact } from "@/lib/submissions.functions";
 import { usePublicContent } from "@/lib/public-content";
 import { SiteLayout, useSettings } from "@/components/SiteLayout";
 import { ContactLinks } from "@/components/ContactLinks";
@@ -467,6 +468,7 @@ function ThoughtsSection() {
 /* ------------------ Contact ------------------ */
 function ContactSection() {
   const { t } = useLang();
+  const sendContact = useServerFn(submitContact);
   
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -477,11 +479,13 @@ function ContactSection() {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) { toast.error(t("fill_all")); return; }
     setSending(true);
-    const { error } = await supabase.from("messages").insert({ name, email, message });
-    setSending(false);
-    if (error) return toast.error(t("send_error"));
-    toast.success(t("send_ok"));
-    setName(""); setEmail(""); setMessage("");
+    try {
+      const result = await sendContact({ data: { name, email, message } });
+      if (!result.ok) { toast.error(t("send_error")); return; }
+      toast.success(t("send_ok"));
+      setName(""); setEmail(""); setMessage("");
+    } catch { toast.error(t("send_error")); }
+    finally { setSending(false); }
   }
 
   return (

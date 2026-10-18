@@ -14,6 +14,8 @@ export const Route = createFileRoute("/people")({
       { property: "og:title", content: "People — Shoibur Rahman" },
       { property: "og:description", content: "Family, teachers, and close friends." },
       { property: "og:url", content: `${CANONICAL}/people` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: `${CANONICAL}/people` }],
   }),

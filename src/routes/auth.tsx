@@ -6,7 +6,12 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Admin" },
+      { title: "Admin Sign In | Shoibur Rahman" },
+      { name: "description", content: "Private administrator sign-in for Shoibur Rahman's portfolio." },
+      { property: "og:title", content: "Admin Sign In | Shoibur Rahman" },
+      { property: "og:description", content: "Administrator access to Shoibur Rahman's portfolio." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

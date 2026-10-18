@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { submitCvRequest } from "@/lib/submissions.functions";
 
 export const Route = createFileRoute("/cv/request")({
   head: () => ({
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/cv/request")({
 });
 
 function CvRequestPage() {
+  const sendRequest = useServerFn(submitCvRequest);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [purpose, setPurpose] = useState("");
@@ -43,30 +45,16 @@ function CvRequestPage() {
     setBusy(true);
     setError("");
     setDuplicate(false);
-    const value = email.trim().toLowerCase().slice(0, 255);
-    // Friendly path: check whether this email already requested access
-    const { data: existing } = await (supabase as any).rpc("check_cv_access", { _email: value });
-    const existingRow = Array.isArray(existing) ? existing[0] : existing;
-    if (existingRow) {
+    try {
+      const result = await sendRequest({ data: { name, email, purpose } });
+      if (result.duplicate) { setDuplicate(true); return; }
+      if (!result.ok) { setError("Could not send your request. Please try again."); return; }
+      setSent(true);
+    } catch {
+      setError("Could not send your request. Please try again.");
+    } finally {
       setBusy(false);
-      setDuplicate(true);
-      return;
     }
-    const { error: insertError } = await supabase.from("cv_requests").insert({
-      user_name: name.trim().slice(0, 100),
-      user_email: value,
-      purpose: purpose.trim().slice(0, 600),
-    });
-    setBusy(false);
-    if (insertError) {
-      if (insertError.code === "23505" || /duplicate key/i.test(insertError.message)) {
-        setDuplicate(true);
-        return;
-      }
-      setError(insertError.message || "Could not send your request. Please try again.");
-      return;
-    }
-    setSent(true);
   }
 
   return (
