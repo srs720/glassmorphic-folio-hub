@@ -11,3 +11,4 @@
 
 - Use the shared Reveal/Stagger primitives for portfolio scroll motion and honor reduced-motion preferences so all content remains accessible.
 - Use the semantic portfolio-card utility for compact hobbies and certificate controls so their border, lift, and shadow behavior stays consistent.
+- Contact and CV requests are saved through public server functions using the publishable client with RLS, then notify Telegram server-side; failed or duplicate saves never send alerts, and notification failures never undo a save.

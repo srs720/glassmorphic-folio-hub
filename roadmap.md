@@ -1,0 +1,2 @@
+- [ ] Add server-only Telegram notifications after successful contact and CV saves.
+- [ ] Verify both submission flows and failure handling, then publish.
