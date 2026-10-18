@@ -132,7 +132,15 @@ export function postHead(post: PostRow | undefined, slug: string, lang: Lang, lo
 
   if (!post) {
     return {
-      meta: [{ title: "Unavailable — Shoibur Rahman" }, { name: "robots", content: "noindex" }],
+      meta: [
+        { title: "Unavailable Article | Shoibur Rahman" },
+        { name: "description", content: "This article from Shoibur Rahman's portfolio is unavailable." },
+        { property: "og:title", content: "Unavailable Article | Shoibur Rahman" },
+        { property: "og:description", content: "The requested portfolio article is unavailable." },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary" },
+        { name: "robots", content: "noindex" },
+      ],
     };
   }
 
