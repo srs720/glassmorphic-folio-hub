@@ -8,6 +8,13 @@
       "when": 1791472326729,
       "tag": "0000_cv_structured_sections",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792400916461,
+      "tag": "0001_restrict_portfolio_asset_reads",
+      "breakpoints": true
     }
   ]
 }
