@@ -731,6 +731,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_public_asset: { Args: { _path: string }; Returns: boolean }
       notes_by_passkey: {
         Args: { _passkey: string }
         Returns: {
