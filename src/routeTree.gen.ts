@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -34,6 +35,7 @@ import { Route as AuthenticatedAdminCvRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedAdminEducationRouteImport } from './routes/_authenticated/admin.education'
 import { Route as AuthenticatedAdminEmailRouteImport } from './routes/_authenticated/admin.email'
 import { Route as AuthenticatedAdminHobbiesRouteImport } from './routes/_authenticated/admin.hobbies'
+import { Route as AuthenticatedAdminLinksRouteImport } from './routes/_authenticated/admin.links'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminNotesRouteImport } from './routes/_authenticated/admin.notes'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
@@ -49,6 +51,11 @@ import { Route as EnPostSlugRouteImport } from './routes/en.post.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SlugRoute = SlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -177,6 +184,11 @@ const AuthenticatedAdminHobbiesRoute =
     path: '/admin/hobbies',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminLinksRoute = AuthenticatedAdminLinksRouteImport.update({
+  id: '/admin/links',
+  path: '/admin/links',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminMessagesRoute =
   AuthenticatedAdminMessagesRouteImport.update({
     id: '/admin/messages',
@@ -242,6 +254,7 @@ const EnPostSlugRoute = EnPostSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$slug': typeof SlugRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/journey': typeof JourneyRoute
@@ -264,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/email': typeof AuthenticatedAdminEmailRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
+  '/admin/links': typeof AuthenticatedAdminLinksRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/notes': typeof AuthenticatedAdminNotesRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -279,6 +293,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$slug': typeof SlugRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/journey': typeof JourneyRoute
@@ -301,6 +316,7 @@ export interface FileRoutesByTo {
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/email': typeof AuthenticatedAdminEmailRoute
   '/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
+  '/admin/links': typeof AuthenticatedAdminLinksRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/notes': typeof AuthenticatedAdminNotesRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -318,6 +334,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/$slug': typeof SlugRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/journey': typeof JourneyRoute
@@ -340,6 +357,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
   '/_authenticated/admin/email': typeof AuthenticatedAdminEmailRoute
   '/_authenticated/admin/hobbies': typeof AuthenticatedAdminHobbiesRoute
+  '/_authenticated/admin/links': typeof AuthenticatedAdminLinksRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/_authenticated/admin/notes': typeof AuthenticatedAdminNotesRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -357,6 +375,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$slug'
     | '/auth'
     | '/contact'
     | '/journey'
@@ -379,6 +398,7 @@ export interface FileRouteTypes {
     | '/admin/education'
     | '/admin/email'
     | '/admin/hobbies'
+    | '/admin/links'
     | '/admin/messages'
     | '/admin/notes'
     | '/admin/people'
@@ -394,6 +414,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$slug'
     | '/auth'
     | '/contact'
     | '/journey'
@@ -416,6 +437,7 @@ export interface FileRouteTypes {
     | '/admin/education'
     | '/admin/email'
     | '/admin/hobbies'
+    | '/admin/links'
     | '/admin/messages'
     | '/admin/notes'
     | '/admin/people'
@@ -432,6 +454,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/$slug'
     | '/auth'
     | '/contact'
     | '/journey'
@@ -454,6 +477,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/education'
     | '/_authenticated/admin/email'
     | '/_authenticated/admin/hobbies'
+    | '/_authenticated/admin/links'
     | '/_authenticated/admin/messages'
     | '/_authenticated/admin/notes'
     | '/_authenticated/admin/people'
@@ -471,6 +495,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  SlugRoute: typeof SlugRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   JourneyRoute: typeof JourneyRoute
@@ -497,6 +522,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$slug': {
+      id: '/$slug'
+      path: '/$slug'
+      fullPath: '/$slug'
+      preLoaderRoute: typeof SlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -667,6 +699,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminHobbiesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/links': {
+      id: '/_authenticated/admin/links'
+      path: '/admin/links'
+      fullPath: '/admin/links'
+      preLoaderRoute: typeof AuthenticatedAdminLinksRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/messages': {
       id: '/_authenticated/admin/messages'
       path: '/admin/messages'
@@ -755,6 +794,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminEducationRoute: typeof AuthenticatedAdminEducationRoute
   AuthenticatedAdminEmailRoute: typeof AuthenticatedAdminEmailRoute
   AuthenticatedAdminHobbiesRoute: typeof AuthenticatedAdminHobbiesRoute
+  AuthenticatedAdminLinksRoute: typeof AuthenticatedAdminLinksRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
   AuthenticatedAdminNotesRoute: typeof AuthenticatedAdminNotesRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
@@ -775,6 +815,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminEducationRoute: AuthenticatedAdminEducationRoute,
   AuthenticatedAdminEmailRoute: AuthenticatedAdminEmailRoute,
   AuthenticatedAdminHobbiesRoute: AuthenticatedAdminHobbiesRoute,
+  AuthenticatedAdminLinksRoute: AuthenticatedAdminLinksRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
   AuthenticatedAdminNotesRoute: AuthenticatedAdminNotesRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
@@ -793,6 +834,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  SlugRoute: SlugRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   JourneyRoute: JourneyRoute,

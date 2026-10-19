@@ -31,6 +31,7 @@ const NAV: Array<{ to: string; label: string; icon: typeof LayoutDashboard; exac
   { to: "/admin/contact", label: "Contact & Socials", icon: Phone },
   { to: "/admin/cv", label: "CV Manager", icon: FileText },
   { to: "/admin/notes", label: "Notes Manager", icon: Lock },
+  { to: "/admin/links", label: "Link Manager", icon: Phone },
   { to: "/admin/email", label: "Email Settings", icon: Mail },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
