@@ -15,6 +15,13 @@
       "when": 1792400916461,
       "tag": "0001_restrict_portfolio_asset_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792404208135,
+      "tag": "0002_custom_links",
+      "breakpoints": true
     }
   ]
 }

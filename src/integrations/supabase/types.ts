@@ -152,6 +152,30 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_links: {
+        Row: {
+          clicks: number
+          created_at: string
+          destination_url: string
+          id: string
+          slug: string
+        }
+        Insert: {
+          clicks?: number
+          created_at?: string
+          destination_url: string
+          id?: string
+          slug: string
+        }
+        Update: {
+          clicks?: number
+          created_at?: string
+          destination_url?: string
+          id?: string
+          slug?: string
+        }
+        Relationships: []
+      }
       cv_content: {
         Row: {
           achievements_awards: Json
@@ -741,6 +765,7 @@ export type Database = {
           title: string
         }[]
       }
+      resolve_custom_link: { Args: { _slug: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "user"
