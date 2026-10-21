@@ -22,6 +22,13 @@
       "when": 1792404208135,
       "tag": "0002_custom_links",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792546104103,
+      "tag": "0003_create_private_crm",
+      "breakpoints": true
     }
   ]
 }
