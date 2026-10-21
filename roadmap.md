@@ -1,4 +1,8 @@
 - [x] Add server-only Telegram notifications after successful contact and CV saves.
 - [x] Verify contact/CV saves, duplicate handling, and non-blocking Telegram failures.
-- [x] Request publishing of the notification update (deployment scheduled).
-- [ ] Confirm Telegram delivery: blocked by Telegram "chat not found" for the supplied chat; user must start the bot or correct the chat ID.
+- [x] Confirm Telegram accepted a test alert after the bot was started.
+- [ ] Add private-by-default CRM profile and event storage with public-only read paths.
+- [ ] Build admin contact/event management and public profile sharing.
+- [ ] Show today's public birthdays and events on the homepage.
+- [ ] Set up and verify the daily Bangladesh-time Telegram reminder schedule.
+- [ ] Verify new routes, admin CRUD, security policies, and preview build.

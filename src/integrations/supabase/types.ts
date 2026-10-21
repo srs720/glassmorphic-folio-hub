@@ -152,6 +152,99 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_events: {
+        Row: {
+          created_at: string
+          description: string | null
+          description_bn: string | null
+          event_date: string
+          event_time: string | null
+          id: string
+          is_public: boolean
+          title: string
+          title_bn: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          description_bn?: string | null
+          event_date: string
+          event_time?: string | null
+          id?: string
+          is_public?: boolean
+          title: string
+          title_bn?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          description_bn?: string | null
+          event_date?: string
+          event_time?: string | null
+          id?: string
+          is_public?: boolean
+          title?: string
+          title_bn?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      crm_profiles: {
+        Row: {
+          bio: string | null
+          bio_bn: string | null
+          created_at: string
+          dob: string | null
+          hobbies: string | null
+          hobbies_bn: string | null
+          id: string
+          is_public: boolean
+          name: string
+          name_bn: string | null
+          photo_path: string | null
+          relation: string | null
+          relation_bn: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          bio_bn?: string | null
+          created_at?: string
+          dob?: string | null
+          hobbies?: string | null
+          hobbies_bn?: string | null
+          id?: string
+          is_public?: boolean
+          name: string
+          name_bn?: string | null
+          photo_path?: string | null
+          relation?: string | null
+          relation_bn?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          bio_bn?: string | null
+          created_at?: string
+          dob?: string | null
+          hobbies?: string | null
+          hobbies_bn?: string | null
+          id?: string
+          is_public?: boolean
+          name?: string
+          name_bn?: string | null
+          photo_path?: string | null
+          relation?: string | null
+          relation_bn?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       custom_links: {
         Row: {
           clicks: number
@@ -748,6 +841,24 @@ export type Database = {
         }[]
       }
       get_cv_for_email: { Args: { _email: string }; Returns: Json }
+      get_public_crm_calendar: { Args: never; Returns: Json }
+      get_public_crm_profile: {
+        Args: { _slug: string }
+        Returns: {
+          bio: string
+          bio_bn: string
+          dob: string
+          hobbies: string
+          hobbies_bn: string
+          id: string
+          name: string
+          name_bn: string
+          photo_path: string
+          relation: string
+          relation_bn: string
+          slug: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
