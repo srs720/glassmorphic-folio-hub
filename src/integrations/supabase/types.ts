@@ -41,6 +41,33 @@ export type Database = {
         }
         Relationships: []
       }
+      auth_reset_codes: {
+        Row: {
+          code: string
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          used: boolean
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          used?: boolean
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          used?: boolean
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           content: string
@@ -161,6 +188,7 @@ export type Database = {
           event_time: string | null
           id: string
           is_public: boolean
+          sort_order: number
           title: string
           title_bn: string | null
           updated_at: string
@@ -173,6 +201,7 @@ export type Database = {
           event_time?: string | null
           id?: string
           is_public?: boolean
+          sort_order?: number
           title: string
           title_bn?: string | null
           updated_at?: string
@@ -185,6 +214,7 @@ export type Database = {
           event_time?: string | null
           id?: string
           is_public?: boolean
+          sort_order?: number
           title?: string
           title_bn?: string | null
           updated_at?: string
@@ -207,6 +237,7 @@ export type Database = {
           relation: string | null
           relation_bn: string | null
           slug: string
+          sort_order: number
           updated_at: string
         }
         Insert: {
@@ -224,6 +255,7 @@ export type Database = {
           relation?: string | null
           relation_bn?: string | null
           slug: string
+          sort_order?: number
           updated_at?: string
         }
         Update: {
@@ -241,7 +273,23 @@ export type Database = {
           relation?: string | null
           relation_bn?: string | null
           slug?: string
+          sort_order?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      crm_reminder_runs: {
+        Row: {
+          run_date: string
+          sent_at: string
+        }
+        Insert: {
+          run_date: string
+          sent_at?: string
+        }
+        Update: {
+          run_date?: string
+          sent_at?: string
         }
         Relationships: []
       }
@@ -840,6 +888,7 @@ export type Database = {
           user_name: string
         }[]
       }
+      get_crm_reminder_digest: { Args: never; Returns: Json }
       get_cv_for_email: { Args: { _email: string }; Returns: Json }
       get_public_crm_calendar: { Args: never; Returns: Json }
       get_public_crm_profile: {

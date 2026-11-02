@@ -29,6 +29,20 @@
       "when": 1792546104103,
       "tag": "0003_create_private_crm",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793585936902,
+      "tag": "0004_enable_cron_extensions",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793585959242,
+      "tag": "0005_crm_reminder_and_auth_reset_support",
+      "breakpoints": true
     }
   ]
 }
