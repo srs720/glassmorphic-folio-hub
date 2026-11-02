@@ -4,21 +4,14 @@ function escapeMarkdown(value: string) {
   return value.replace(/[\\_*`\[\]]/g, "\\$&");
 }
 
-export async function notifyTelegram(
+/** Generic server-side Telegram alert. Never throws; never logs the token or URL. */
+export async function sendTelegramMessage(
   token: string | undefined,
-  kind: "contact" | "cv",
-  submission: Submission,
+  text: string,
   transport: typeof fetch = fetch,
 ): Promise<void> {
   try {
     if (!token) throw new Error("Telegram token is not configured");
-    const text = [
-      kind === "contact" ? "📬 *New Portfolio Message!*" : "📄 *New CV Request!*",
-      `*Name:* ${escapeMarkdown(submission.name)}`,
-      `*Email:* ${escapeMarkdown(submission.email)}`,
-      `*${kind === "contact" ? "Message" : "Purpose"}:* ${escapeMarkdown(submission.detail)}`,
-      ...(kind === "cv" ? ["Go to Admin Panel to approve."] : []),
-    ].join("\n");
     const response = await transport(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -33,8 +26,24 @@ export async function notifyTelegram(
     if (result.ok !== true) console.error("Telegram notification was rejected");
   } catch {
     // Never log fetch errors or URLs: Telegram includes the private token in its URL.
-    console.error("Telegram notification could not be delivered; submission remains saved");
+    console.error("Telegram message could not be delivered; app state remains saved");
   }
+}
+
+export async function notifyTelegram(
+  token: string | undefined,
+  kind: "contact" | "cv",
+  submission: Submission,
+  transport: typeof fetch = fetch,
+): Promise<void> {
+  const text = [
+    kind === "contact" ? "📬 *New Portfolio Message!*" : "📄 *New CV Request!*",
+    `*Name:* ${escapeMarkdown(submission.name)}`,
+    `*Email:* ${escapeMarkdown(submission.email)}`,
+    `*${kind === "contact" ? "Message" : "Purpose"}:* ${escapeMarkdown(submission.detail)}`,
+    ...(kind === "cv" ? ["Go to Admin Panel to approve."] : []),
+  ].join("\n");
+  await sendTelegramMessage(token, text, transport);
 }
 
 export async function saveThenNotify(

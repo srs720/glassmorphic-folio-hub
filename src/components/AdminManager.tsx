@@ -9,7 +9,7 @@ import { SignedImage } from "@/components/SignedImage";
 export type FieldDef = {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "select" | "number" | "date";
+  type?: "text" | "textarea" | "select" | "number" | "date" | "time" | "boolean";
   options?: string[];
   placeholder?: string;
   min?: number;
@@ -194,9 +194,18 @@ function ManagerForm({
               <option value="">— select —</option>
               {(f.options ?? []).map((o) => <option key={o} value={o}>{o}</option>)}
             </select>
+          ) : f.type === "boolean" ? (
+            <label className="mt-1 flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={!!values[f.key]}
+                onChange={(e) => setValues({ ...values, [f.key]: e.target.checked })}
+              />
+              Yes
+            </label>
           ) : (
             <input
-              type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
+              type={f.type === "number" ? "number" : f.type === "date" ? "date" : f.type === "time" ? "time" : "text"}
               min={f.min}
               max={f.max}
               className="glass-input w-full mt-1"
