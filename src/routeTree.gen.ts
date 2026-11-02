@@ -14,6 +14,7 @@ import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as JourneyRouteImport } from './routes/journey'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as NotesRouteImport } from './routes/notes'
@@ -25,12 +26,14 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as CvIndexRouteImport } from './routes/cv.index'
 import { Route as CvRequestRouteImport } from './routes/cv.request'
 import { Route as CvViewerRouteImport } from './routes/cv.viewer'
+import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as PostSlugRouteImport } from './routes/post.$slug'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminAiRouteImport } from './routes/_authenticated/admin.ai'
 import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
 import { Route as AuthenticatedAdminContactRouteImport } from './routes/_authenticated/admin.contact'
+import { Route as AuthenticatedAdminCrmRouteImport } from './routes/_authenticated/admin.crm'
 import { Route as AuthenticatedAdminCvRouteImport } from './routes/_authenticated/admin.cv'
 import { Route as AuthenticatedAdminEducationRouteImport } from './routes/_authenticated/admin.education'
 import { Route as AuthenticatedAdminEmailRouteImport } from './routes/_authenticated/admin.email'
@@ -47,6 +50,7 @@ import { Route as AuthenticatedAdminSkillsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminTestimonialsRouteImport } from './routes/_authenticated/admin.testimonials'
 import { Route as BnPostSlugRouteImport } from './routes/bn.post.$slug'
 import { Route as EnPostSlugRouteImport } from './routes/en.post.$slug'
+import { Route as ApiPublicHooksCrmRemindersRouteImport } from './routes/api/public/hooks/crm-reminders'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +74,11 @@ const AuthRoute = AuthRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JourneyRoute = JourneyRouteImport.update({
@@ -129,6 +138,11 @@ const CvViewerRoute = CvViewerRouteImport.update({
   path: '/cv/viewer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PSlugRoute = PSlugRouteImport.update({
+  id: '/p/$slug',
+  path: '/p/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PostSlugRoute = PostSlugRouteImport.update({
   id: '/post/$slug',
   path: '/post/$slug',
@@ -162,6 +176,11 @@ const AuthenticatedAdminContactRoute =
     path: '/admin/contact',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminCrmRoute = AuthenticatedAdminCrmRouteImport.update({
+  id: '/admin/crm',
+  path: '/admin/crm',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminCvRoute = AuthenticatedAdminCvRouteImport.update({
   id: '/admin/cv',
   path: '/admin/cv',
@@ -251,12 +270,19 @@ const EnPostSlugRoute = EnPostSlugRouteImport.update({
   path: '/en/post/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksCrmRemindersRoute =
+  ApiPublicHooksCrmRemindersRouteImport.update({
+    id: '/api/public/hooks/crm-reminders',
+    path: '/api/public/hooks/crm-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/journey': typeof JourneyRoute
   '/mcp': typeof McpRoute
   '/notes': typeof NotesRoute
@@ -267,12 +293,14 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
   '/cv/viewer': typeof CvViewerRoute
+  '/p/$slug': typeof PSlugRoute
   '/post/$slug': typeof PostSlugRoute
   '/cv/': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
+  '/admin/crm': typeof AuthenticatedAdminCrmRoute
   '/admin/cv': typeof AuthenticatedAdminCvRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/email': typeof AuthenticatedAdminEmailRoute
@@ -290,12 +318,14 @@ export interface FileRoutesByFullPath {
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/api/public/hooks/crm-reminders': typeof ApiPublicHooksCrmRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/journey': typeof JourneyRoute
   '/mcp': typeof McpRoute
   '/notes': typeof NotesRoute
@@ -306,12 +336,14 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
   '/cv/viewer': typeof CvViewerRoute
+  '/p/$slug': typeof PSlugRoute
   '/post/$slug': typeof PostSlugRoute
   '/cv': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
+  '/admin/crm': typeof AuthenticatedAdminCrmRoute
   '/admin/cv': typeof AuthenticatedAdminCvRoute
   '/admin/education': typeof AuthenticatedAdminEducationRoute
   '/admin/email': typeof AuthenticatedAdminEmailRoute
@@ -329,6 +361,7 @@ export interface FileRoutesByTo {
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/api/public/hooks/crm-reminders': typeof ApiPublicHooksCrmRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -337,6 +370,7 @@ export interface FileRoutesById {
   '/$slug': typeof SlugRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/journey': typeof JourneyRoute
   '/mcp': typeof McpRoute
   '/notes': typeof NotesRoute
@@ -347,12 +381,14 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cv/request': typeof CvRequestRoute
   '/cv/viewer': typeof CvViewerRoute
+  '/p/$slug': typeof PSlugRoute
   '/post/$slug': typeof PostSlugRoute
   '/cv/': typeof CvIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/ai': typeof AuthenticatedAdminAiRoute
   '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/_authenticated/admin/contact': typeof AuthenticatedAdminContactRoute
+  '/_authenticated/admin/crm': typeof AuthenticatedAdminCrmRoute
   '/_authenticated/admin/cv': typeof AuthenticatedAdminCvRoute
   '/_authenticated/admin/education': typeof AuthenticatedAdminEducationRoute
   '/_authenticated/admin/email': typeof AuthenticatedAdminEmailRoute
@@ -370,6 +406,7 @@ export interface FileRoutesById {
   '/bn/post/$slug': typeof BnPostSlugRoute
   '/en/post/$slug': typeof EnPostSlugRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/api/public/hooks/crm-reminders': typeof ApiPublicHooksCrmRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -378,6 +415,7 @@ export interface FileRouteTypes {
     | '/$slug'
     | '/auth'
     | '/contact'
+    | '/forgot-password'
     | '/journey'
     | '/mcp'
     | '/notes'
@@ -388,12 +426,14 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
     | '/cv/viewer'
+    | '/p/$slug'
     | '/post/$slug'
     | '/cv/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/ai'
     | '/admin/certificates'
     | '/admin/contact'
+    | '/admin/crm'
     | '/admin/cv'
     | '/admin/education'
     | '/admin/email'
@@ -411,12 +451,14 @@ export interface FileRouteTypes {
     | '/bn/post/$slug'
     | '/en/post/$slug'
     | '/admin/'
+    | '/api/public/hooks/crm-reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/$slug'
     | '/auth'
     | '/contact'
+    | '/forgot-password'
     | '/journey'
     | '/mcp'
     | '/notes'
@@ -427,12 +469,14 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
     | '/cv/viewer'
+    | '/p/$slug'
     | '/post/$slug'
     | '/cv'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/ai'
     | '/admin/certificates'
     | '/admin/contact'
+    | '/admin/crm'
     | '/admin/cv'
     | '/admin/education'
     | '/admin/email'
@@ -450,6 +494,7 @@ export interface FileRouteTypes {
     | '/bn/post/$slug'
     | '/en/post/$slug'
     | '/admin'
+    | '/api/public/hooks/crm-reminders'
   id:
     | '__root__'
     | '/'
@@ -457,6 +502,7 @@ export interface FileRouteTypes {
     | '/$slug'
     | '/auth'
     | '/contact'
+    | '/forgot-password'
     | '/journey'
     | '/mcp'
     | '/notes'
@@ -467,12 +513,14 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/cv/request'
     | '/cv/viewer'
+    | '/p/$slug'
     | '/post/$slug'
     | '/cv/'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/ai'
     | '/_authenticated/admin/certificates'
     | '/_authenticated/admin/contact'
+    | '/_authenticated/admin/crm'
     | '/_authenticated/admin/cv'
     | '/_authenticated/admin/education'
     | '/_authenticated/admin/email'
@@ -490,6 +538,7 @@ export interface FileRouteTypes {
     | '/bn/post/$slug'
     | '/en/post/$slug'
     | '/_authenticated/admin/'
+    | '/api/public/hooks/crm-reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -498,6 +547,7 @@ export interface RootRouteChildren {
   SlugRoute: typeof SlugRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   JourneyRoute: typeof JourneyRoute
   McpRoute: typeof McpRoute
   NotesRoute: typeof NotesRoute
@@ -508,11 +558,13 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CvRequestRoute: typeof CvRequestRoute
   CvViewerRoute: typeof CvViewerRoute
+  PSlugRoute: typeof PSlugRoute
   PostSlugRoute: typeof PostSlugRoute
   CvIndexRoute: typeof CvIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   BnPostSlugRoute: typeof BnPostSlugRoute
   EnPostSlugRoute: typeof EnPostSlugRoute
+  ApiPublicHooksCrmRemindersRoute: typeof ApiPublicHooksCrmRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -550,6 +602,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/journey': {
@@ -629,6 +688,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CvViewerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/p/$slug': {
+      id: '/p/$slug'
+      path: '/p/$slug'
+      fullPath: '/p/$slug'
+      preLoaderRoute: typeof PSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/post/$slug': {
       id: '/post/$slug'
       path: '/post/$slug'
@@ -669,6 +735,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/contact'
       fullPath: '/admin/contact'
       preLoaderRoute: typeof AuthenticatedAdminContactRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/crm': {
+      id: '/_authenticated/admin/crm'
+      path: '/admin/crm'
+      fullPath: '/admin/crm'
+      preLoaderRoute: typeof AuthenticatedAdminCrmRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/cv': {
@@ -783,6 +856,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnPostSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/crm-reminders': {
+      id: '/api/public/hooks/crm-reminders'
+      path: '/api/public/hooks/crm-reminders'
+      fullPath: '/api/public/hooks/crm-reminders'
+      preLoaderRoute: typeof ApiPublicHooksCrmRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -790,6 +870,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminAiRoute: typeof AuthenticatedAdminAiRoute
   AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
   AuthenticatedAdminContactRoute: typeof AuthenticatedAdminContactRoute
+  AuthenticatedAdminCrmRoute: typeof AuthenticatedAdminCrmRoute
   AuthenticatedAdminCvRoute: typeof AuthenticatedAdminCvRoute
   AuthenticatedAdminEducationRoute: typeof AuthenticatedAdminEducationRoute
   AuthenticatedAdminEmailRoute: typeof AuthenticatedAdminEmailRoute
@@ -811,6 +892,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminAiRoute: AuthenticatedAdminAiRoute,
   AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
   AuthenticatedAdminContactRoute: AuthenticatedAdminContactRoute,
+  AuthenticatedAdminCrmRoute: AuthenticatedAdminCrmRoute,
   AuthenticatedAdminCvRoute: AuthenticatedAdminCvRoute,
   AuthenticatedAdminEducationRoute: AuthenticatedAdminEducationRoute,
   AuthenticatedAdminEmailRoute: AuthenticatedAdminEmailRoute,
@@ -837,6 +919,7 @@ const rootRouteChildren: RootRouteChildren = {
   SlugRoute: SlugRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   JourneyRoute: JourneyRoute,
   McpRoute: McpRoute,
   NotesRoute: NotesRoute,
@@ -848,11 +931,13 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CvRequestRoute: CvRequestRoute,
   CvViewerRoute: CvViewerRoute,
+  PSlugRoute: PSlugRoute,
   PostSlugRoute: PostSlugRoute,
   CvIndexRoute: CvIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   BnPostSlugRoute: BnPostSlugRoute,
   EnPostSlugRoute: EnPostSlugRoute,
+  ApiPublicHooksCrmRemindersRoute: ApiPublicHooksCrmRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
