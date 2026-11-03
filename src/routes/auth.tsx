@@ -65,6 +65,9 @@ function AuthPage() {
             <button disabled={loading} className="btn-primary mt-2" type="submit">
               {loading ? "…" : "Sign in"}
             </button>
+            <Link to="/forgot-password" className="text-center text-sm text-muted-foreground hover:text-foreground">
+              Forgot password?
+            </Link>
           </form>
         </div>
       </div>
