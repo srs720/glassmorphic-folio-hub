@@ -17,6 +17,7 @@ import {
   ArrowDown, ArrowRight, Calendar, Maximize2,
 } from "lucide-react";
 import { useLang, pickLang } from "@/lib/i18n";
+import { getPublicCrmCalendar, type CrmCalendar } from "@/lib/crm.functions";
 import { Lightbox } from "@/components/Lightbox";
 import { Link } from "@tanstack/react-router";
 
