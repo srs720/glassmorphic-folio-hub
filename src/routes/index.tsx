@@ -74,6 +74,7 @@ function HomePage() {
 
   return (
     <SiteLayout>
+      <CrmBanner />
       {/* ============ HERO with slider ============ */}
       <section id="home" className="relative min-h-[92vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
@@ -163,6 +164,59 @@ function HomePage() {
 
       <div className="pb-16" />
     </SiteLayout>
+  );
+}
+
+/* ------------------ CRM banner — today's birthdays & public events ------------------ */
+function CrmBanner() {
+  const { t, lang } = useLang();
+  const loadCalendar = useServerFn(getPublicCrmCalendar);
+  const [cal, setCal] = useState<CrmCalendar | null>(null);
+  useEffect(() => {
+    loadCalendar().then(setCal).catch(() => {});
+  }, [loadCalendar]);
+  if (!cal || (cal.birthdays.length === 0 && cal.events.length === 0)) return null;
+  const BIRTHDAY: Record<Lang, string> = { en: "🎂 Birthday today", bn: "🎂 আজ জন্মদিন" };
+  const EVENT: Record<Lang, string> = { en: "📅 Event today", bn: "📅 আজকের ইভেন্ট" };
+  return (
+    <Reveal className="relative z-10 mx-auto max-w-7xl px-4 md:px-6 pt-6">
+      <div className="bento-yellow p-5 md:p-6 grid gap-3">
+        {cal.birthdays.length > 0 && (
+          <div>
+            <p className="label-mono">{BIRTHDAY[lang]}</p>
+            <div className="mt-2 flex flex-wrap gap-3">
+              {cal.birthdays.map((b) => (
+                <Link
+                  key={b.id}
+                  to="/p/$slug"
+                  params={{ slug: b.slug }}
+                  className="glass rounded-xl px-4 py-2 text-sm font-semibold hover:shadow-md transition"
+                >
+                  {lang === "bn" ? (b.name_bn || b.name) : b.name}
+                  {b.relation || b.relation_bn ? ` — ${lang === "bn" ? (b.relation_bn || b.relation) : b.relation}` : ""}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+        {cal.events.length > 0 && (
+          <div>
+            <p className="label-mono">{EVENT[lang]}</p>
+            <div className="mt-2 grid gap-2">
+              {cal.events.map((e) => (
+                <p key={e.id} className="text-sm font-medium">
+                  {lang === "bn" ? (e.title_bn || e.title) : e.title}
+                  {e.event_time ? ` · ${e.event_time.slice(0, 5)}` : ""}
+                  {(e.description || e.description_bn) && (
+                    <span className="text-foreground/70"> — {lang === "bn" ? (e.description_bn || e.description) : e.description}</span>
+                  )}
+                </p>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </Reveal>
   );
 }
 
