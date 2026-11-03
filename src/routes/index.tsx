@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -16,7 +16,7 @@ import {
   GraduationCap, BookOpen, Sparkles, Award, Send, Mail, Quote as QuoteIcon,
   ArrowDown, ArrowRight, Calendar, Maximize2,
 } from "lucide-react";
-import { useLang, pickLang } from "@/lib/i18n";
+import { useLang, pickLang, type Lang } from "@/lib/i18n";
 import { getPublicCrmCalendar, type CrmCalendar } from "@/lib/crm.functions";
 import { Lightbox } from "@/components/Lightbox";
 import { Link } from "@tanstack/react-router";
