@@ -6,4 +6,4 @@ Disallow: /notes
 Disallow: /cv/viewer
 Disallow: /api
 
-Sitemap: https://shoiburrahman.com/sitemap.xml
+Sitemap: https://glassmorphic-folio-hub.lovable.app/sitemap.xml
