@@ -29,18 +29,24 @@ export function HeroSlider({
       setUrls([]);
       return;
     }
-    Promise.all(paths.map((p) => getSignedUrl(p))).then((resolved) => {
+    const resolveSlides = async () => {
+      const first = await getSignedUrl(paths[0]);
       if (cancelled) return;
-      const list = resolved.filter(Boolean) as string[];
-      if (list[0]) {
+      const initial = first ? [first] : [];
+      setUrls(initial);
+      setI(0);
+      if (first) {
         const img = new Image();
         img.decoding = "async";
         img.fetchPriority = "high";
-        img.src = list[0];
+        img.src = first;
       }
-      setUrls(list);
-      setI(0);
-    });
+
+      const rest = await Promise.all(paths.slice(1).map((path) => getSignedUrl(path)));
+      if (cancelled) return;
+      setUrls([...initial, ...rest.filter((url): url is string => Boolean(url))]);
+    };
+    void resolveSlides();
     return () => {
       cancelled = true;
     };
