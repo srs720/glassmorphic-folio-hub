@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState, type FormEvent } from "react";
+import { Suspense, useState, type FormEvent } from "react";
+import { useSuspenseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, X, Upload, GripVertical } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,11 +29,41 @@ export type ManagerConfig = {
 };
 
 export function AdminManager({ cfg }: { cfg: ManagerConfig }) {
+  return (
+    <Suspense fallback={<AdminManagerSkeleton title={cfg.plural} />}>
+      <AdminManagerContent cfg={cfg} />
+    </Suspense>
+  );
+}
+
+function AdminManagerSkeleton({ title }: { title: string }) {
+  return (
+    <div className="glass-strong grid gap-5 p-6" aria-busy="true" aria-label={`Loading ${title}`}>
+      <div className="grid gap-2">
+        <div className="h-6 w-40 animate-pulse rounded bg-surface-2" />
+        <div className="h-4 w-56 max-w-full animate-pulse rounded bg-surface-2" />
+      </div>
+      <div className="grid gap-2">
+        {[0, 1, 2].map((item) => (
+          <div key={item} className="flex h-16 items-center gap-3 rounded-md bg-surface-2 p-3">
+            <div className="h-10 w-10 animate-pulse rounded bg-surface" />
+            <div className="grid flex-1 gap-2">
+              <div className="h-4 w-1/3 animate-pulse rounded bg-surface" />
+              <div className="h-3 w-1/4 animate-pulse rounded bg-surface" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AdminManagerContent({ cfg }: { cfg: ManagerConfig }) {
   const qc = useQueryClient();
   const [editing, setEditing] = useState<Record<string, any> | null>(null);
   const [showForm, setShowForm] = useState(false);
 
-  const list = useQuery({
+  const list = useSuspenseQuery({
     queryKey: [cfg.queryKey],
     queryFn: async () => {
       const { data, error } = await supabase.from(cfg.table as any).select("*").order("sort_order").order("created_at");
@@ -80,9 +110,8 @@ export function AdminManager({ cfg }: { cfg: ManagerConfig }) {
       )}
 
       <div className="grid gap-2">
-        {list.isLoading && <p className="text-sm text-muted-foreground">Loading…</p>}
-        {list.data?.length === 0 && <p className="text-sm text-muted-foreground">Nothing here yet.</p>}
-        {list.data?.map((row) => (
+        {list.data.length === 0 && <p className="text-sm text-muted-foreground">Nothing here yet.</p>}
+        {list.data.map((row) => (
           <div key={row.id} className="glass flex items-center gap-3 p-3">
             <GripVertical className="h-4 w-4 text-muted-foreground" />
             {cfg.imageField && (

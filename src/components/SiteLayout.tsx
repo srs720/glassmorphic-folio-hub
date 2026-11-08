@@ -98,7 +98,7 @@ function TopNav() {
           >
             <div className="h-10 w-10 rounded-2xl overflow-hidden shrink-0 bg-white ring-1 ring-border shadow-sm flex items-center justify-center">
               {settings.data?.logo_path ? (
-                <SignedImage path={settings.data.logo_path} alt={`${t("fullName")} logo`} className="h-full w-full object-cover" />
+                <SignedImage path={settings.data.logo_path} alt={`${t("fullName")} logo`} className="h-full w-full object-cover" priority />
               ) : (
                 <span className="font-display text-sm font-bold text-[#0E2A3F]">SR</span>
               )}

@@ -5,14 +5,19 @@ export function SignedImage({
   path,
   alt,
   className,
+  priority = false,
 }: {
   path: string | null | undefined;
   alt: string;
   className?: string;
+  priority?: boolean;
 }) {
   const [url, setUrl] = useState<string | null>(null);
+  const [loadedUrl, setLoadedUrl] = useState<string | null>(null);
   useEffect(() => {
     let mounted = true;
+    setUrl(null);
+    setLoadedUrl(null);
     getSignedUrl(path).then((u) => mounted && setUrl(u));
     return () => {
       mounted = false;
@@ -31,7 +36,19 @@ export function SignedImage({
       </div>
     );
   }
-  if (!url) return <div className={"animate-pulse bg-white/40 " + (className ?? "")} />;
+  if (!url) return <div aria-hidden="true" className={"animate-pulse bg-surface-2 " + (className ?? "")} />;
   const seoAlt = alt.startsWith("Shoibur Rahman - ") ? alt : `Shoibur Rahman - ${alt.replace(/^(Shoibur Rahman|শোয়াইবুর রহমান)\s*[—-]\s*/, "")}`;
-  return <img src={url} alt={seoAlt} className={className} loading="lazy" />;
+  const isLoaded = loadedUrl === url;
+  return (
+    <img
+      src={url}
+      alt={seoAlt}
+      className={`${className ?? ""} bg-surface-2 transition-opacity duration-300 ${isLoaded ? "opacity-100" : "animate-pulse opacity-0"}`}
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : "auto"}
+      decoding="async"
+      onLoad={() => setLoadedUrl(url)}
+      onError={() => setLoadedUrl(url)}
+    />
+  );
 }

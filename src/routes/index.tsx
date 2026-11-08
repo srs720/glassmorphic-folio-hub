@@ -81,7 +81,7 @@ function HomePage() {
           {sliderPaths.length > 0 ? (
             <HeroSlider paths={sliderPaths} alt={`${t("fullName")} — full-stack web developer portrait`} />
           ) : heroFallback ? (
-            <SignedImage path={heroFallback} alt={`${t("fullName")} — full-stack web developer portrait`} className="absolute inset-0 h-full w-full object-cover" />
+            <SignedImage path={heroFallback} alt={`${t("fullName")} — full-stack web developer portrait`} className="absolute inset-0 h-full w-full object-cover" priority />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#EAF5FE] via-white to-[#DCEEFB]" />
           )}

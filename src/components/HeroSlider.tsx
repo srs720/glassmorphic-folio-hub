@@ -22,7 +22,7 @@ export function HeroSlider({
   const [urls, setUrls] = useState<string[]>([]);
   const [i, setI] = useState(0);
 
-  // Resolve + preload every slide up front.
+  // Resolve slide links once, but only preload the currently visible image.
   useEffect(() => {
     let cancelled = false;
     if (!paths.length) {
@@ -32,11 +32,12 @@ export function HeroSlider({
     Promise.all(paths.map((p) => getSignedUrl(p))).then((resolved) => {
       if (cancelled) return;
       const list = resolved.filter(Boolean) as string[];
-      list.forEach((src) => {
+      if (list[0]) {
         const img = new Image();
         img.decoding = "async";
-        img.src = src;
-      });
+        img.fetchPriority = "high";
+        img.src = list[0];
+      }
       setUrls(list);
       setI(0);
     });
@@ -52,6 +53,15 @@ export function HeroSlider({
     return () => window.clearInterval(id);
   }, [urls.length, interval]);
 
+  useEffect(() => {
+    if (urls.length <= 1) return;
+    const next = urls[(i + 1) % urls.length];
+    if (!next) return;
+    const img = new Image();
+    img.decoding = "async";
+    img.src = next;
+  }, [i, urls]);
+
   if (!paths.length || (!urls.length && fallback)) return <>{fallback}</>;
 
   return (
@@ -65,7 +75,10 @@ export function HeroSlider({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1, ease: "easeInOut" }}
-          className="absolute inset-0 h-full w-full object-cover will-change-[opacity]"
+          className="absolute inset-0 h-full w-full object-cover will-change-[opacity] bg-surface-2"
+          loading={i === 0 ? "eager" : "lazy"}
+          fetchPriority={i === 0 ? "high" : "auto"}
+          decoding="async"
         />
       </AnimatePresence>
     </div>
