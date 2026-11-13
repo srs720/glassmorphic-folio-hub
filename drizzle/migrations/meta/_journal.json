@@ -43,6 +43,13 @@
       "when": 1793585959242,
       "tag": "0005_crm_reminder_and_auth_reset_support",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794562067593,
+      "tag": "0006_tighten_public_submission_policies",
+      "breakpoints": true
     }
   ]
 }
