@@ -17,7 +17,7 @@ export const getPublicCrmCalendar = createServerFn({ method: "GET" }).handler(as
 
 /** Public read-only shared CRM profile by slug (null when private or missing). */
 export const getPublicCrmProfile = createServerFn({ method: "GET" })
-  .inputValidator((data: { slug: string }) => z.object({ slug: z.string().min(1).max(120) }).parse(data))
+  .validator((data: { slug: string }) => z.object({ slug: z.string().min(1).max(120) }).parse(data))
   .handler(async ({ data }) => {
     const sb = serverPublicClient();
     const { data: profile, error } = await (sb.rpc as any)("get_public_crm_profile", { _slug: data.slug });

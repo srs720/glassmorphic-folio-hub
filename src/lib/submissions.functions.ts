@@ -20,7 +20,7 @@ function publicClient(url: string | undefined, key: string | undefined) {
 const base = z.object({ name: z.string().trim().min(1).max(100), email: z.string().trim().email().max(255) });
 
 export const submitContact = createServerFn({ method: "POST" })
-  .inputValidator(base.extend({ message: z.string().trim().min(1).max(3000) }))
+  .validator(base.extend({ message: z.string().trim().min(1).max(3000) }))
   .handler(async ({ data }) => {
     const sb = publicClient(process.env["SUPABASE_URL"], process.env["SUPABASE_PUBLISHABLE_KEY"]);
     const result = await saveThenNotify(
@@ -31,7 +31,7 @@ export const submitContact = createServerFn({ method: "POST" })
   });
 
 export const submitCvRequest = createServerFn({ method: "POST" })
-  .inputValidator(base.extend({ name: z.string().trim().min(2).max(100), purpose: z.string().trim().min(3).max(600) }))
+  .validator(base.extend({ name: z.string().trim().min(2).max(100), purpose: z.string().trim().min(3).max(600) }))
   .handler(async ({ data }) => {
     const sb = publicClient(process.env["SUPABASE_URL"], process.env["SUPABASE_PUBLISHABLE_KEY"]);
     const email = data.email.toLowerCase();

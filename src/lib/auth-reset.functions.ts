@@ -12,7 +12,7 @@ function findUserByEmail(list: { users: Array<{ id: string; email?: string }> } 
  * emails so accounts cannot be enumerated.
  */
 export const requestPasswordOtp = createServerFn({ method: "POST" })
-  .inputValidator((data: { email: string }) => z.object({ email: z.string().email().max(200) }).parse(data))
+  .validator((data: { email: string }) => z.object({ email: z.string().email().max(200) }).parse(data))
   .handler(async ({ data }) => {
     const email = data.email.trim().toLowerCase();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -36,7 +36,7 @@ export const requestPasswordOtp = createServerFn({ method: "POST" })
 
 /** Verify the OTP and update the account password. */
 export const resetPasswordWithOtp = createServerFn({ method: "POST" })
-  .inputValidator((data: { email: string; code: string; password: string }) =>
+  .validator((data: { email: string; code: string; password: string }) =>
     z.object({
       email: z.string().email().max(200),
       code: z.string().regex(/^\d{6}$/),

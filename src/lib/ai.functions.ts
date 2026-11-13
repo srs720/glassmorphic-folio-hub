@@ -5,7 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 /** Admin-only: draft an SEO meta description from the post body. */
 export const generateSeoMeta = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         title: z.string(),
@@ -48,7 +48,7 @@ export const generateSeoMeta = createServerFn({ method: "POST" })
 
 /** Public: answer reader questions strictly from one published article. */
 export const askAboutPost = createServerFn({ method: "POST" })
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         slug: z.string().max(120),
@@ -110,7 +110,7 @@ export const askAboutPost = createServerFn({ method: "POST" })
 
 /** Public: answer any question about the whole site using the full public DB + admin knowledge base. */
 export const askSite = createServerFn({ method: "POST" })
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         question: z.string().min(2).max(500),
